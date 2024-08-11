@@ -1,0 +1,275 @@
+---
+title: "Cross Trade"
+author: "Bagas Trilaksonoaji"
+date: "`r Sys.Date()`"
+format: 
+  html:
+    toc: true
+    number-sections: true
+editor: visual
+editor_options: 
+  chunk_output_type: console
+execute: 
+  echo: false
+  message: false
+  warning: false
+cache: true
+---
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+options(knitr.table.html.attr = "quarto-disable-processing=true")
+library(chron)
+library(hms)
+```
+
+
+```{r}
+all_1pg <- read.csv("data/1pg-all-dates.csv", colClasses = c(BidID = "character", AskID = "character"))
+
+trade_1pg <- all_1pg |> filter(RecordType == "TRADE")
+```
+
+# Data
+
+1PG Trades Count (2015) by Qualifiers:
+```{r}
+trade_1pg |>
+  group_by(Qualifiers) |>
+  summarise(count = n()) |> 
+  kable() |>
+  kable_styling(full_width = FALSE)
+
+```
+
+We do not care about Center Point trades, because they do not influence market price directly. Hence, take them out. We also do not need Auction trades. It leaves us with XT Bi, XT Si, Bi and Si Trades.
+
+```{r}
+trade_1pg_fl <- trade_1pg |>
+  filter(Qualifiers %in% c("XT Bi", "XT Si", "Bi", "Si")) |>
+  mutate(HourMinuteSecond = hms::as_hms(HourMinuteSecond),
+         dttm = paste(RecordDate, HourMinuteSecond, MilliSecond, sep = "."))
+
+trade_1pg_fl$dttm <- as.POSIXct(trade_1pg_fl$dttm, format = "%Y-%m-%d.%H:%M:%S.%OS")
+trade_1pg_fl <- trade_1pg_fl[!is.na(trade_1pg_fl$dttm), ]
+
+trade_1pg_fl |> 
+  group_by(Qualifiers) |>
+  summarise(count = n()) |>
+  kable() |>
+  kable_styling(full_width = FALSE)
+
+```
+
+# Analysis
+
+## XT vs Non-XT
+
+```{r}
+trade_1pg_xt <- trade_1pg_fl |>
+  filter(Qualifiers %in% c("XT Bi", "XT Si"),
+         HourMinuteSecond > as_hms("10:00:00") &
+           HourMinuteSecond <= as_hms("16:00:00"))
+
+trade_1pg_noxt <- trade_1pg_fl |>
+  filter(Qualifiers %in% c("Bi", "Si"),
+         HourMinuteSecond > as_hms("10:00:00") &
+           HourMinuteSecond <= as_hms("16:00:00"))
+
+ggplot() +
+  geom_density(data = trade_1pg_xt,
+               aes(x = HourMinuteSecond, fill = "XT"),
+               alpha = 0.4) +
+  geom_density(data = trade_1pg_noxt,
+               aes(x = HourMinuteSecond, fill = "NON-XT"),
+               alpha = 0.4) +
+  scale_fill_manual(values = c("XT" = "maroon", "NON-XT" = "steelblue"),
+                    name = "Trade") +
+  labs(title = "Density of XT and Non-XT by Time",
+       subtitle = "1PG Stock (2015)",
+       x = "Time") +
+  theme_bw()
+
+```
+
+## Price Impact
+
+Price impact is measured using:
+
+- Bi: Natural logarithm of the ratio of trade price 5 minutes after the Trade divided by the Trade price. Prices are expected to increase after Buy Initiator trade, if the order is information driven. $$ PI5_Bi = ln(P5/P0)$$
+- Si: Natural logarithm of the ratio of the Trade price divided by trade price 5 minutes after the Trade. Prices are expected to decrease after Sell Initiator trade, if the order is information driven. $$ PI5_Si = ln(P0/P5)$$
+
+```{r}
+# create new table for merging (dttm - 5 min) 
+trade_1pg_fl_later <- trade_1pg_fl |>
+  mutate(dttm_5 = dttm - lubridate::minutes(5),
+         Price_later = Price) |>
+  select(dttm_5, Price_later)
+
+# remove duplicate dttm, ensure 1 (row) to 1 merging
+trade_1pg_fl_later <- trade_1pg_fl_later |>
+  group_by(dttm_5) |>
+  slice_head(n = 1) |>
+  ungroup()
+```
+
+```{r}
+# create function to find closest dttm
+closest_dttm <- function(dttm1, dttm2) {
+  dttm2[which.min(abs(difftime(dttm2, dttm1)))]
+}
+
+# # Find closest dttm
+# trade_1pg_fl_5 <- trade_1pg_fl |>
+#   rowwise() |>
+#   mutate(closest = closest_dttm(dttm, trade_1pg_fl_later$dttm_5))
+# 
+# # left join to get the price
+# trade_1pg_fl_5 <- trade_1pg_fl_5 |>
+#   left_join(trade_1pg_fl_later, by = c("closest" = "dttm_5"))
+
+# # create price impact column
+# trade_1pg_fl_5 <- trade_1pg_fl_5 |>
+#   mutate(PI = if_else(Qualifiers %in% c("XT Bi", "Bi"),
+#                       log(Price_later / Price), 
+#                       log(Price / Price_later)))
+
+load("data/trade_1pg_fl_5")
+```
+
+### XT vs All Non-XT
+
+```{r}
+# mean PI
+trade_1pg_fl_5 |> 
+  group_by(Qualifiers) |>
+  summarise(PI5_mean = mean(PI))
+
+trade_1pg_fl_5$PI |> 
+  summary()
+```
+
+```{r}
+xt_5 <-trade_1pg_fl_5 |>
+  filter(Qualifiers %in% c("XT Bi", "XT Si")) |>
+  group_by(RecordDate) |>
+  summarise(price_impact = sum(PI),
+            freq = n()) |>
+  mutate(avg = price_impact/freq)
+
+nonxt_5 <- trade_1pg_fl_5 |>
+  filter(Qualifiers %in% c("Bi", "Si")) |>
+  group_by(RecordDate) |>
+  summarise(price_impact = sum(PI),
+            freq = n()) |>
+  mutate(avg = price_impact/freq)
+
+# visualisation
+
+daily_pi <- left_join(xt_5, nonxt_5, by = "RecordDate") |>
+  rename(xt = avg.x,
+         nonxt = avg.y)
+
+daily_pi |>
+  select(RecordDate, xt, nonxt) |>
+  pivot_longer(cols = c(xt, nonxt), names_to = "type", values_to = "price_impact") |>
+  ggplot() +
+  geom_col(aes(x = RecordDate, y = price_impact, fill = type), position = "dodge") +
+  labs(title = "Daily Average Price Impact XT vs Non-XT",
+       subtitle = "Stock: 1PG",
+       y = "Price Impact")
+```
+
+### XT vs Matched Trades 
+
+```{r}
+# Function to match trades for a single row
+match_trade <- function(row, df) {
+  df |>
+    filter(
+      !grepl("XT", Qualifiers),
+      (grepl("Bi", row$Qualifiers) & grepl("Bi", Qualifiers) |
+          grepl("Si", row$Qualifiers) & grepl("Si", Qualifiers)
+      ),
+      mykey != row$mykey,
+      abs(Volume - row$Volume) / row$Volume <= 0.1,
+      dttm <= row$dttm - lubridate::minutes(5)
+    ) |>
+    pull(mykey)
+}
+
+match_trade <- function(row, df) {
+  df |>
+    filter(
+      !grepl("XT", Qualifiers),
+      (grepl("Bi", row$Qualifiers) & grepl("Bi", Qualifiers) |
+          grepl("Si", row$Qualifiers) & grepl("Si", Qualifiers)
+      ),
+      mykey != row$mykey,
+      abs(Volume - row$Volume) / row$Volume <= 0.1,
+      dttm == row$dttm - lubridate::minutes(5)
+    ) |>
+    pull(mykey)
+}
+
+trade_1pg_fl_5 <- tail(trade_1pg_fl_5, 10000)
+
+# Apply the function to each row where XT qualifiers are present
+df_temp <- trade_1pg_fl_5 |>
+  filter(grepl("XT", Qualifiers)) |>
+  mutate(matched_keys = map(mykey, ~ match_trade(trade_1pg_fl_5[trade_1pg_fl_5$mykey == .x, ], trade_1pg_fl_5)))
+
+matched_trade_key <- unlist(df_temp$matched_keys) |> unique()
+
+df_xt_matched <- trade_1pg_fl_5 |>
+  filter(mykey %in% matched_trade_key |
+           Qualifiers %in% c("XT Bi", "XT Si"))
+
+# save(df_xt_matched, file = "df_xt_matched_10000")
+
+load("data/df_xt_matched_10000")
+```
+
+```{r}
+# mean PI
+df_xt_matched |> 
+  group_by(Qualifiers) |>
+  summarise(PI5_mean = mean(PI))
+
+df_xt_matched$PI |> 
+  summary()
+```
+
+```{r}
+xt_5_2 <- df_xt_matched |>
+  filter(Qualifiers %in% c("XT Bi", "XT Si")) |>
+  group_by(RecordDate) |>
+  summarise(price_impact = sum(PI),
+            freq = n()) |>
+  mutate(avg = price_impact/freq)
+
+nonxt_5_2 <- df_xt_matched |>
+  filter(Qualifiers %in% c("Bi", "Si")) |>
+  group_by(RecordDate) |>
+  summarise(price_impact = sum(PI),
+            freq = n()) |>
+  mutate(avg = price_impact/freq)
+
+# visualisation
+
+daily_pi_2 <- left_join(xt_5_2, nonxt_5_2, by = "RecordDate") |>
+  rename(xt = avg.x,
+         nonxt = avg.y)
+
+daily_pi_2 |>
+  select(RecordDate, xt, nonxt) |>
+  pivot_longer(cols = c(xt, nonxt), names_to = "type", values_to = "price_impact") |>
+  ggplot() +
+  geom_col(aes(x = RecordDate, y = price_impact, fill = type), position = "dodge") +
+  labs(title = "Daily Average Price Impact XT vs Non-XT",
+       subtitle = "Stock: 1PG",
+       y = "Price Impact")
+```
+
