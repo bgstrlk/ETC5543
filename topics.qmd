@@ -92,16 +92,16 @@ xt |>
 
 ## Why is it interesting?
 
-- Cross trades are supposed to have a price impact similar to non-cross trades, as they are supposed to have no correlation. However, this early analysis shows that cross trade consistently have a higher price impact than non-cross trade, suggesting cross trades are more informed than non-cross trades.
-- Those price-impacting cross trades are dominated by a retail broker (Institution brokers should have more information than retail brokers).
-- In Indonesia, there is a nominee issue where brokers have their nominees trade on the exchange on behalf of themselves (secretly) to impact prices. Research on cross trades could be a preliminary step in addressing this issue.
-- Not many papers focusing on the impact of cross trades on price discovery.
+-   Cross trades are supposed to have a price impact similar to non-cross trades, as they are supposed to have no correlation. However, this early analysis shows that cross trade consistently have a higher price impact than non-cross trade, suggesting cross trades are more informed than non-cross trades.
+-   Those price-impacting cross trades are dominated by a retail broker (Institution brokers should have more information than retail brokers).
+-   In Indonesia, there is a nominee issue where brokers have their nominees trade on the exchange on behalf of themselves (secretly) to impact prices. Research on cross trades could be a preliminary step in addressing this issue.
+-   Not many papers focusing on the impact of cross trades on price discovery.
 
 ## What more can be done?
 
-- Analyse special orders on the cross trades.
-- Compare cross trades on ASX200 and non-ASX200.
-- HFT on cross trades?
+-   Analyse special orders on the cross trades.
+-   Compare cross trades on ASX200 and non-ASX200.
+-   HFT on cross trades?
 
 # Iceberg Order (1)
 
@@ -174,7 +174,6 @@ ice_1pg_icetr <- ice_1pg_ice[neighbor_idx2, ] |>
   mutate(dttm = ymd_hms(paste(RecordDate, HourMinuteSecond)))
 ```
 
-
 ```{r}
 ice_1pg_voltr |> filter(RecordDate == "2015-01-12") |>
   ggplot() +
@@ -212,17 +211,17 @@ icenon200 |>
 
 ## What is interesting?
 
-- Large non-iceberg orders do not drive price. Market participants were not taking this information into consideration (at least in non-ASX200 stocks).
-- Similarly, as iceberg orders hide total orders, they do not drive the price.
-- Hence, is there any benefit in using iceberg limit orders (in non-ASX200)?
+-   Large non-iceberg orders do not drive price. Market participants were not taking this information into consideration (at least in non-ASX200 stocks).
+-   Similarly, as iceberg orders hide total orders, they do not drive the price.
+-   Hence, is there any benefit in using iceberg limit orders (in non-ASX200)?
 
 ## What more can be done?
 
-- Analyse how large order impact order-price instead of trade-price. 
+-   Analyse how large order impact order-price instead of trade-price.
 
 ## Challenge
 
-- Difficult to measure (drive or does not drive prices).
+-   Difficult to measure (drive or does not drive prices).
 
 # Iceberg Order (2)
 
@@ -267,19 +266,19 @@ cross_tab |> ggplot() +
 
 ## What is interesting?
 
-- Iceberg orders tend to have more aggressive, compared to non-iceberg large orders (large order = more than 20k stocks). Interesting to see what happen in ASX200.
-- Previous paper focuses on the iceberg order on market-participant POV: how market participant put iceberg orders in the CLOB.
-- This topic focuses on comparing how frequent iceberg-aggressive and noniceberg-aggressive large orders: Do market participant really care about leaving any information on aggressive orders? (more iceberg-aggressive orders means that they are really care)
-- Comparing these could be beneficial in measuring how effective iceberg orders are in helping informed traders keep information. This can be a consideration in implementing iceberg orders in Indonesia.
+-   Iceberg orders tend to have more aggressive, compared to non-iceberg large orders (large order = more than 20k stocks). Interesting to see what happen in ASX200.
+-   Previous paper focuses on the iceberg order on market-participant POV: how market participant put iceberg orders in the CLOB.
+-   This topic focuses on comparing how frequent iceberg-aggressive and noniceberg-aggressive large orders: Do market participant really care about leaving any information on aggressive orders? (more iceberg-aggressive orders means that they are really care)
+-   Comparing these could be beneficial in measuring how effective iceberg orders are in helping informed traders keep information. This can be a consideration in implementing iceberg orders in Indonesia.
 
 ## What more can be done?
 
-- Compare the price impact between iceberg and non-iceberg large orders.
+-   Compare the price impact between iceberg and non-iceberg large orders.
 
 ## Challenge
 
-- Similar to previous paper.
-- Difficult to measure price impact.  
+-   Similar to previous paper.
+-   Difficult to measure price impact.
 
 # Center Point
 
@@ -360,16 +359,16 @@ tbl_cxlag_cxtot |> ggplot() +
 
 ## What is interesting?
 
-- Most market participants already trade within 5 lags before their CX trading, suggesting they already try to buy or sell their shares at prices close to the best bid/ask.
-- However they do not want to meet the best bid/ask, but instead want to meet in the middle. Hence, they place orders on the CX table, where other traders can meet the order.
-- CX Bi (buyer initiator) suggests brokers who are desperate to sell their shares (place sell order on the CX table to be met by buyer), while CX Si (seller initiator) suggests brokers who are desperate to buy shares (place buy order on the CX table to be met by seller). The plot already takes this into consideration.
-- The pattern shows that Center Point Trading is needed on many occasion by market participants. IDX may implement Center Point Trading if it is proven beneficial.
+-   Most market participants already trade within 5 lags before their CX trading, suggesting they already try to buy or sell their shares at prices close to the best bid/ask.
+-   However they do not want to meet the best bid/ask, but instead want to meet in the middle. Hence, they place orders on the CX table, where other traders can meet the order.
+-   CX Bi (buyer initiator) suggests brokers who are desperate to sell their shares (place sell order on the CX table to be met by buyer), while CX Si (seller initiator) suggests brokers who are desperate to buy shares (place buy order on the CX table to be met by seller). The plot already takes this into consideration.
+-   The pattern shows that Center Point Trading is needed on many occasion by market participants. IDX may implement Center Point Trading if it is proven beneficial.
 
 ## What more can be done?
 
-- Instead of using last trade, using last orders may be more appropriate.
+-   Instead of using last trade, using last orders may be more appropriate.
 
 ## Challenge
 
-- Not many papers discuss center point trades.
-- Using assumptions about how market participant behaves. 
+-   Not many papers discuss center point trades.
+-   Using assumptions about how market participant behaves.
