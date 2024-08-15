@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Bagas Trilaksonoaji">
-<meta name="dcterms.date" content="2024-08-09">
+<meta name="dcterms.date" content="2024-08-15">
 
-<title>Cross Trade</title>
+<title>Research Project</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -52,14 +52,23 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#data" id="toc-data" class="nav-link active" data-scroll-target="#data"><span class="header-section-number">1</span> Data</a></li>
-  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis"><span class="header-section-number">2</span> Analysis</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
-  <li><a href="#xt-vs-non-xt" id="toc-xt-vs-non-xt" class="nav-link" data-scroll-target="#xt-vs-non-xt"><span class="header-section-number">2.1</span> XT vs Non-XT</a></li>
-  <li><a href="#price-impact" id="toc-price-impact" class="nav-link" data-scroll-target="#price-impact"><span class="header-section-number">2.2</span> Price Impact</a>
+  <li><a href="#australian-stock-exchange" id="toc-australian-stock-exchange" class="nav-link" data-scroll-target="#australian-stock-exchange"><span class="header-section-number">1.1</span> Australian Stock Exchange</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="header-section-number">1.2</span> Data</a></li>
+  <li><a href="#topics" id="toc-topics" class="nav-link" data-scroll-target="#topics"><span class="header-section-number">1.3</span> Topics</a>
   <ul class="collapse">
-  <li><a href="#xt-vs-all-non-xt" id="toc-xt-vs-all-non-xt" class="nav-link" data-scroll-target="#xt-vs-all-non-xt"><span class="header-section-number">2.2.1</span> XT vs All Non-XT</a></li>
-  <li><a href="#xt-vs-matched-trades" id="toc-xt-vs-matched-trades" class="nav-link" data-scroll-target="#xt-vs-matched-trades"><span class="header-section-number">2.2.2</span> XT vs Matched Trades</a></li>
+  <li><a href="#hypothesis" id="toc-hypothesis" class="nav-link" data-scroll-target="#hypothesis"><span class="header-section-number">1.3.1</span> Hypothesis</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#data-1" id="toc-data-1" class="nav-link" data-scroll-target="#data-1"><span class="header-section-number">2</span> Data</a></li>
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis"><span class="header-section-number">3</span> Analysis</a>
+  <ul class="collapse">
+  <li><a href="#xt-vs-non-xt" id="toc-xt-vs-non-xt" class="nav-link" data-scroll-target="#xt-vs-non-xt"><span class="header-section-number">3.1</span> XT vs Non-XT</a></li>
+  <li><a href="#price-impact" id="toc-price-impact" class="nav-link" data-scroll-target="#price-impact"><span class="header-section-number">3.2</span> Price Impact</a>
+  <ul class="collapse">
+  <li><a href="#xt-vs-all-non-xt" id="toc-xt-vs-all-non-xt" class="nav-link" data-scroll-target="#xt-vs-all-non-xt"><span class="header-section-number">3.2.1</span> XT vs All Non-XT</a></li>
+  <li><a href="#xt-vs-matched-trades" id="toc-xt-vs-matched-trades" class="nav-link" data-scroll-target="#xt-vs-matched-trades"><span class="header-section-number">3.2.2</span> XT vs Matched Trades</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -69,7 +78,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Cross Trade</h1>
+<h1 class="title">Research Project</h1>
 </div>
 
 
@@ -86,7 +95,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">August 9, 2024</p>
+      <p class="date">August 15, 2024</p>
     </div>
   </div>
   
@@ -96,8 +105,32 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="data" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Data</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<section id="australian-stock-exchange" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="australian-stock-exchange"><span class="header-section-number">1.1</span> Australian Stock Exchange</h2>
+<p>ASX is an integrated exchange offering listings, trading, clearing, settlement, technical and information services, technology, data and other post-trade services.</p>
+<p>It acts as a market operator, clearing house and payments system facilitator. It oversees compliance with its operating rules, promotes standards of corporate governance among Australia’s listed companies and helps to educate retail investors.</p>
+<p>ASX operates markets for a wide range of asset classes including <strong>equities</strong>, fixed income, commodities and energy.</p>
+</section>
+<section id="data" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="data"><span class="header-section-number">1.2</span> Data</h2>
+<p>Historical trade data in ASX from 2011 - 2015.</p>
+<p>Initial: trade data of 1 stock in the year 2015.</p>
+</section>
+<section id="topics" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="topics"><span class="header-section-number">1.3</span> Topics</h2>
+<p>Price Impact of Cross Trades</p>
+<p>A <strong>cross trade</strong> occurs when both the buyer and seller sides of a trade are handled by the same broker.</p>
+<p><strong>Price impact</strong> refers to the effect that a trade, or a series of trades, has on the market price of a stock. It measures how much the price of a stock moves as a result of trading activity.</p>
+<section id="hypothesis" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="hypothesis"><span class="header-section-number">1.3.1</span> Hypothesis</h3>
+<p>Cross trades have a greater price impact than regular trades because they are more information-driven.</p>
+</section>
+</section>
+</section>
+<section id="data-1" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Data</h1>
 <p>1PG Trades Count (2015) by Qualifiers:</p>
 <div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-3_fa8c792928e74f996f2eb2b1fb7912b6">
 <div class="cell-output-display">
@@ -152,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>We do not care about Center Point trades, because they do not influence market price directly. Hence, take them out. We also do not need Auction trades. It leaves us with XT Bi, XT Si, Bi and Si Trades.</p>
-<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-4_02afdd49502b3895529c22471f020927">
+<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-4_a1970bf325b85764263e2451d9441a7a">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
@@ -164,19 +197,19 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Bi</td>
-<td style="text-align: right;">103439</td>
+<td style="text-align: right;">103429</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Si</td>
-<td style="text-align: right;">105108</td>
+<td style="text-align: right;">105131</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">XT Bi</td>
-<td style="text-align: right;">4054</td>
+<td style="text-align: right;">4059</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">XT Si</td>
-<td style="text-align: right;">4553</td>
+<td style="text-align: right;">4552</td>
 </tr>
 </tbody>
 </table>
@@ -185,68 +218,41 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="analysis" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Analysis</h1>
-<section id="xt-vs-non-xt" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="xt-vs-non-xt"><span class="header-section-number">2.1</span> XT vs Non-XT</h2>
-<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-5_358b606d2b6797f9013447d47db58040">
+<section id="analysis" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Analysis</h1>
+<section id="xt-vs-non-xt" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="xt-vs-non-xt"><span class="header-section-number">3.1</span> XT vs Non-XT</h2>
+<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-5_50e1d63c72fd2871b36154f3659b8a45">
 <div class="cell-output-display">
 <p><img src="CrossTrade_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="price-impact" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="price-impact"><span class="header-section-number">2.2</span> Price Impact</h2>
+<section id="price-impact" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="price-impact"><span class="header-section-number">3.2</span> Price Impact</h2>
 <p>Price impact is measured using:</p>
-<ul>
-<li>Bi: Natural logarithm of the ratio of trade price 5 minutes after the Trade divided by the Trade price. Prices are expected to increase after Buy Initiator trade, if the order is information driven. <span class="math display">\[ PI5_Bi = ln(P5/P0)\]</span></li>
-<li>Si: Natural logarithm of the ratio of the Trade price divided by trade price 5 minutes after the Trade. Prices are expected to decrease after Sell Initiator trade, if the order is information driven. <span class="math display">\[ PI5_Si = ln(P0/P5)\]</span></li>
-</ul>
-<section id="xt-vs-all-non-xt" class="level3" data-number="2.2.1">
-<h3 data-number="2.2.1" class="anchored" data-anchor-id="xt-vs-all-non-xt"><span class="header-section-number">2.2.1</span> XT vs All Non-XT</h3>
-<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-8_e5de7fd36616883df12b1626eaaa4d24">
+<p>Absolute value of Natural logarithm of the ratio of the best bid-ask mid-quote 5 minutes after the Cross Trade, divided by the prevailing best bid-ask mid-quote at the time of the trade. <span class="math display">\[ PI5 = |ln(MidQuote_5/MidQuote_0)|\]</span></p>
+<section id="xt-vs-all-non-xt" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="xt-vs-all-non-xt"><span class="header-section-number">3.2.1</span> XT vs All Non-XT</h3>
+<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-9_e14946ac802bec4abee603c9ee1b426c">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 2
-  Qualifiers  PI5_mean
-  &lt;chr&gt;          &lt;dbl&gt;
-1 Bi          0.000416
-2 Si         -0.000203
-3 XT Bi      -0.000234
-4 XT Si      -0.000763</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
--7.529e-02 -3.150e-03  0.000e+00  7.948e-05  3.140e-03  7.825e-02 </code></pre>
+  Qualifiers PI5_mean
+  &lt;chr&gt;         &lt;dbl&gt;
+1 Bi          0.00476
+2 Si          0.00465
+3 XT Bi       0.00501
+4 XT Si       0.00499</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-9_38fbc296a4661c13811769821c9f957a">
+<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-10_4c0f0df92a9b5956cb15784612de4d2e">
 <div class="cell-output-display">
-<p><img src="CrossTrade_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="CrossTrade_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="xt-vs-matched-trades" class="level3" data-number="2.2.2">
-<h3 data-number="2.2.2" class="anchored" data-anchor-id="xt-vs-matched-trades"><span class="header-section-number">2.2.2</span> XT vs Matched Trades</h3>
-<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-11_5a2298fec95444369e2eb05a37faf266">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 2
-  Qualifiers  PI5_mean
-  &lt;chr&gt;          &lt;dbl&gt;
-1 Bi          0.000881
-2 Si         -0.00111 
-3 XT Bi      -0.000594
-4 XT Si       0.000141</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
--5.311e-02 -3.110e-03  0.000e+00  1.315e-05  3.110e-03  3.867e-02 </code></pre>
-</div>
-</div>
-<div class="cell" data-hash="CrossTrade_cache/html/unnamed-chunk-12_bd83c97ec0ac891b0984cb1f12472bd8">
-<div class="cell-output-display">
-<p><img src="CrossTrade_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
+<section id="xt-vs-matched-trades" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="xt-vs-matched-trades"><span class="header-section-number">3.2.2</span> XT vs Matched Trades</h3>
 </section>
 </section>
 </section>

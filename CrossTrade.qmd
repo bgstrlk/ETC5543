@@ -1,5 +1,5 @@
 ---
-title: "Cross Trade"
+title: "Research Project"
 author: "Bagas Trilaksonoaji"
 date: "`r Sys.Date()`"
 format: 
@@ -13,7 +13,7 @@ execute:
   echo: false
   message: false
   warning: false
-cache: true
+cache: TRUE
 ---
 
 ```{r}
@@ -25,6 +25,35 @@ library(chron)
 library(hms)
 ```
 
+# Introduction
+
+## Australian Stock Exchange
+
+ASX is an integrated exchange offering listings, trading, clearing, settlement, technical and information services, technology, data and other post-trade services.
+
+It acts as a market operator, clearing house and payments system facilitator. It oversees compliance with its operating rules, promotes standards of corporate governance among Australia’s listed companies and helps to educate retail investors.
+
+ASX operates markets for a wide range of asset classes including **equities**, fixed income, commodities and energy.
+
+## Data
+
+Historical trade data in ASX from 2011 - 2015.
+
+Initial: trade data of 1 stock in the year 2015.
+
+## Topics
+
+Price Impact of Cross Trades
+
+A **cross trade** occurs when both the buyer and seller sides of a trade are handled by the same broker.
+
+**Price impact** refers to the effect that a trade, or a series of trades, has on the market price of a stock. It measures how much the price of a stock moves as a result of trading activity.
+
+### Hypothesis
+
+Cross trades have a greater price impact than regular trades because they are more information-driven.
+
+# Data
 
 ```{r}
 all_1pg <- read.csv("data/1pg-all-dates.csv", colClasses = c(BidID = "character", AskID = "character"))
@@ -32,9 +61,8 @@ all_1pg <- read.csv("data/1pg-all-dates.csv", colClasses = c(BidID = "character"
 trade_1pg <- all_1pg |> filter(RecordType == "TRADE")
 ```
 
-# Data
-
 1PG Trades Count (2015) by Qualifiers:
+
 ```{r}
 trade_1pg |>
   group_by(Qualifiers) |>
@@ -50,10 +78,13 @@ We do not care about Center Point trades, because they do not influence market p
 trade_1pg_fl <- trade_1pg |>
   filter(Qualifiers %in% c("XT Bi", "XT Si", "Bi", "Si")) |>
   mutate(HourMinuteSecond = hms::as_hms(HourMinuteSecond),
-         dttm = paste(RecordDate, HourMinuteSecond, MilliSecond, sep = "."))
+         dttm = paste(RecordDate, HourMinuteSecond, sep = "."))
 
-trade_1pg_fl$dttm <- as.POSIXct(trade_1pg_fl$dttm, format = "%Y-%m-%d.%H:%M:%S.%OS")
-trade_1pg_fl <- trade_1pg_fl[!is.na(trade_1pg_fl$dttm), ]
+trade_1pg_fl$dttm <- as.POSIXct(trade_1pg_fl$dttm, format = "%Y-%m-%d.%H:%M:%S") + milliseconds(trade_1pg_fl$MilliSecond)
+
+trade_1pg_fl <- trade_1pg_fl |>
+  filter(HourMinuteSecond > as_hms("10:00:00") &
+           HourMinuteSecond <= as_hms("16:00:00"))
 
 trade_1pg_fl |> 
   group_by(Qualifiers) |>
@@ -69,14 +100,10 @@ trade_1pg_fl |>
 
 ```{r}
 trade_1pg_xt <- trade_1pg_fl |>
-  filter(Qualifiers %in% c("XT Bi", "XT Si"),
-         HourMinuteSecond > as_hms("10:00:00") &
-           HourMinuteSecond <= as_hms("16:00:00"))
+  filter(Qualifiers %in% c("XT Bi", "XT Si"))
 
 trade_1pg_noxt <- trade_1pg_fl |>
-  filter(Qualifiers %in% c("Bi", "Si"),
-         HourMinuteSecond > as_hms("10:00:00") &
-           HourMinuteSecond <= as_hms("16:00:00"))
+  filter(Qualifiers %in% c("Bi", "Si"))
 
 ggplot() +
   geom_density(data = trade_1pg_xt,
@@ -98,71 +125,123 @@ ggplot() +
 
 Price impact is measured using:
 
-- Bi: Natural logarithm of the ratio of trade price 5 minutes after the Trade divided by the Trade price. Prices are expected to increase after Buy Initiator trade, if the order is information driven. $$ PI5_Bi = ln(P5/P0)$$
-- Si: Natural logarithm of the ratio of the Trade price divided by trade price 5 minutes after the Trade. Prices are expected to decrease after Sell Initiator trade, if the order is information driven. $$ PI5_Si = ln(P0/P5)$$
+Absolute value of Natural logarithm of the ratio of the best bid-ask mid-quote 5 minutes after the Cross Trade, divided by the prevailing best bid-ask mid-quote at the time of the trade. $$ PI5 = |ln(MidQuote_5/MidQuote_0)|$$
+
+```{r}
+# tidy L1 data
+L1_1pg <- read.csv("data/1pg-L1-data.csv")
+
+L1_1pg_fl <- L1_1pg |>
+  mutate(HourMinuteSecond = hms::as_hms(HourMinuteSecond),
+         dttm = paste(RecordDate, HourMinuteSecond, sep = "."),
+         midquote = (L1BidPrice+L1AskPrice)/2) |>
+  filter(HourMinuteSecond > as_hms("10:00:00") &
+           HourMinuteSecond <= as_hms("16:00:00"))
+
+L1_1pg_fl$dttm <- as.POSIXct(L1_1pg_fl$dttm, format = "%Y-%m-%d.%H:%M:%S") + milliseconds(L1_1pg_fl$MilliSecond)
+
+```
 
 ```{r}
 # create new table for merging (dttm - 5 min) 
-trade_1pg_fl_later <- trade_1pg_fl |>
+L1_1pg_fl_later <- L1_1pg_fl |>
   mutate(dttm_5 = dttm - lubridate::minutes(5),
-         Price_later = Price) |>
-  select(dttm_5, Price_later)
+         midquote_5 = midquote) |>
+  select(dttm_5, midquote_5)
 
-# remove duplicate dttm, ensure 1 (row) to 1 merging
-trade_1pg_fl_later <- trade_1pg_fl_later |>
+# remove duplicate dttm, ensure 1 row to merge (the last)
+L1_1pg_fl_later <- L1_1pg_fl_later |>
   group_by(dttm_5) |>
-  slice_head(n = 1) |>
+  slice_tail(n = 1) |>
   ungroup()
 ```
 
 ```{r}
-# create function to find closest dttm
-closest_dttm <- function(dttm1, dttm2) {
-  dttm2[which.min(abs(difftime(dttm2, dttm1)))]
-}
-
-# # Find closest dttm
+# # create function to find closest dttm
+# closest_dttm <- function(dttm1, dttm2) {
+#   dttm2[which.min(abs(difftime(dttm2, dttm1)))]
+# }
+# 
+# closest_dttm2 <- function(dttm1, dttm2) {
+#   closest_time <- max(dttm2[dttm2 < dttm1], na.rm = TRUE)
+#  
+#   return(closest_time)
+# }
+# 
+# # Find closest dttm_5
 # trade_1pg_fl_5 <- trade_1pg_fl |>
 #   rowwise() |>
-#   mutate(closest = closest_dttm(dttm, trade_1pg_fl_later$dttm_5))
+#   mutate(closest = closest_dttm(dttm, L1_1pg_fl_later$dttm_5))
 # 
-# # left join to get the price
+# # left join to get the midquote_5
 # trade_1pg_fl_5 <- trade_1pg_fl_5 |>
-#   left_join(trade_1pg_fl_later, by = c("closest" = "dttm_5"))
-
+#   left_join(L1_1pg_fl_later, by = c("closest" = "dttm_5"))
+# 
+# # midquote at XT
+# 
+# trade_1pg_fl_5 <- trade_1pg_fl_5 |>
+#   left_join((L1_1pg_fl |>
+#               select(dttm, midquote)), 
+#             by = "dttm")
+# 
+# # midquote at XT for non-exact dttm trade-L1
+# trade_1pg_fl_5_na <- trade_1pg_fl_5 |>
+#   filter(is.na(midquote))
+# 
+# trade_1pg_fl_5_na <- trade_1pg_fl_5_na |>
+#   rowwise() |>
+#   mutate(closest_na = closest_dttm2(dttm, L1_1pg_fl$dttm))
+# 
+# trade_1pg_fl_5_na <- trade_1pg_fl_5_na |>
+#   select(-midquote) |>
+#   left_join((L1_1pg_fl |>
+#               select(dttm, midquote)), 
+#             by = c("closest_na" = "dttm"))
+# 
+# trade_1pg_fl_5 <- trade_1pg_fl_5 |>
+#   left_join((trade_1pg_fl_5_na |>
+#                select(mykey, midquote)),
+#             by = "mykey", suffix = c("", "_na")) |>
+#   mutate(midquote = ifelse(is.na(midquote), midquote_na, midquote)) |>
+#   select(-midquote_na) 
+#   
 # # create price impact column
 # trade_1pg_fl_5 <- trade_1pg_fl_5 |>
-#   mutate(PI = if_else(Qualifiers %in% c("XT Bi", "Bi"),
-#                       log(Price_later / Price), 
-#                       log(Price / Price_later)))
+#   mutate(PI = abs(log(midquote_5 / midquote)))
+# 
+# trade_1pg_fl_5 <- trade_1pg_fl_5 |> 
+#     filter(HourMinuteSecond > as_hms("10:00:00") &
+#            HourMinuteSecond <= as_hms("16:00:00"))
+# 
+# save(trade_1pg_fl_5, file = "data/trade_1pg_fl_5L1")
 
-load("data/trade_1pg_fl_5")
 ```
 
 ### XT vs All Non-XT
 
 ```{r}
+load("data/trade_1pg_fl_5L1")
+
 # mean PI
 trade_1pg_fl_5 |> 
+  filter(!is.na(PI)) |>
   group_by(Qualifiers) |>
   summarise(PI5_mean = mean(PI))
 
-trade_1pg_fl_5$PI |> 
-  summary()
 ```
 
 ```{r}
 xt_5 <-trade_1pg_fl_5 |>
   filter(Qualifiers %in% c("XT Bi", "XT Si")) |>
   group_by(RecordDate) |>
-  summarise(price_impact = sum(PI),
+  summarise(price_impact = sum(PI, na.rm = TRUE),
             freq = n()) |>
   mutate(avg = price_impact/freq)
 
 nonxt_5 <- trade_1pg_fl_5 |>
   filter(Qualifiers %in% c("Bi", "Si")) |>
   group_by(RecordDate) |>
-  summarise(price_impact = sum(PI),
+  summarise(price_impact = sum(PI, na.rm = TRUE),
             freq = n()) |>
   mutate(avg = price_impact/freq)
 
@@ -182,9 +261,9 @@ daily_pi |>
        y = "Price Impact")
 ```
 
-### XT vs Matched Trades 
+### XT vs Matched Trades
 
-```{r}
+```{r, eval = FALSE}
 # Function to match trades for a single row
 match_trade <- function(row, df) {
   df |>
@@ -232,7 +311,7 @@ df_xt_matched <- trade_1pg_fl_5 |>
 load("data/df_xt_matched_10000")
 ```
 
-```{r}
+```{r, eval = FALSE}
 # mean PI
 df_xt_matched |> 
   group_by(Qualifiers) |>
@@ -242,7 +321,7 @@ df_xt_matched$PI |>
   summary()
 ```
 
-```{r}
+```{r, eval = FALSE}
 xt_5_2 <- df_xt_matched |>
   filter(Qualifiers %in% c("XT Bi", "XT Si")) |>
   group_by(RecordDate) |>
@@ -272,4 +351,3 @@ daily_pi_2 |>
        subtitle = "Stock: 1PG",
        y = "Price Impact")
 ```
-
