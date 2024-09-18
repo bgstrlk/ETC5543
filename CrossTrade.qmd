@@ -351,3 +351,109 @@ daily_pi_2 |>
        subtitle = "Stock: 1PG",
        y = "Price Impact")
 ```
+
+## Possible Topics
+
+### XT for cross-subsidization of funds (informed)
+
+Characteristics:
+
+1.  Done by HFT brokers
+2.  XT happened more off the market (transfer the stocks after/before automated HFT)
+3.  XT happened:
+
+-   After non-preferred funds (B) buying the stock from market. This could happened for transferring stock from non-preferred (B) to preferred funds (A).
+- After A buying the stock from market. This could happened for transferring stock from A to B.
+
+4.  For control we need:
+
+-   The XT volume should be similar to the buying volume before.
+-   Time of buying before the XT should be not far away from the XT
+
+5.  Absolute price impact is greater(?)
+
+### XT for principal profit (informed)
+
+Principal profit:
+
+- move unwanted shares to clients
+- take wanted shares from clients
+
+Characteristics:
+
+1.  Done by retail brokers
+2.  XT happened more off the market
+
+- XT happened:
+  -   After brokers buying the stock from market. This could happened for moving unwanted stock to clients.
+  -   After clients buying the stock from the market. This could happened for taking wanted stocks clients.
+  - Execution price similar than prevailing market price. In non-informed XT, usually premium/discount are exist, as buyer/seller wants to buy/sell desperately. Hence, if the premium/discount are non-existent, the other party may be given or have different information.
+
+3.  Absolute price impact is greater(?)
+
+### Price Impacting XT (non-informed)
+
+Characteristics:
+
+1.  Done by institutional brokers (high capital)
+2.  Happened on the market, hence impacting price
+3.  buy/ask order time and volume are similar (predetermined)
+4.  happened quite frequently in short period of time
+5.  very aggressive (absorb the liquidity)
+6. price impact is greater(?) 
+
+### XT for transaction fee (non-informed))
+
+1.  Done by institutional and retail brokers
+2.  On-the-market. XT happened with similar volume and time of orders
+3. Not as aggressive
+4.  price impact is not greater than regular trades
+
+## XT Statistics
+
+```{r}
+jan_1pg <- read.csv("data/1PGJan2015orderbook.csv", colClasses = c(BidID = "character", AskID = "character"))
+
+tes <- jan_1pg |> filter(AskID == "6504725087869854637")
+
+jan_1pgxt <- read.csv("data/1PGJan2015orderbookXT.csv", colClasses = c(BidID = "character", AskID = "character"))
+```
+
+```{r}
+# trade_1pg_fl_5 |> 
+#   filter(month(dttm) == 1,
+#          Qualifiers %in% c("XT Bi", "XT Si")) 
+```
+
+```{r}
+jan_1pgxt2 <- jan_1pgxt |> 
+  distinct(Mykey, .keep_all = TRUE) |>
+  mutate(p_impr = ifelse(Price > Bid_before & Price < Ask_before,
+                         1,
+                         ifelse(Price == Bid_before | Price == Ask_before, 2, 3)))
+```
+
+### Price Improvement Statistics on January 
+
+```{r}
+jan_1pgxt2 |> 
+  count(p_impr) |>
+  mutate(count = n,
+         desc = c("price improvement", "best bid/ask", "outside"),
+         percentage = round(count / sum(count) * 100, 2)) |>
+  select(desc, count, percentage) |>
+  kable() |>
+  kable_styling(full_width = FALSE)
+
+```
+
+```{r}
+tes <- all_1pg |> 
+  mutate(hms = hms::as_hms(HourMinuteSecond)) |>
+  filter(Volume == 1,
+         hms > as_hms("10:00:00"),
+         hms < as_hms("16:00:00"))
+
+jan9 <- all_1pg |> filter(RecordDate == "2015-01-09")
+```
+
