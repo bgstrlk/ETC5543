@@ -23,6 +23,7 @@ library(kableExtra)
 options(knitr.table.html.attr = "quarto-disable-processing=true")
 library(chron)
 library(hms)
+library(lubridate)
 ```
 
 # Introduction
@@ -363,7 +364,7 @@ Characteristics:
 3.  XT happened:
 
 -   After non-preferred funds (B) buying the stock from market. This could happened for transferring stock from non-preferred (B) to preferred funds (A).
-- After A buying the stock from market. This could happened for transferring stock from A to B.
+-   After A buying the stock from market. This could happened for transferring stock from A to B.
 
 4.  For control we need:
 
@@ -376,18 +377,18 @@ Characteristics:
 
 Principal profit:
 
-- move unwanted shares to clients
-- take wanted shares from clients
+-   move unwanted shares to clients
+-   take wanted shares from clients
 
 Characteristics:
 
 1.  Done by retail brokers
 2.  XT happened more off the market
 
-- XT happened:
-  -   After brokers buying the stock from market. This could happened for moving unwanted stock to clients.
-  -   After clients buying the stock from the market. This could happened for taking wanted stocks clients.
-  - Execution price similar than prevailing market price. In non-informed XT, usually premium/discount are exist, as buyer/seller wants to buy/sell desperately. Hence, if the premium/discount are non-existent, the other party may be given or have different information.
+-   XT happened:
+    -   After brokers buying the stock from market. This could happened for moving unwanted stock to clients.
+    -   After clients buying the stock from the market. This could happened for taking wanted stocks clients.
+    -   Execution price similar than prevailing market price. In non-informed XT, usually premium/discount are exist, as buyer/seller wants to buy/sell desperately. Hence, if the premium/discount are non-existent, the other party may be given or have different information.
 
 3.  Absolute price impact is greater(?)
 
@@ -400,19 +401,27 @@ Characteristics:
 3.  buy/ask order time and volume are similar (predetermined)
 4.  happened quite frequently in short period of time
 5.  very aggressive (absorb the liquidity)
-6. price impact is greater(?) 
+6.  price impact is greater(?)
 
 ### XT for transaction fee (non-informed))
 
 1.  Done by institutional and retail brokers
 2.  On-the-market. XT happened with similar volume and time of orders
-3. Not as aggressive
+3.  Not as aggressive
 4.  price impact is not greater than regular trades
 
 ## XT Statistics
 
 ```{r}
 jan_1pg <- read.csv("data/1PGJan2015orderbook.csv", colClasses = c(BidID = "character", AskID = "character"))
+
+jan_1pg <- jan_1pg |>
+  select(-Count) |>
+  distinct() |>
+  mutate(hms = hms::as_hms(HourMinuteSecond)) |>
+  filter(hms > as_hms("10:00:00"),
+         hms < as_hms("16:00:00"))
+  
 
 tes <- jan_1pg |> filter(AskID == "6504725087869854637")
 
@@ -433,7 +442,7 @@ jan_1pgxt2 <- jan_1pgxt |>
                          ifelse(Price == Bid_before | Price == Ask_before, 2, 3)))
 ```
 
-### Price Improvement Statistics on January 
+### Price Improvement Statistics on January
 
 ```{r}
 jan_1pgxt2 |> 
@@ -455,5 +464,92 @@ tes <- all_1pg |>
          hms < as_hms("16:00:00"))
 
 jan9 <- all_1pg |> filter(RecordDate == "2015-01-09")
+```
+
+## TWPI
+
+```{r}
+l1 <- read.csv("data/1pg-L1-data.csv")
+
+all_1pg_session <- all_1pg |>
+  mutate(RecordDate = lubridate::ymd(RecordDate),
+         hms = hms::as_hms(HourMinuteSecond)) |>
+  filter(hms > as_hms("10:00:00"),
+         hms < as_hms("16:00:00"))
+
+# # remove duplicates
+# jan_1pg_best <- jan_1pg |>
+#   select(Mykey, Bid_before, Ask_before) |>
+#   filter(!is.na(Bid_before),
+#          !is.na(Ask_before)) |>
+#   rename(mykey = Mykey)
+# 
+# all_1pg_best <- all_1pg_session |> left_join(jan_1pg_best, by = "mykey")
+
+
+l1_lag <- l1 |>
+  mutate(lagged_bid = lag(L1BidPrice),
+         lagged_ask = lag(L1AskPrice),
+         RecordDate = lubridate::ymd(RecordDate)) |>
+  select(RecordDate, HourMinuteSecond, MilliSecond, lagged_bid, lagged_ask)
+
+
+all_1pg_best <- all_1pg_session |>
+  left_join(l1_lag, by = c("RecordDate","HourMinuteSecond","MilliSecond")) |>
+  fill(lagged_bid, .direction = "up") |>
+  fill(lagged_ask, .direction = "up") |>
+  rename(bid_before = lagged_bid,
+         ask_before = lagged_ask)
+
+```
+
+```{r}
+twpi <- all_1pg_best |> 
+  filter(RecordType == "OFFTR",
+         Qualifiers == "NX XT") |>
+  mutate(code = ifelse(Price > bid_before & Price < ask_before,
+                       "within",
+                       ifelse(Price == bid_before | Price == ask_before, "at best", "outside")))
+
+
+twpi |>
+  count(code) |>
+  mutate(count = n,
+         desc = code,
+         percentage = round(count / sum(count) * 100, 2)) |>
+  select(desc, count, percentage) |>
+  kable() |>
+  kable_styling(full_width = FALSE)
+
+twpi |> 
+  group_by(code) |>
+  count(BuyerBrokerID) |>
+  rename(`Trade Price` = code) |>
+  ungroup() |>
+  group_by(BuyerBrokerID) |>
+  mutate(percentage = round(n / sum(n) * 100, 2)) |>
+  arrange(BuyerBrokerID) |>
+    kable() |>
+  kable_styling(full_width = FALSE)
+
+twpi |> 
+  group_by(code) |>
+  count(BuyerBrokerID) |>
+  rename(`Trade Price` = code) |>
+  ggplot(aes(x = as.factor(BuyerBrokerID), y = n, fill = `Trade Price`)) +
+  geom_col(position = "dodge") +
+  theme_bw() +
+  labs(title = "Crossing Trades Reported as TWPI",
+       x = "Broker ID",
+       y = "NX XT Counts")
+```
+
+```{r}
+twpi |> 
+  group_by(BuyerBrokerID) |>
+  count(BuyerBrokerID) |>
+  ungroup() |>
+  mutate(count = n,
+         percentage = round(count / sum(count) * 100, 2))
 ```
 
