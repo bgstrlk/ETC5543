@@ -1,11 +1,29 @@
 ---
-title: "Report"
-format: html
+title: "Week 10"
+format: pdf
 editor: visual
 ---
 
 # Research Problem
 
+1.  ASIC found that many brokers reported TWPI that do not actually with improvement. Either they were at best bid/ask or worse than that. But ASIC does not published the report. Therefore, we want to know how the violation occurred since the introduction of the rule in 2011.
+2.  The purposes of rule change in 2013 (limit TWPI to within best bid/ask exclusively) are:
+
+    - encourage more trading to occur in lit market
+    - protect lit orders from being traded ahead of by dark trades at the same price
+    - address the impact of dark liquidity on price formation, market quality and fairness 
+
+    Therefore, we want to know how effective is this rule change in 2013: did TWPI trades significantly decrease in percentage of total trades? (to answer purpose no 1)
+
 # Data
 
+- TWPI trades on ASX200 since the introduction of the TWPI rule in 2011, until 2016. New columns of within, at, or outside best bid/ask.
+- Everything about Big Machine, where can I read about it?
+- Brokers with the most special trades (Fill and Kill, All or Nothing, Iceberg), to analyse the correlation to the TWPI
+
 # Analysis
+
+- Violation of TWPI by numbers, from 2011 - 2016
+- Rules change in 2013, how they impact the numbers of TWPI
+- What type of brokers did the most violation? Are they informed brokers (institutional)?
+- Do brokers with the most special orders tend to do TWPI? if yes, then we have initial connection that TWPI is informed transaction (for future work)
