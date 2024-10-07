@@ -1,33 +1,48 @@
 ---
-title: "TWPI"
+title: "Trades With Price Improvement"
 format: revealjs
 editor: visual
 ---
 
-## What is Trade With Price Improvement?
+## What is TWPI? Background ..
 
-Equity market products must be traded on a lit market (ASX trading platform). Why?
-Promotes liquidity and price formation.
+Equity market products must be traded on a lit market (ASX trading platform).
+
+Why? Promotes liquidity and price formation.
+
 Exception:
+
 - block trade
 - portfolio trade
 - out-of-hours trade
 - Trade with price improvement (TWPI)
 
-Price Improvement: higher than best bid, lower than best offer
+## What is TWPI? Technically ..
 
-Allowed because better price than lit market -> investor's gain
+Price Improvement: 
 
-## What is Trade With Price Improvement ? Technically ..
+- higher than best bid, lower than best offer
+- better price than lit market -> investor's gain
 
-
+TWPI occurred on the broker's internal system (dark market), for example: crossing system.
 
 ## Research Problem
 
-- ASIC review of TWPI in 2022
-- Rule change in 2013
+<div style="font-size:32px;">
+Background:
 
-## Objectives and Significance
+1. Rule change in 2013: TWPI must be better than lit market price ..
+    - ensuring liquidity, better price formation in the lit market (investor POV)
+    - ASX business model: public owned company, seeking for profit (ASX POV)
+    
+2. ASIC review of TWPI in 2022: 
+    - TWPI reported not exactly occurred at better prices.  
+</div>
+
+Questions:
+
+- Do ASX gaining profit after imposing TWPI?
+- How many violations of TWPI rule?
 
 ## Methodology
 

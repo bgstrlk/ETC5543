@@ -10,7 +10,7 @@
 <link href="presentation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
-  <title>TWPI</title>
+  <title>Trades With Price Improvement</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -325,32 +325,76 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">TWPI</h1>
+  <h1 class="title">Trades With Price Improvement</h1>
 
 <div class="quarto-title-authors">
 </div>
 
 </section>
-<section id="quarto" class="slide level2">
-<h2>Quarto</h2>
-<p>Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <a href="https://quarto.org/docs/presentations/" class="uri">https://quarto.org/docs/presentations/</a>.</p>
-</section>
-<section id="bullets" class="slide level2">
-<h2>Bullets</h2>
-<p>When you click the <strong>Render</strong> button a document will be generated that includes:</p>
+<section id="what-is-twpi-background-.." class="slide level2">
+<h2>What is TWPI? Background ..</h2>
+<p>Equity market products must be traded on a lit market (ASX trading platform).</p>
+<p>Why? Promotes liquidity and price formation.</p>
+<p>Exception:</p>
 <ul>
-<li>Content authored with markdown</li>
-<li>Output from executable code</li>
+<li>block trade</li>
+<li>portfolio trade</li>
+<li>out-of-hours trade</li>
+<li>Trade with price improvement (TWPI)</li>
 </ul>
 </section>
-<section id="code" class="slide level2">
-<h2>Code</h2>
-<p>When you click the <strong>Render</strong> button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<section id="what-is-twpi-technically-.." class="slide level2">
+<h2>What is TWPI? Technically ..</h2>
+<p>Price Improvement:</p>
+<ul>
+<li>higher than best bid, lower than best offer</li>
+<li>better price than lit market -&gt; investor’s gain</li>
+</ul>
+<p>TWPI occurred on the broker’s internal system (dark market), for example: crossing system.</p>
+</section>
+<section id="research-problem" class="slide level2">
+<h2>Research Problem</h2>
+<div style="font-size:32px;">
+<p>Background:</p>
+<ol type="1">
+<li>Rule change in 2013: TWPI must be better than lit market price
+<ul>
+<li>ensuring liquidity, better price formation in the lit market (investor POV)</li>
+<li>ASX business model: public owned company, seeking for profit (ASX POV)</li>
+</ul></li>
+<li>ASIC review of TWPI in 2022:
+<ul>
+<li>TWPI reported not exactly occurred at better prices.<br>
+</li>
+</ul></li>
+</ol>
 </div>
-</div>
+<p>Questions:</p>
+<ul>
+<li>Do ASX gaining profit after imposing TWPI?</li>
+<li>How many violation of TWPI rule?</li>
+</ul>
+</section>
+<section id="methodology" class="slide level2">
+<h2>Methodology</h2>
+</section>
+<section id="challenges" class="slide level2">
+<h2>Challenges</h2>
+</section>
+<section id="analysis" class="slide level2">
+<h2>Analysis</h2>
+</section>
+<section id="result" class="slide level2">
+<h2>Result</h2>
+</section>
+<section id="discussion" class="slide level2">
+<h2>Discussion</h2>
+</section>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
+</section>
+<section id="future-work" class="slide level2">
+<h2>Future Work</h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
@@ -567,82 +611,6 @@
         ]
       });
     </script>
-    
-
-    <script>
-
-      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
-
-      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
-
-      // slide changes (different for each slide format).
-
-      (function () {
-
-        // dispatch for htmlwidgets
-
-        function fireSlideEnter() {
-
-          const event = window.document.createEvent("Event");
-
-          event.initEvent("slideenter", true, true);
-
-          window.document.dispatchEvent(event);
-
-        }
-
-    
-
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          fireSlideEnter();
-
-    
-
-          // dispatch for shiny
-
-          if (window.jQuery) {
-
-            if (previousSlide) {
-
-              window.jQuery(previousSlide).trigger("hidden");
-
-            }
-
-            if (currentSlide) {
-
-              window.jQuery(currentSlide).trigger("shown");
-
-            }
-
-          }
-
-        }
-
-    
-
-        // hookup for slidy
-
-        if (window.w3c_slidy) {
-
-          window.w3c_slidy.add_observer(function (slide_num) {
-
-            // slide_num starts at position 1
-
-            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
-
-          });
-
-        }
-
-    
-
-      })();
-
-    </script>
-
-    
-
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
