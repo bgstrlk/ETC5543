@@ -27,3 +27,9 @@ editor: visual
 - Rules change in 2013, how they impact the numbers of TWPI
 - What type of brokers did the most violation? Are they informed brokers (institutional)?
 - Do brokers with the most special orders tend to do TWPI? if yes, then we have initial connection that TWPI is informed transaction (for future work)
+
+- simple regression model to predict: when the TWPI is violated
+reason: 
+1. simpler data, whole data can be extracted
+2. more interesting than looking at informative trade. 
+3. 
