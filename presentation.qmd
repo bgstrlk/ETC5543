@@ -4,21 +4,41 @@ format: revealjs
 editor: visual
 ---
 
-## Quarto
+## What is Trade With Price Improvement?
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+Equity market products must be traded on a lit market (ASX trading platform). Why?
+Promotes liquidity and price formation.
+Exception:
+- block trade
+- portfolio trade
+- out-of-hours trade
+- Trade with price improvement (TWPI)
 
-## Bullets
+Price Improvement: higher than best bid, lower than best offer
 
-When you click the **Render** button a document will be generated that includes:
+Allowed because better price than lit market -> investor's gain
 
--   Content authored with markdown
--   Output from executable code
+## What is Trade With Price Improvement ? Technically ..
 
-## Code
 
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
 
-```{r}
-1 + 1
-```
+## Research Problem
+
+- ASIC review of TWPI in 2022
+- Rule change in 2013
+
+## Objectives and Significance
+
+## Methodology
+
+## Challenges
+
+## Analysis
+
+## Result
+
+## Discussion
+
+## Conclusion
+
+## Future Work
