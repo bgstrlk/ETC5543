@@ -21,10 +21,12 @@ Exception:
 
 Price Improvement: 
 
-- higher than best bid, lower than best offer
+- higher than best bid, lower than best offer (show visual example)
 - better price than lit market -> investor's gain
 
 TWPI occurred on the broker's internal system (dark market), for example: crossing system.
+
+TWPI is reported to trading platform in immediate manner. 
 
 ## Research Problem
 
@@ -41,19 +43,53 @@ Background:
 
 Questions:
 
-- Do ASX gaining profit after imposing TWPI?
-- How many violations of TWPI rule?
+- How many violations on TWPI rule?
+- Who did the violation?
+- What conditions that make the violation occurred? Develop a model ...
 
-## Methodology
+## Data and Methodology
+
+Now: Trading data for one stock, one year:
+Next: Whole ASX200 trading data for six years, 2011 - 2016 (using Big Machine)
+
+Combine trading and L1 Data: look for violations
+(show the trading data and L1 Data) 
+(show the combined data)
 
 ## Challenges
 
-## Analysis
+- Latest open data available only until 2016
+- Handling large amount of data need huge processing power
+- Big Machine can handle it, but ...
+    - still need days
+    - new issues every weeks, still on progress to make it work
 
-## Result
+## Result and Discussion
 
-## Discussion
+(barplot of violations)
+
+How many violations in percentage?
+What type of broker did the most violation?
+
+Paper said that institution tend to have better information 
+-> initial sign that TWPI is informed transaction. 
+
+## Result and Discussion - Modelling
+
+
 
 ## Conclusion
 
+- Violation of TWPI rule mostly occurred if it is done by institutional broker and ...
+- Informed traders may opt to choose TWPI before putting their order on the lit market to keep the information from leaking (need more thorough research)
+- There is no measure from ASX to reject TWPI from being reported if the condition is not met -> ASX need to address this issue 
+
 ## Future Work
+
+- Analyse for the whole ASX200 stocks
+- How much potential losses for ASX due to TWPI violation?
+
+
+
+
+

@@ -347,17 +347,18 @@
 <h2>What is TWPI? Technically ..</h2>
 <p>Price Improvement:</p>
 <ul>
-<li>higher than best bid, lower than best offer</li>
+<li>higher than best bid, lower than best offer (show visual example)</li>
 <li>better price than lit market -&gt; investor’s gain</li>
 </ul>
 <p>TWPI occurred on the broker’s internal system (dark market), for example: crossing system.</p>
+<p>TWPI is reported to trading platform in immediate manner.</p>
 </section>
 <section id="research-problem" class="slide level2">
 <h2>Research Problem</h2>
 <div style="font-size:32px;">
 <p>Background:</p>
 <ol type="1">
-<li>Rule change in 2013: TWPI must be better than lit market price
+<li>Rule change in 2013: TWPI must be better than lit market price ..
 <ul>
 <li>ensuring liquidity, better price formation in the lit market (investor POV)</li>
 <li>ASX business model: public owned company, seeking for profit (ASX POV)</li>
@@ -371,30 +372,51 @@
 </div>
 <p>Questions:</p>
 <ul>
-<li>Do ASX gaining profit after imposing TWPI?</li>
-<li>How many violation of TWPI rule?</li>
+<li>How many violations on TWPI rule?</li>
+<li>Who did the violation?</li>
+<li>What conditions that make the violation occurred? Develop a model …</li>
 </ul>
 </section>
-<section id="methodology" class="slide level2">
-<h2>Methodology</h2>
+<section id="data-and-methodology" class="slide level2">
+<h2>Data and Methodology</h2>
+<p>Now: Trading data for one stock, one year: Next: Whole ASX200 trading data for six years, 2011 - 2016 (using Big Machine)</p>
+<p>Combine trading and L1 Data: look for violations (show the trading data and L1 Data) (show the combined data)</p>
 </section>
 <section id="challenges" class="slide level2">
 <h2>Challenges</h2>
+<ul>
+<li>Latest open data available only until 2016</li>
+<li>Handling large amount of data need huge processing power</li>
+<li>Big Machine can handle it, but …
+<ul>
+<li>still need days</li>
+<li>new issues every weeks, still on progress to make it work</li>
+</ul></li>
+</ul>
 </section>
-<section id="analysis" class="slide level2">
-<h2>Analysis</h2>
+<section id="result-and-discussion" class="slide level2">
+<h2>Result and Discussion</h2>
+<p>(barplot of violations)</p>
+<p>How many violations in percentage? What type of broker did the most violation?</p>
+<p>Paper said that institution tend to have better information -&gt; initial sign that TWPI is informed transaction.</p>
 </section>
-<section id="result" class="slide level2">
-<h2>Result</h2>
-</section>
-<section id="discussion" class="slide level2">
-<h2>Discussion</h2>
+<section id="result-and-discussion---modelling" class="slide level2">
+<h2>Result and Discussion - Modelling</h2>
 </section>
 <section id="conclusion" class="slide level2">
 <h2>Conclusion</h2>
+<ul>
+<li>Violation of TWPI rule mostly occurred if it is done by institutional broker and …</li>
+<li>Informed traders may opt to choose TWPI before putting their order on the lit market to keep the information from leaking (need more thorough research)</li>
+<li>There is no measure from ASX to reject TWPI from being reported if the condition is not met -&gt; ASX need to address this issue</li>
+</ul>
 </section>
 <section id="future-work" class="slide level2">
 <h2>Future Work</h2>
+<ul>
+<li>Analyse for the whole ASX200 stocks</li>
+<li>How much potential losses for ASX due to TWPI violation?</li>
+</ul>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
