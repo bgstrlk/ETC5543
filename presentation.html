@@ -28,6 +28,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="presentation_files/libs/revealjs/dist/theme/quarto.css">
   <link href="presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -319,6 +384,10 @@
       margin-right: 0; 
     }
   </style>
+  <script src="presentation_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
+  <link href="presentation_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -355,7 +424,7 @@
 </section>
 <section id="research-problem" class="slide level2">
 <h2>Research Problem</h2>
-<div style="font-size:32px;">
+<div style="font-size:30px;">
 <p>Background:</p>
 <ol type="1">
 <li>Rule change in 2013: TWPI must be better than lit market price ..
@@ -365,22 +434,392 @@
 </ul></li>
 <li>ASIC review of TWPI in 2022:
 <ul>
-<li>TWPI reported not exactly occurred at better prices.<br>
-</li>
+<li>TWPI reported not exactly occurred at better prices.</li>
 </ul></li>
 </ol>
-</div>
+<p><br></p>
 <p>Questions:</p>
 <ul>
 <li>How many violations on TWPI rule?</li>
 <li>Who did the violation?</li>
 <li>What conditions that make the violation occurred? Develop a model …</li>
 </ul>
+</div>
 </section>
-<section id="data-and-methodology" class="slide level2">
-<h2>Data and Methodology</h2>
-<p>Now: Trading data for one stock, one year: Next: Whole ASX200 trading data for six years, 2011 - 2016 (using Big Machine)</p>
-<p>Combine trading and L1 Data: look for violations (show the trading data and L1 Data) (show the combined data)</p>
+<section id="data" class="slide level2">
+<h2>Data</h2>
+<ul>
+<li>Now: Trading data for one stock, one year</li>
+<li>Next: Whole ASX200 trading data for six years, 2011 - 2016 (using Big Machine)</li>
+</ul>
+<p>Big Machine</p>
+<div style="font-size:30px;">
+<ul>
+<li>aaaaa</li>
+<li>bbbbb</li>
+</ul>
+</div>
+</section>
+<section id="data-1" class="slide level2">
+<h2>Data</h2>
+<div class="columns">
+<div class="column">
+<p><span style="font-size: 20px; color: red;">Trading Data</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">mykey</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RecordDate</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">HourMinuteSecond</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MilliSecond</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RecordType</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Price</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Volume</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">UndisclosedVolume</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">DollarValue</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Qualifiers</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">BidID</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AskID</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BuyerBrokerID</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">SellerBrokerID</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">hms</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">158992400</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:00:32</td>
+<td style="text-align: right;">854</td>
+<td style="text-align: left;">ENTER</td>
+<td style="text-align: right;">1.190</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11900.000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">6505906787991053321</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">10:00:32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">158992401</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: left;">ENTER</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">23600.000</td>
+<td style="text-align: left;">OB0</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">6505906787991062575</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">10:06:28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">158992402</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: left;">TRADE</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1253</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1484.805</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">6505906787990991241</td>
+<td style="text-align: left;">6505906787991062575</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">638</td>
+<td style="text-align: left;">10:06:28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">158992403</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: left;">TRADE</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">18747</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">22121.460</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">6505906787990992156</td>
+<td style="text-align: left;">6505906787991062575</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">638</td>
+<td style="text-align: left;">10:06:28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">158992404</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:49</td>
+<td style="text-align: right;">921</td>
+<td style="text-align: left;">ENTER</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">23600.000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">6505906787991063494</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">10:06:49</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">158992405</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:49</td>
+<td style="text-align: right;">921</td>
+<td style="text-align: left;">TRADE</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">10914</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">12878.520</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">6505906787990992156</td>
+<td style="text-align: left;">6505906787991063494</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">179</td>
+<td style="text-align: left;">10:06:49</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div><div class="column">
+<p><span style="font-size: 20px; color: red;">L1 Data</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">mykey</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RecordDate</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">HourMinuteSecond</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MilliSecond</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L1BidPrice</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L1BidVolume</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L1AskPrice</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L1AskVolume</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2440989525</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">07:00:00</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">1.140</td>
+<td style="text-align: right;">300</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">11488</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2440989526</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">09:59:46</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">1.190</td>
+<td style="text-align: right;">22000</td>
+<td style="text-align: right;">1.195</td>
+<td style="text-align: right;">11567</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2440989527</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">09:59:47</td>
+<td style="text-align: right;">403</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1253</td>
+<td style="text-align: right;">1.195</td>
+<td style="text-align: right;">11567</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2440989528</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:00:32</td>
+<td style="text-align: right;">854</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1253</td>
+<td style="text-align: right;">1.190</td>
+<td style="text-align: right;">10000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2440989529</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">10914</td>
+<td style="text-align: right;">1.190</td>
+<td style="text-align: right;">10000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2440989530</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:49</td>
+<td style="text-align: right;">921</td>
+<td style="text-align: right;">1.160</td>
+<td style="text-align: right;">3389</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">9086</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div></div>
+<p><span style="font-size: 20px; color: red;">Combined Data</span></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">mykey</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RecordDate</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">HourMinuteSecond</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MilliSecond</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">RecordType</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Price</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Volume</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">UndisclosedVolume</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">DollarValue</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Qualifiers</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">BidID</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">AskID</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">BuyerBrokerID</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">SellerBrokerID</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">bid_before</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">ask_before</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">158992400</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:00:32</td>
+<td style="text-align: right;">854</td>
+<td style="text-align: left;">ENTER</td>
+<td style="text-align: right;">1.190</td>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">11900.000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">6505906787991053321</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1.195</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">158992401</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: left;">ENTER</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">23600.000</td>
+<td style="text-align: left;">OB0</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">6505906787991062575</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1.190</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">158992402</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: left;">TRADE</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1253</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1484.805</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">6505906787990991241</td>
+<td style="text-align: left;">6505906787991062575</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">638</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1.190</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">158992403</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:28</td>
+<td style="text-align: right;">776</td>
+<td style="text-align: left;">TRADE</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">18747</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">22121.460</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">6505906787990992156</td>
+<td style="text-align: left;">6505906787991062575</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">638</td>
+<td style="text-align: right;">1.185</td>
+<td style="text-align: right;">1.190</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">158992404</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:49</td>
+<td style="text-align: right;">921</td>
+<td style="text-align: left;">ENTER</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">23600.000</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">6505906787991063494</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">1.190</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">158992405</td>
+<td style="text-align: left;">2015-01-02</td>
+<td style="text-align: left;">10:06:49</td>
+<td style="text-align: right;">921</td>
+<td style="text-align: left;">TRADE</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">10914</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">12878.520</td>
+<td style="text-align: left;">Si</td>
+<td style="text-align: left;">6505906787990992156</td>
+<td style="text-align: left;">6505906787991063494</td>
+<td style="text-align: right;">140</td>
+<td style="text-align: right;">179</td>
+<td style="text-align: right;">1.180</td>
+<td style="text-align: right;">1.190</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
 </section>
 <section id="challenges" class="slide level2">
 <h2>Challenges</h2>
@@ -396,25 +835,394 @@
 </section>
 <section id="result-and-discussion" class="slide level2">
 <h2>Result and Discussion</h2>
-<p>(barplot of violations)</p>
-<p>How many violations in percentage? What type of broker did the most violation?</p>
-<p>Paper said that institution tend to have better information -&gt; initial sign that TWPI is informed transaction.</p>
+<div class="columns">
+<div class="column" style="width:32%;">
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; width: auto !important; ">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Price</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Count</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">at best</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.63</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">outside</td>
+<td style="text-align: right;">313</td>
+<td style="text-align: right;">12.38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">within</td>
+<td style="text-align: right;">2199</td>
+<td style="text-align: right;">86.99</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; width: auto !important; ">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Broker Type</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">TWPI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Violation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">HFT-Broker</td>
+<td style="text-align: right;">1757</td>
+<td style="text-align: right;">320</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Institution</td>
+<td style="text-align: right;">758</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Unclassified</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div><div class="column" style="width:68%;">
+<div style="font-size: 30px;">
+<ul>
+<li>13% of reported TWPIs violated the rule</li>
+<li>HFT Brokers have done the most TWPI, as well as violation</li>
+</ul>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="presentation_files/figure-revealjs/unnamed-chunk-10-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div></div>
 </section>
 <section id="result-and-discussion---modelling" class="slide level2">
 <h2>Result and Discussion - Modelling</h2>
+<p>Five machine learning modelling to understand violation pattern:</p>
+<ul>
+<li>Logistic Regression</li>
+<li>LDA</li>
+<li>Decision Tree</li>
+<li>Random Forest</li>
+<li>Boosted Tree (xgboost)</li>
+</ul>
+<p>Logistic Regression and LDA give the best result for this classification problem. Random Forest has highest balance accuracy score, but lower true violation.</p>
+</section>
+<section id="result-and-discussion---modelling-1" class="slide level2">
+<h2>Result and Discussion - Modelling</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 18px; width: auto !important; ">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Logistic Regression
+</div></th>
+</tr>
+<tr class="odd">
+<th style="text-align: left;" data-quarto-table-cell-role="th">violation</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">cl_acc</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.6579670</td>
+<td style="text-align: right;">479</td>
+<td style="text-align: right;">249</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.6909091</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">76</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div style="font-size: 0.75em;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>bal_accuracy_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6744381</code></pre>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 18px; width: auto !important; ">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+LDA
+</div></th>
+</tr>
+<tr class="odd">
+<th style="text-align: left;" data-quarto-table-cell-role="th">violation</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">cl_acc</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.6813187</td>
+<td style="text-align: right;">496</td>
+<td style="text-align: right;">232</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.7000000</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">77</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div style="font-size: 0.75em;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>bal_accuracy_lda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6906593</code></pre>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 18px; width: auto !important; ">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Random Forest
+</div></th>
+</tr>
+<tr class="odd">
+<th style="text-align: left;" data-quarto-table-cell-role="th">violation</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Accuracy</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">0.9519231</td>
+<td style="text-align: right;">693</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">0.5545455</td>
+<td style="text-align: right;">49</td>
+<td style="text-align: right;">61</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div style="font-size: 0.75em;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>bal_accuracy_rf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.7532343</code></pre>
+</div>
+</div>
+</div>
+</div><div class="column">
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 15px; width: auto !important; ">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">logreg_est</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">lda_coef</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-2.0488864</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Volume</td>
+<td style="text-align: right;">-16.5825046</td>
+<td style="text-align: right;">-1.5813406</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DollarValue</td>
+<td style="text-align: right;">12.9541072</td>
+<td style="text-align: right;">2.0710686</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DescriptionInstitution</td>
+<td style="text-align: right;">-2.7122448</td>
+<td style="text-align: right;">-1.4305830</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">month5</td>
+<td style="text-align: right;">0.6076385</td>
+<td style="text-align: right;">0.6832949</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">month6</td>
+<td style="text-align: right;">-0.8452584</td>
+<td style="text-align: right;">-1.0080138</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">month7</td>
+<td style="text-align: right;">-0.2517291</td>
+<td style="text-align: right;">-0.1887093</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">month8</td>
+<td style="text-align: right;">0.0653476</td>
+<td style="text-align: right;">0.3293706</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">month9</td>
+<td style="text-align: right;">0.1029304</td>
+<td style="text-align: right;">0.4159168</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">month10</td>
+<td style="text-align: right;">-0.1204500</td>
+<td style="text-align: right;">0.1913036</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">month11</td>
+<td style="text-align: right;">-0.8804823</td>
+<td style="text-align: right;">-0.6815653</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">month12</td>
+<td style="text-align: right;">-1.0017338</td>
+<td style="text-align: right;">-0.4568380</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">date</td>
+<td style="text-align: right;">-0.2885516</td>
+<td style="text-align: right;">-0.3497301</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dayofweek3</td>
+<td style="text-align: right;">-1.0379909</td>
+<td style="text-align: right;">-0.9817993</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dayofweek4</td>
+<td style="text-align: right;">0.2381441</td>
+<td style="text-align: right;">0.1715348</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dayofweek5</td>
+<td style="text-align: right;">0.0580754</td>
+<td style="text-align: right;">0.0705273</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">dayofweek6</td>
+<td style="text-align: right;">-0.0261969</td>
+<td style="text-align: right;">-0.0220093</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hour11</td>
+<td style="text-align: right;">0.4518003</td>
+<td style="text-align: right;">0.3475419</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">hour12</td>
+<td style="text-align: right;">0.7845899</td>
+<td style="text-align: right;">0.7921792</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hour13</td>
+<td style="text-align: right;">0.1646974</td>
+<td style="text-align: right;">-0.0260414</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">hour14</td>
+<td style="text-align: right;">0.6198249</td>
+<td style="text-align: right;">0.4264185</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hour15</td>
+<td style="text-align: right;">0.4416449</td>
+<td style="text-align: right;">0.3555191</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div></div>
 </section>
 <section id="conclusion" class="slide level2">
 <h2>Conclusion</h2>
 <ul>
-<li>Violation of TWPI rule mostly occurred if it is done by institutional broker and …</li>
-<li>Informed traders may opt to choose TWPI before putting their order on the lit market to keep the information from leaking (need more thorough research)</li>
+<li>Violation of TWPI is mostly correlated with broker type, trade volume, and trade value in dollar. Particular month and day of the week also play some part.</li>
 <li>There is no measure from ASX to reject TWPI from being reported if the condition is not met -&gt; ASX need to address this issue</li>
 </ul>
 </section>
 <section id="future-work" class="slide level2">
 <h2>Future Work</h2>
 <ul>
-<li>Analyse for the whole ASX200 stocks</li>
+<li>Analyse the whole ASX200 stocks</li>
 <li>How much potential losses for ASX due to TWPI violation?</li>
 </ul>
 <div class="quarto-auto-generated-content">
@@ -599,7 +1407,7 @@
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: '100%',
 
         height: 700,
 
@@ -633,6 +1441,82 @@
         ]
       });
     </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
