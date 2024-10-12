@@ -264,7 +264,6 @@ df_train <- training(df_split)
 df_test <- testing(df_split)
 ```
 
-
 ```{r, include=FALSE}
 #logistic regression
 log_mod <- logistic_reg() |>
@@ -403,7 +402,6 @@ tree_res <-
 best_tree <- tree_res |> select_best(metric = "roc_auc")
 ```
 
-
 ```{r, include=FALSE}
 # measure accuracy decision tree
 df_tr_pred_tree <- df_train |>
@@ -501,21 +499,18 @@ rbind(bt_acc_ts, bt_bacc_ts)
 
 Five machine learning modelling to understand violation pattern:
 
-- Logistic Regression
-- LDA
-- Decision Tree
-- Random Forest
-- Boosted Tree (xgboost)
+-   Logistic Regression
+-   LDA
+-   Decision Tree
+-   Random Forest
+-   Boosted Tree (xgboost)
 
-Logistic Regression and LDA give the best result for this classification problem.
-Random Forest has highest balance accuracy score, but lower true violation.
+Logistic Regression and LDA give the best result for this classification problem. Random Forest has highest balance accuracy score, but lower true violation.
 
 ## Result and Discussion - Modelling
 
-:::: {.columns}
-
+::: columns
 ::: {.column width="40%"}
-
 ```{r}
 matrix_ts |>
   kbl() |>
@@ -523,11 +518,11 @@ matrix_ts |>
   add_header_above(c("Logistic Regression" = ncol(matrix_ts)))
 ```
 
-<div style="font-size: 0.75em;">
+::: {style="font-size: 0.75em;"}
 ```{r, echo = TRUE}
 bal_accuracy_logistic
 ```
-</div>
+:::
 
 ```{r}
 matrix_ts_lda |>
@@ -536,11 +531,11 @@ matrix_ts_lda |>
   add_header_above(c("LDA" = ncol(matrix_ts)))
 ```
 
-<div style="font-size: 0.75em;">
+::: {style="font-size: 0.75em;"}
 ```{r, echo = TRUE}
 bal_accuracy_lda
 ```
-</div>
+:::
 
 ```{r}
 cf_rf_ts |>
@@ -549,16 +544,14 @@ cf_rf_ts |>
   add_header_above(c("Random Forest" = ncol(matrix_ts)))
 ```
 
-<div style="font-size: 0.75em;">
+::: {style="font-size: 0.75em;"}
 ```{r, echo = TRUE}
 bal_accuracy_rf
 ```
-</div>
-
+:::
 :::
 
-::: {.column}
-
+::: column
 ```{r}
 tidy(log_fit)[,1:2] |>
   left_join(data.frame(lda_fit$fit$scaling) |> rownames_to_column(),
@@ -568,15 +561,13 @@ tidy(log_fit)[,1:2] |>
   kbl() |>
   kable_styling(font_size = 15, full_width = F, position = "left")
 ```
-
 :::
-
-::::
+:::
 
 ## Conclusion
 
--   Violation of TWPI is mostly correlated with broker type, trade volume, and trade value in dollar. Particular month and day of the week also play some part. 
--   There is no measure from ASX to reject TWPI from being reported if the condition is not met -> ASX need to address this issue
+-   Violation of TWPI is mostly correlated with broker type, trade volume, and trade value in dollar. Particular month and day of the week also play some part.
+-   There is no measure from ASX to reject TWPI from being reported if the condition is not met -\> ASX need to address this issue
 
 ## Future Work
 
