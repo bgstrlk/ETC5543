@@ -35,27 +35,31 @@ TWPI is reported to trading platform in immediate manner.
 ::: {style="font-size:30px;"}
 Background:
 
-1.  Rule change in 2013: TWPI must be better than lit market price ..
+1. `Crossings at or within the spread` was introduced in the late 2011.
+2.  Rule change in May 2013: `Trade with price improvement`
     -   ensuring liquidity, better price formation in the lit market (investor POV)
     -   ASX business model: public owned company, seeking for profit (ASX POV)
-2.  ASIC review of TWPI in 2022:
+3.  ASIC review of TWPI in 2022:
     -   TWPI reported not exactly occurred at better prices.
 
 <br>
 
 Questions:
 
--   How many violations on TWPI rule?
--   Who did the violation?
--   What conditions that make the violation occurred? Develop a model ...
+- Decline in the `crossings at best price` after 26 May 2013?
+- How many violations on TWPI rule after the rule change?
+- Who did the violation?
+- What conditions that make the violation occurred? Develop a model ...
+
 :::
 
 ## Data
 
--   Now: Trading data for one stock, one year
--   Next: Whole ASX200 trading data for six years, 2011 - 2016 (using Big Machine)
+- ASX200 data from 2012 to 2015
+- Source: SIRCA
+- Extracted with Nectar Cloud Computing
 
-Big Machine
+Nectar Cloud Computing
 
 ::: {style="font-size:30px;"}
 -   aaaaa
@@ -74,6 +78,7 @@ library(discrim)
 library(rpart)
 library(rpart.plot)
 library(randomForest)
+library(themis)
 ```
 
 ```{r}
@@ -141,31 +146,76 @@ head(all_1pg_best) |>
 
 -   Latest open data available only until 2016
 -   Handling large amount of data need huge processing power
--   Big Machine can handle it, but ...
+-   Nectar can handle it, but ...
     -   still need days
-    -   new issues every weeks, still on progress to make it work
+    -   new issues every weeks
 
 ## Result and Discussion
 
 ```{r}
-twpi <- all_1pg_best |> 
-  filter(RecordType == "OFFTR",
-         Qualifiers == "NX XT") |>
-  mutate(code = ifelse(Price > bid_before & Price < ask_before,
-                       "within",
-                       ifelse(Price == bid_before | Price == ask_before, "at best", "outside")))
+# load("data/twpi_2012-2015")
 
 ```
 
 ::: columns
 ::: {.column width="32%"}
 ```{r}
-twpi |>
-  count(code) |>
+# twpi <- twpi_df |> select(-Count, -(6:16), -(19:21))
+
+# twpi2 <- twpi |>
+#   mutate(RecordDate = lubridate::ymd(RecordDate),
+#          Hour = substr(HourMinuteSecond, 1, 2),
+#          Year = lubridate::year(RecordDate),
+#          Month = lubridate::month(RecordDate),
+#          Date = lubridate::day(RecordDate),
+#          Dayofweek = lubridate::wday(RecordDate)) |>
+#   select(1:3, 5:9, 11:15, Marks) |>
+#   mutate(BuyerBrokerID = as.factor(BuyerBrokerID),
+#          across(9:11, as.factor),
+#          across(13:14, as.factor)) |>
+#   group_by(Instrument) |>
+#   mutate_if(is.numeric, function(x) (x-mean(x, na.rm = TRUE))/sd(x, na.rm = TRUE))
+# 
+# twpi3 <- twpi2 |> # remove duplicates
+#   group_by(Mykey) |>
+#   filter(n() == 1) |>
+#   ungroup()
+# 
+# save(twpi3, file = "data/twpi3")
+```
+
+```{r}
+load("data/twpi3")
+```
+
+```{r, eval = FALSE}
+# # find the greatest NX XT
+twpi3$Instrument |> table() |> sort(decreasing = TRUE)
+```
+
+
+```{r}
+rio <- twpi3 ## |> filter(Instrument == "RIO")
+
+rio_bf <- rio |>
+  filter(RecordDate < lubridate::ymd("20130526"))
+
+rio_af <- rio |>
+  filter(RecordDate >= lubridate::ymd("20130526"))
+
+rio_bf |>
+  count(Marks) |>
   mutate(Count = n,
-         Price = code,
          Percentage = round(Count / sum(Count) * 100, 2)) |>
-  select(Price, Count, Percentage) |>
+  select(Marks, Count, Percentage) |>
+  left_join(rio_af |>
+    count(Marks) |>
+    mutate(Count = n,
+           Percentage = round(Count / sum(Count) * 100, 2)) |>
+    select(Marks, Count, Percentage), by = "Marks") |>
+  select(Marks, Percentage.x, Percentage.y) |>
+  rename(Before = Percentage.x,
+         After = Percentage.y) |>
   kbl() |>
   kable_styling(font_size = 20, full_width = F, position = "left")
 ```
@@ -173,38 +223,39 @@ twpi |>
 ```{r}
 broker <- read.csv("data/BrokerClassifications.csv")
 class <- read.csv("data/Classifications.csv")
-broker2 <- broker |> left_join(class, by = "Classification")
+broker2 <- broker |> left_join(class, by = "Classification") |>
+  mutate(No = as.factor(No))
 ```
 
 ```{r}
-broker_table <- twpi |>
+broker_table <- rio_af |>
   left_join(broker2, by = c("BuyerBrokerID" = "No")) |>
   group_by(Description) |>
   count(Description) |>
   ungroup() |>
   left_join(
     (
-    twpi |>
+    rio_af |>
     left_join(broker2, by = c("BuyerBrokerID" = "No")) |>
-    filter(code != "within")  |>
+    filter(Marks != 1)  |>
     group_by(Description) |>
     count(Description) |>
     ungroup()
     ), 
     by = "Description") |>
+  mutate(Percentage = round((n.y/n.x) * 100, 2)) |>
   rename(TWPI = n.x,
          Violation = n.y,
-         `Broker Type` = Description)
+         `Broker Type` = Description) |>
+  # arrange(desc(TWPI)) |>
+  mutate_if(is.numeric, ~ replace_na(., 0)) |>
+  mutate_if(is.character, ~ replace_na(., "Unclassified"))
 
-broker_table[3,1] <- "Unclassified"
-broker_table[3,3] <- 0
-  
 broker_table |>
   kbl() |>
   kable_styling(font_size = 20, full_width = F, position = "left")
 
 
-  
 ```
 :::
 
@@ -215,11 +266,19 @@ broker_table |>
 :::
 
 ```{r}
-twpi |> 
-  group_by(code) |>
+broker_10 <- rio_af |> 
   count(BuyerBrokerID) |>
-  rename(`Trade Price` = code) |>
-  ggplot(aes(x = as.factor(BuyerBrokerID), y = n, fill = `Trade Price`)) +
+  arrange(desc(n)) |>
+  head(10) |>
+  pull(BuyerBrokerID)
+
+rio_af |> 
+  filter(BuyerBrokerID %in% broker_10)|>
+  filter(Marks != 1) |>
+  group_by(Marks) |>
+  count(BuyerBrokerID) |>
+  arrange(desc(n)) |>
+  ggplot(aes(x = reorder(BuyerBrokerID, -n), y = n, fill = Marks)) +
   geom_col(position = "dodge") +
   theme_bw() +
   labs(title = "Crossing Trades Reported as TWPI",
@@ -234,53 +293,67 @@ twpi |>
 
 ```{r, include=FALSE}
 # prepare and cleaning the data 
-data <- all_1pg_best |> 
-  left_join(twpi[, c("mykey", "code")], by = "mykey") |>
-  left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
-  filter(RecordType %in% c("TRADE", "OFFTR")) |>
-  mutate(nxxt = ifelse(is.na(code), 0, 1),
-         violation = ifelse(code %in% c("at best", "outside"), 1, 0),
-         year = lubridate::year(RecordDate),
-         month = lubridate::month(RecordDate),
-         date = lubridate::day(RecordDate),
-         dayofweek = lubridate::wday(RecordDate), 
-         hour = lubridate::hour(hms)) |>
-  select(7:8, 10, 20, 27:35)
 
-data_twpi <- data |>
-  filter(nxxt == 1,
-         !(month %in% c(1,2,3))) |> # month 1 to 3 only have 1 observation
-  mutate(across(6:10, as.factor),
-         across(12:13, as.factor)) |>
-  mutate_if(is.numeric, function(x) (x-mean(x))/sd(x)) |>
-  select(Price, Volume, DollarValue, Description, month, date, dayofweek, hour, violation) |>
+# data <- all_1pg_best |> 
+#   left_join(twpi[, c("mykey", "code")], by = "mykey") |>
+#   left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+#   filter(RecordType %in% c("TRADE", "OFFTR")) |>
+#   mutate(nxxt = ifelse(is.na(code), 0, 1),
+#          violation = ifelse(code %in% c("at best", "outside"), 1, 0),
+#          year = lubridate::year(RecordDate),
+#          month = lubridate::month(RecordDate),
+#          date = lubridate::day(RecordDate),
+#          dayofweek = lubridate::wday(RecordDate), 
+#          hour = lubridate::hour(hms)) |>
+#   select(7:8, 10, 20, 27:35)
+# 
+# data_twpi <- data |>
+#   filter(nxxt == 1,
+#          !(month %in% c(1,2,3))) |> # month 1 to 3 only have 1 observation
+#   mutate(across(6:10, as.factor),
+#          across(12:13, as.factor)) |>
+#   mutate_if(is.numeric, function(x) (x-mean(x))/sd(x)) |>
+#   select(Price, Volume, DollarValue, Description, month, date, dayofweek, hour, violation) |>
+#   na.omit()
+
+data <- rio_af |> 
+  filter(BuyerBrokerID %in% c(210,361,203,150,231),
+         Hour != 16) |>
+  # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+  mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1))) |>
+  select(2, 4, 6:13, 15) |>
   na.omit()
 
-# table(data_twpi$month)
-
 set.seed(1010)
-df_split <- initial_split(data_twpi, 2/3, strata = violation)
+df_split <- initial_split(data, 2/3, strata = Violation)
 df_train <- training(df_split)
 df_test <- testing(df_split)
 ```
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 #logistic regression
 log_mod <- logistic_reg() |>
   set_engine("glm") |>
   set_mode("classification") |>
   translate()
 log_fit <- log_mod |>
-  fit(violation ~ . -Price,
-      data = df_train)
+  fit(Violation ~ .,
+      data = df_train[-1])
+
+saveRDS(log_fit, file = "data/model/log_fit.rds")
+
 
 tidy(log_fit) 
 glance(log_fit)
 ```
 
+```{r}
+log_fit <- readRDS("data/model/log_fit.rds")
+```
+
 ```{r,include=FALSE}
 # measure accuracy logistic regression
-treshold <- 0.17
+treshold <- 0.05
 
 df_tr_pred <- log_fit |> 
   augment(new_data = df_train) |>
@@ -290,83 +363,89 @@ df_ts_pred <- log_fit |>
   mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
 
 matrix_tr <- df_tr_pred |>
-  count(violation, pred_viol) |>
-  group_by(violation) |>
-  mutate(cl_acc = n[pred_viol == violation]/sum(n)) |>
+  count(Violation, pred_viol) |>
+  group_by(Violation) |>
+  mutate(cl_acc = n[pred_viol == Violation]/sum(n)) |>
   pivot_wider(names_from = pred_viol, 
               values_from = n, values_fill=0)
 
 matrix_ts <- df_ts_pred |>
-  count(violation, pred_viol) |>
-  group_by(violation) |>
-  mutate(cl_acc = n[pred_viol == violation]/sum(n)) |>
+  count(Violation, pred_viol) |>
+  group_by(Violation) |>
+  mutate(cl_acc = n[pred_viol == Violation]/sum(n)) |>
   pivot_wider(names_from = pred_viol, 
               values_from = n, values_fill=0)
 
-accuracy(df_tr_pred, violation, pred_viol)$.estimate
-bal_accuracy(df_tr_pred, violation, pred_viol)$.estimate
+accuracy(df_tr_pred, Violation, pred_viol)$.estimate
+bal_accuracy(df_tr_pred, Violation, pred_viol)$.estimate
 
-accuracy(df_ts_pred, violation, pred_viol)$.estimate
-bal_accuracy_logistic <- bal_accuracy(df_ts_pred, violation, pred_viol)$.estimate
+accuracy(df_ts_pred, Violation, pred_viol)$.estimate
+bal_accuracy_logistic <- bal_accuracy(df_ts_pred, Violation, pred_viol)$.estimate
 ```
 
 ```{r, include = FALSE}
-# LDA
-lda_mod <- discrim_linear() |>
-  set_mode("classification") |>
-  set_engine("MASS", prior = c(0.55, 0.45))
-lda_fit <- lda_mod |> 
-  fit(violation ~ . -Price,
-      data = df_train)
-
-lda_fit$fit$scaling
+# # LDA
+# lda_mod <- discrim_linear() |>
+#   set_mode("classification") |>
+#   set_engine("MASS", prior = c(0.5, 0.5))
+# lda_fit <- lda_mod |> 
+#   fit(Violation ~ .,
+#       data = df_train[-1])
+# 
+# lda_fit$fit$scaling
 ```
 
 ```{r, include = FALSE}
-# measure accuracy LDA
-
-df_tr_pred_lda <- df_train |>
-  mutate(pred_viol = predict(lda_fit$fit, df_train)$class)
-df_ts_pred_lda <- df_test |>
-  mutate(pred_viol = predict(lda_fit$fit, df_test)$class)
-
-matrix_tr_lda <- df_tr_pred_lda |>
-  count(violation, pred_viol) |>
-  group_by(violation) |>
-  mutate(cl_acc = n[pred_viol == violation]/sum(n)) |>
-  pivot_wider(names_from = pred_viol, 
-              values_from = n, values_fill=0)
-
-matrix_ts_lda <- df_ts_pred_lda |>
-  count(violation, pred_viol) |>
-  group_by(violation) |>
-  mutate(cl_acc = n[pred_viol == violation]/sum(n)) |>
-  pivot_wider(names_from = pred_viol, 
-              values_from = n, values_fill=0)
-
-accuracy(df_tr_pred_lda, violation, pred_viol)$.estimate
-bal_accuracy(df_tr_pred_lda, violation, pred_viol)$.estimate
-
-accuracy(df_ts_pred_lda, violation, pred_viol)$.estimate
-bal_accuracy_lda <- bal_accuracy(df_ts_pred_lda, violation, pred_viol)$.estimate
+# # measure accuracy LDA
+# 
+# df_tr_pred_lda <- df_train |>
+#   mutate(pred_viol = predict(lda_fit$fit, df_train)$class)
+# df_ts_pred_lda <- df_test |>
+#   mutate(pred_viol = predict(lda_fit$fit, df_test)$class)
+# 
+# matrix_tr_lda <- df_tr_pred_lda |>
+#   count(violation, pred_viol) |>
+#   group_by(violation) |>
+#   mutate(cl_acc = n[pred_viol == violation]/sum(n)) |>
+#   pivot_wider(names_from = pred_viol, 
+#               values_from = n, values_fill=0)
+# 
+# matrix_ts_lda <- df_ts_pred_lda |>
+#   count(violation, pred_viol) |>
+#   group_by(violation) |>
+#   mutate(cl_acc = n[pred_viol == violation]/sum(n)) |>
+#   pivot_wider(names_from = pred_viol, 
+#               values_from = n, values_fill=0)
+# 
+# accuracy(df_tr_pred_lda, violation, pred_viol)$.estimate
+# bal_accuracy(df_tr_pred_lda, violation, pred_viol)$.estimate
+# 
+# accuracy(df_ts_pred_lda, violation, pred_viol)$.estimate
+# bal_accuracy_lda <- bal_accuracy(df_ts_pred_lda, violation, pred_viol)$.estimate
 ```
 
-```{r, include = FALSE}
+```{r, eval = FALSE}
 # decision tree
 tree <- decision_tree(
   cost_complexity = 1e-10,
-  tree_depth = 8,
-  min_n = 21) |>
+  tree_depth = 10,
+  min_n = 4) |>
   set_mode("classification") |>
   set_engine("rpart")
 
 fit_tree <- tree |>
-  fit(violation ~ . -Price,
-      data = df_train)
+  fit(Violation ~ .,
+      data = df_train[-1])
 
-fit_tree |>
-  extract_fit_engine() |>
-  rpart.plot(type=3, extra=1)
+saveRDS(fit_tree, file = "data/model/fit_tree.rds")
+
+# fit_tree |>
+#   extract_fit_engine() |>
+#   rpart.plot(type=3, extra=1)
+```
+
+```{r}
+fit_tree <- readRDS("data/model/fit_tree.rds")
 ```
 
 ```{r, eval=FALSE}
@@ -389,7 +468,7 @@ d_folds <- vfold_cv(df_train)
 # tuning the model with all the combination
 tree_wf <- workflow() %>%
   add_model(tree_tune) %>%
-  add_formula(violation ~ . -Price)
+  add_formula(Violation ~ . -Instrument)
 
 tree_res <- 
   tree_wf %>% 
@@ -415,43 +494,43 @@ df_ts_pred_tree <- df_test |>
                             type="class"))
 
 cf_tr <- df_tr_pred_tree |>
-  count(violation, pviol) |>
-  group_by(violation) |>
-  mutate(Accuracy = n[violation==pviol]/sum(n)) |>
+  count(Violation, pviol) |>
+  group_by(Violation) |>
+  mutate(Accuracy = n[Violation==pviol]/sum(n)) |>
   pivot_wider(names_from = "pviol", 
               values_from = n)
 
 
 cf_ts <- df_ts_pred_tree |>
-  count(violation, pviol) |>
-  group_by(violation) |>
-  mutate(Accuracy = n[violation==pviol]/sum(n)) |>
+  count(Violation, pviol) |>
+  group_by(Violation) |>
+  mutate(Accuracy = n[Violation==pviol]/sum(n)) |>
   pivot_wider(names_from = "pviol", 
               values_from = n)
 
-accuracy(df_tr_pred_tree, violation, pviol)
-bal_accuracy(df_tr_pred_tree, violation, pviol)
+accuracy(df_tr_pred_tree, Violation, pviol)
+bal_accuracy(df_tr_pred_tree, Violation, pviol)
 
-accuracy(df_ts_pred_tree, violation, pviol)
-bal_accuracy(df_ts_pred_tree, violation, pviol)
+accuracy(df_ts_pred_tree, Violation, pviol)
+bal_accuracy(df_ts_pred_tree, Violation, pviol)
 ```
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 # random forest
-set.seed(11112)
-rf <- rand_forest(mtry=8, trees=1000) |>
+set.seed(1010)
+rf <- rand_forest(mtry=2, trees=1000) |>
   set_mode("classification") |>
   set_engine("randomForest", importance = TRUE)
 
 rf_workflow <- workflow() |>
   add_model(rf) |>
-  add_formula(violation ~ . -Price)
+  add_formula(Violation ~ . -Instrument)
 
 fit_rf <- rf_workflow |> 
   fit(data = df_train)
 
 # fit_rf <- rf |>
-#   fit(violation ~ . -Price,
+#   fit(Violation ~ . -Price,
 #       data = df_train)
 
 df_ts_pred_rf <- df_test |>
@@ -459,53 +538,152 @@ df_ts_pred_rf <- df_test |>
                          df_test)$.pred_class)
 
 cf_rf_ts <- df_ts_pred_rf |>
-  count(violation, pviol) |>
-  group_by(violation) |>
-  mutate(Accuracy = n[violation==pviol]/sum(n)) |>
+  count(Violation, pviol) |>
+  group_by(Violation) |>
+  mutate(Accuracy = n[Violation==pviol]/sum(n)) |>
   pivot_wider(names_from = "pviol", 
               values_from = n, values_fill = 0)
 
-accuracy(df_ts_pred_rf, violation, pviol)
-bal_accuracy_rf <- bal_accuracy(df_ts_pred_rf, violation, pviol)$.estimate
+accuracy(df_ts_pred_rf, Violation, pviol)
+bal_accuracy_rf <- bal_accuracy(df_ts_pred_rf, Violation, pviol)$.estimate
 
 
 rf_model <- pull_workflow_fit(fit_rf)$fit
 importance(rf_model)
 ```
 
-```{r, include=FALSE}
+```{r, eval = FALSE}
+data_rec <- recipe(Violation ~ ., data = df_train) |>
+  step_downsample(Violation) |>
+  step_rm(Instrument)
+
+data_prep <- prep(data_rec)
+data_juice <- juice(data_prep)
+
+saveRDS(data_prep, file = "data/model/data_prep.rds")
+
+```
+
+```{r}
+data_prep <- readRDS("data/model/data_prep.rds")
+data_juice <- juice(data_prep)
+```
+
+
+```{r, eval = FALSE}
+# tuning hyperparameters
+rf_tune <- rand_forest(
+  mtry = tune(),
+  trees = 1000,
+  min_n = tune()) |>
+  set_mode("classification") |>
+  set_engine("randomForest")
+
+tune_wf <- workflow() |>
+  add_recipe(data_rec) |>
+  add_model(rf_tune)
+  
+doParallel::registerDoParallel() # for paralle processing
+
+set.seed(3344)
+w_folds <- vfold_cv(data)
+
+rf_grid <- grid_regular(mtry(range = c(2, 8)),
+                        min_n(range = c(1, 4)),
+                        levels = 3)
+
+tune_res <- 
+  tune_grid(tune_wf,
+            resamples = w_folds,
+            grid = rf_grid
+            )
+
+# select best combination based on accuracy
+best_hp <- tune_res |> select_best(metric = "accuracy")
+```
+
+```{r, eval = FALSE}
+# apply the model
+set.seed(3344)
+rf <- rand_forest(mtry = 5, 
+                     min_n = 4) |>
+  set_mode("classification") |>
+  set_engine("randomForest", importance = TRUE)
+
+rf_workflow2 <- workflow() |>
+  add_model(rf) |>
+  add_formula(Violation ~ .)
+
+fit_rf2 <- rf_workflow2 |> 
+  fit(data = data_juice)
+
+saveRDS(fit_rf2, file = "data/model/fit_rf2.rds")
+```
+
+```{r}
+fit_rf2 <- readRDS("data/model/fit_rf2.rds")
+```
+
+```{r, eval = FALSE}
+df_ts_pred_rf2 <- bake(data_prep, df_test) |>
+  mutate(pviol = predict(fit_rf2,
+                         bake(data_prep, df_test))$.pred_class)
+
+cf_rf_ts2 <- df_ts_pred_rf2 |>
+  count(Violation, pviol) |>
+  group_by(Violation) |>
+  mutate(Accuracy = n[Violation==pviol]/sum(n)) |>
+  pivot_wider(names_from = "pviol", 
+              values_from = n, values_fill = 0)
+
+save(df_ts_pred_rf2, file = "data/model/df_ts_pred_rf2.csv")
+```
+
+```{r}
+load("data/model/df_ts_pred_rf2.csv")
+```
+
+```{r, include = FALSE}
+accuracy(df_ts_pred_rf2, Violation, pviol)
+bal_accuracy_rf2 <- bal_accuracy(df_ts_pred_rf2, Violation, pviol)$.estimate
+
+rf_model2 <- pull_workflow_fit(fit_rf2)$fit
+importance(rf_model2)
+```
+
+```{r, eval=FALSE}
+# boosted tree
 bt <- boost_tree() |>
   set_mode("classification") |>
   set_engine("xgboost")
 fit_bt <- bt |>
-  fit(violation ~ . -Price,
-      data = df_train)
+  fit(Violation ~ .,
+      data = df_train[-1])
 
 df_ts_pred_rf <- df_test |>
   mutate(pviol = predict(fit_bt, 
                             df_test)$.pred_class)
 
 cf_bt_ts <- df_ts_pred_rf |>
-  count(violation, pviol) |>
-  group_by(violation) |>
-  mutate(Accuracy = n[violation==pviol]/sum(n)) |>
+  count(Violation, pviol) |>
+  group_by(Violation) |>
+  mutate(Accuracy = n[Violation==pviol]/sum(n)) |>
   pivot_wider(names_from = "pviol", 
               values_from = n, values_fill = 0)
 
-bt_acc_ts <- accuracy(df_ts_pred_rf, violation, pviol)
-bt_bacc_ts <- bal_accuracy(df_ts_pred_rf, violation, pviol)
+bt_acc_ts <- accuracy(df_ts_pred_rf, Violation, pviol)
+bt_bacc_ts <- bal_accuracy(df_ts_pred_rf, Violation, pviol)
 rbind(bt_acc_ts, bt_bacc_ts)
 ```
 
-Five machine learning modelling to understand violation pattern:
+For machine learning modelling to understand violation pattern:
 
 -   Logistic Regression
--   LDA
 -   Decision Tree
 -   Random Forest
 -   Boosted Tree (xgboost)
 
-Logistic Regression and LDA give the best result for this classification problem. Random Forest has highest balance accuracy score, but lower true violation.
+Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.
 
 ## Result and Discussion - Modelling
 
@@ -525,20 +703,7 @@ bal_accuracy_logistic
 :::
 
 ```{r}
-matrix_ts_lda |>
-  kbl() |>
-  kable_styling(font_size = 18, full_width = F, position = "left") |>
-  add_header_above(c("LDA" = ncol(matrix_ts)))
-```
-
-::: {style="font-size: 0.75em;"}
-```{r, echo = TRUE}
-bal_accuracy_lda
-```
-:::
-
-```{r}
-cf_rf_ts |>
+cf_rf_ts2 |>
   kbl() |>
   kable_styling(font_size = 18, full_width = F, position = "left") |>
   add_header_above(c("Random Forest" = ncol(matrix_ts)))
@@ -546,30 +711,40 @@ cf_rf_ts |>
 
 ::: {style="font-size: 0.75em;"}
 ```{r, echo = TRUE}
-bal_accuracy_rf
+bal_accuracy_rf2
 ```
 :::
 :::
 
 ::: column
 ```{r}
-tidy(log_fit)[,1:2] |>
-  left_join(data.frame(lda_fit$fit$scaling) |> rownames_to_column(),
-            by = c("term" = "rowname")) |>
-  rename(logreg_est = estimate,
-         lda_coef = LD1) |>
-  kbl() |>
-  kable_styling(font_size = 15, full_width = F, position = "left")
+# tidy(log_fit)[,1:2] |>
+#   left_join(data.frame(lda_fit$fit$scaling) |> rownames_to_column(),
+#             by = c("term" = "rowname")) |>
+#   rename(logreg_est = estimate,
+#          lda_coef = LD1) |>
+#   kbl() |>
+#   kable_styling(font_size = 15, full_width = F, position = "left")
 ```
+
+```{r}
+importance(rf_model2)
+```
+
 :::
 :::
 
 ## Conclusion
 
--   Violation of TWPI is mostly correlated with broker type, trade volume, and trade value in dollar. Particular month and day of the week also play some part.
--   There is no measure from ASX to reject TWPI from being reported if the condition is not met -\> ASX need to address this issue
+- The purpose of TWPI has been met as the number of transactions at the same price as the market price drastically reduced. 
+-   Violation of TWPI is mostly correlated with the depth of the liquidity  available just before the trades (Ask and Bid Volume available in the open market). Date, Volume, and the transaction values also play important role in the TWPI violation pattern.
+-   There is no measure from ASX to reject TWPI from being reported if the condition is not met -> ASX need to address this issue
 
 ## Future Work
 
--   Analyse the whole ASX200 stocks
--   How much potential losses for ASX due to TWPI violation?
+- Analyse pattern with other variables, such as stock's industry sector, market cap, lagged price values, bid-ask spread, etc.
+- How much profit did ASX make due to the change in the TWPI rule?
+
+
+
+
