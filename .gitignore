@@ -1,3 +1,9 @@
 .Rproj.user
 .Rhistory
 *.csv
+*.rds
+*.rdb
+presentation_cache/
+twpi_2012-2015
+twpi2
+twpi3

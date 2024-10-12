@@ -562,18 +562,37 @@ list_2014 <- list.files(path = "data/2014/", pattern = "*.csv", full.names = TRU
 list_2015 <- list.files(path = "data/2015/", pattern = "*.csv", full.names = TRUE)
 
 # read all CSV files into a list of data frames
-df_list_2012 <- lapply(list_2012, read.csv)
-df_list_2013 <- lapply(list_2013, read.csv)
-df_list_2014 <- lapply(list_2014, read.csv)
-df_list_2015 <- lapply(list_2015, read.csv)
+df_list_2012 <- lapply(list_2012, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+df_list_2013 <- lapply(list_2013, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+df_list_2014 <- lapply(list_2014, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+df_list_2015 <- lapply(list_2015, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
 
 df_list <- c(df_list_2012, df_list_2013, df_list_2014, df_list_2015)
 
 # combine the data frames into a single data frame
 twpi_df <- bind_rows(df_list)
 
-
 # save the df 
-save(twpi_df, file = "data/twpi_2012-2015")
+# save(twpi_df, file = "data/twpi_2012-2015")
 
 ```
+
+
+```{r}
+twpi_2014 <- bind_rows(df_list_2014)
+
+dup <- twpi_2014 |> group_by(Mykey) |> count(Mykey) |> filter(n > 1)
+
+tes <- twpi_2014 |> filter(Mykey %in% c("368013045", "368013048"))
+
+twpi_df$Mykey |> duplicated() |> sum()
+```
+
