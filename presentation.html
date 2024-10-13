@@ -10,7 +10,7 @@
 <link href="presentation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.5.57">
 
-  <title>Trades With Price Improvement</title>
+  <title>Trades With Price Improvement on ASX</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -394,7 +394,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Trades With Price Improvement</h1>
+  <h1 class="title">Trades With Price Improvement on ASX</h1>
 
 <div class="quarto-title-authors">
 </div>
@@ -1211,17 +1211,25 @@ Random Forest
 <section id="conclusion" class="slide level2">
 <h2>Conclusion</h2>
 <ul>
-<li>The purpose of TWPI has been met as the number of transactions at the same price as the market price drastically reduced.</li>
-<li>Violation of TWPI is mostly correlated with the depth of the liquidity available just before the trades (Ask and Bid Volume available in the open market). Date, Volume, and the transaction values also play important role in the TWPI violation pattern.</li>
-<li>There is no measure from ASX to reject TWPI from being reported if the condition is not met -&gt; ASX need to address this issue</li>
+<li>The purpose of the rule amendment in May 2013 has been met, as the number of <code>crossings at the spread</code> drastically reduced. These kind of trades moves to ASX platform.</li>
+<li>Violation of <code>TWPI</code> can be associated with the depth of the liquidity available just before the trades. Date, Volume, and the transaction values also play important role in the <code>TWPI</code> violation pattern.</li>
+<li>There is no measure from ASX to reject <code>TWPI</code> from being reported if the condition is not met -&gt; ASX need to address this issue</li>
 </ul>
 </section>
 <section id="future-work" class="slide level2">
 <h2>Future Work</h2>
 <ul>
-<li>Analyse pattern with other variables, such as stock’s industry sector, market cap, lagged price values, bid-ask spread, etc.</li>
-<li>How much profit did ASX make due to the change in the TWPI rule?</li>
+<li><p>Analyse violation pattern with other variables, such as stock’s industry sector, market cap, lagged price values, bid-ask spread, etc.</p></li>
+<li><p>Try different method to analyse the pattern, such as PCA and factor modelling.</p></li>
+<li><p>More research questions:</p>
+<ul>
+<li>How much profit did ASX make due to the rule amendment in May 2013?</li>
+<li>Why there were only several brokers dominate the TWPI?</li>
+</ul></li>
 </ul>
+</section>
+<section id="thank-you" class="title-slide slide level1 center">
+<h1>Thank You</h1>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 

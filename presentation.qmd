@@ -1,5 +1,5 @@
 ---
-title: "Trades With Price Improvement"
+title: "Trades With Price Improvement on ASX"
 format: 
   revealjs:
     slide-number: true
@@ -838,9 +838,13 @@ importance(rf_model2) |>
 
 ## Future Work
 
-- Analyse pattern with other variables, such as stock's industry sector, market cap, lagged price values, bid-ask spread, etc.
-- How much profit did ASX make due to the change in the TWPI rule?
+- Analyse violation pattern with other variables, such as stock's industry sector, market cap, lagged price values, bid-ask spread, etc.
+- Try different method to analyse the pattern, such as PCA and factor modelling.
+- More research questions:
+    
+    - How much profit did ASX make due to the rule amendment in May 2013?
+    - Why there were only several brokers dominate the TWPI?
 
-
+# Thank You
 
 
