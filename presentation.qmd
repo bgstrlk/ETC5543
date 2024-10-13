@@ -765,40 +765,43 @@ We try four machine learning modelling to understand violation pattern:
 -   Random Forest
 -   Boosted Tree (xgboost)
 
-**Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.**
+**Random Forest gives the best result for this classification problem: highest balance accuracy score on the test set.**
 
-## Result and Discussion - Modelling
+## Modelling
 
-::: columns
-::: {.column width="40%"}
+:::: columns
+::: {.column width="35%"}
+
 ```{r}
 matrix_ts |>
   kbl() |>
-  kable_styling(font_size = 18, full_width = F, position = "left") |>
+  kable_styling(font_size = 20, full_width = F, position = "left") |>
   add_header_above(c("Logistic Regression" = ncol(matrix_ts)))
 ```
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{r, echo = TRUE}
 bal_accuracy_logistic
 ```
 :::
 
+<br> 
+
 ```{r}
 cf_rf_ts2 |>
   kbl() |>
-  kable_styling(font_size = 18, full_width = F, position = "left") |>
+  kable_styling(font_size = 20, full_width = F, position = "left") |>
   add_header_above(c("Random Forest" = ncol(matrix_ts)))
 ```
 
-::: {style="font-size: 0.75em;"}
+::: {style="font-size: 1em;"}
 ```{r, echo = TRUE}
 bal_accuracy_rf2
 ```
 :::
 :::
 
-::: column
+::: {.column width="65%"}
 ```{r}
 # tidy(log_fit)[,1:2] |>
 #   left_join(data.frame(lda_fit$fit$scaling) |> rownames_to_column(),
@@ -808,13 +811,24 @@ bal_accuracy_rf2
 #   kbl() |>
 #   kable_styling(font_size = 15, full_width = F, position = "left")
 ```
+<div style="font-size: 70%;">
+Variable importance from the Random Forest Model:
+</div>
 
 ```{r}
-importance(rf_model2)
+importance(rf_model2) |>
+  kbl() |>
+  kable_styling(font_size = 20, full_width = T, position = "left") 
 ```
 
+<div style="font-size: 60%;">
+- `Ask/BidVol_before` are the volume of the best ask/bid price in the lit market. They have the greatest value based on the Gini, meaning they are important for splitting the result between violation or not violation.
+- `DollarValue`, `Volume`, and `Date` are also important for splitting the result.
+- Meanwhile, `Year` and `Month` have roles on increasing accuracy of the model.
+</div>
+
 :::
-:::
+::::
 
 ## Conclusion
 

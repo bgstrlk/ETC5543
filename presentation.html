@@ -1008,15 +1008,15 @@ PERCENTAGE
 <li>Random Forest</li>
 <li>Boosted Tree (xgboost)</li>
 </ul>
-<p><strong>Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.</strong></p>
+<p><strong>Random Forest gives the best result for this classification problem: highest balance accuracy score on the test set.</strong></p>
 </section>
-<section id="result-and-discussion---modelling" class="slide level2">
-<h2>Result and Discussion - Modelling</h2>
+<section id="modelling-2" class="slide level2">
+<h2>Modelling</h2>
 <div class="columns">
-<div class="column" style="width:40%;">
+<div class="column" style="width:35%;">
 <div class="cell">
 <div class="cell-output-display">
-<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 18px; width: auto !important; ">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; width: auto !important; ">
 <colgroup>
 <col style="width: 25%">
 <col style="width: 25%">
@@ -1055,7 +1055,7 @@ Logistic Regression
 
 </div>
 </div>
-<div style="font-size: 0.75em;">
+<div style="font-size: 1em;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>bal_accuracy_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1063,9 +1063,10 @@ Logistic Regression
 </div>
 </div>
 </div>
+<p><br></p>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 18px; width: auto !important; ">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; width: auto !important; ">
 <colgroup>
 <col style="width: 25%">
 <col style="width: 25%">
@@ -1104,7 +1105,7 @@ Random Forest
 
 </div>
 </div>
-<div style="font-size: 0.75em;">
+<div style="font-size: 1em;">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>bal_accuracy_rf2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1112,20 +1113,98 @@ Random Forest
 </div>
 </div>
 </div>
-</div><div class="column">
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>                      0        1 MeanDecreaseAccuracy MeanDecreaseGini
-DollarValue   161.06057 203.5223             309.9214        12932.043
-AskVol_before 435.08456 397.4673             485.4454        23207.125
-BidVol_before 417.66525 422.8720             530.8331        23130.516
-Volume        164.54704 217.6188             317.2079        12629.889
-Date           97.77479 305.8460             301.0975        13255.853
-Hour           78.21799 126.6891             136.8460         5907.657
-Year          162.17166 616.0610             585.3168         5630.567
-Month         114.19433 439.0454             434.0923         8433.228
-Dayofweek      67.17229 262.7428             256.8236         5497.704</code></pre>
+</div><div class="column" style="width:65%;">
+<div style="font-size: 70%;">
+<p>Variable importance from the Random Forest Model:</p>
 </div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; ">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">0</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MeanDecreaseAccuracy</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">MeanDecreaseGini</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DollarValue</td>
+<td style="text-align: right;">161.06057</td>
+<td style="text-align: right;">203.5223</td>
+<td style="text-align: right;">309.9214</td>
+<td style="text-align: right;">12932.043</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AskVol_before</td>
+<td style="text-align: right;">435.08456</td>
+<td style="text-align: right;">397.4673</td>
+<td style="text-align: right;">485.4454</td>
+<td style="text-align: right;">23207.125</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BidVol_before</td>
+<td style="text-align: right;">417.66525</td>
+<td style="text-align: right;">422.8720</td>
+<td style="text-align: right;">530.8331</td>
+<td style="text-align: right;">23130.516</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Volume</td>
+<td style="text-align: right;">164.54704</td>
+<td style="text-align: right;">217.6188</td>
+<td style="text-align: right;">317.2079</td>
+<td style="text-align: right;">12629.889</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Date</td>
+<td style="text-align: right;">97.77479</td>
+<td style="text-align: right;">305.8460</td>
+<td style="text-align: right;">301.0975</td>
+<td style="text-align: right;">13255.853</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hour</td>
+<td style="text-align: right;">78.21799</td>
+<td style="text-align: right;">126.6891</td>
+<td style="text-align: right;">136.8460</td>
+<td style="text-align: right;">5907.657</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Year</td>
+<td style="text-align: right;">162.17166</td>
+<td style="text-align: right;">616.0610</td>
+<td style="text-align: right;">585.3168</td>
+<td style="text-align: right;">5630.567</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Month</td>
+<td style="text-align: right;">114.19433</td>
+<td style="text-align: right;">439.0454</td>
+<td style="text-align: right;">434.0923</td>
+<td style="text-align: right;">8433.228</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dayofweek</td>
+<td style="text-align: right;">67.17229</td>
+<td style="text-align: right;">262.7428</td>
+<td style="text-align: right;">256.8236</td>
+<td style="text-align: right;">5497.704</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<div style="font-size: 60%;">
+<ul>
+<li><code>Ask/BidVol_before</code> are the volume of the best ask/bid price in the lit market. They have the greatest value based on the Gini, meaning they are important for splitting the result between violation or not violation.</li>
+<li><code>DollarValue</code>, <code>Volume</code>, and <code>Date</code> are also important for splitting the result.</li>
+<li>Meanwhile, <code>Year</code> and <code>Month</code> have roles on increasing accuracy of the model.</li>
+</ul>
 </div>
 </div></div>
 </section>
