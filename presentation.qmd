@@ -29,17 +29,17 @@ Compare TWPI before and after the rule change, then finding the pattern of viola
 TWPI amendment in 2013 did significantly decrease the proportion of `at-market-price` TWPI from 52% to 1.23%. However, the proportion of the violation rose from 1% to 4.5%.
 </div>
 
-## What is TWPI? Background ..
+## Background - Trading on Stock Exchange
 
 Rule: Equity market products (stocks) must be traded on an **open market**, like ASX trading platform.
 
-<span style="font-size: 80%;"> Open market / lit market: </span> 
+<span style="font-size: 80%;"> Open market / lit pool: </span> 
     
     -> traders can see the price and volume of all orders on a trading platform, real time 
     -> ASX trading platform
     -> establish fair price, transparency
 
-<span style="font-size: 80%;"> Dark market: </span>
+<span style="font-size: 80%;"> Dark pool: </span>
 
     -> details of orders are not disclosed to the public, until a transaction is completed
     -> brokers internal system (reported to ASX)
@@ -47,14 +47,17 @@ Rule: Equity market products (stocks) must be traded on an **open market**, like
 
 <div style="height: 20px;"></div>
 
-<span style="color: red;">**Both "markets" are just trading venues, they are still in a same market: <br>
-ASX TRADE**</span>
+<span style="color: red;">**Both pools are just trading venues, they are still in a same stock exchange: ASX TRADE**</span>
 
-## What is TWPI? Definition ..
+## Background - Trading on Stock Exchange
+
+<img data-src="image/ASX.PNG" height="80%" width="80%" />
+
+## MUST BE In Lit Market?? ***not really ..***
 
 :::: {.columns}
 
-When the stocks can be traded in a non-open market (dark market)?
+When the stocks can be traded in a dark pool?
 
 ::: {.column width="60%"}
 
@@ -82,6 +85,12 @@ When the stocks can be traded in a non-open market (dark market)?
 
 ## Research Problem
 
+
+
+:::: {.columns}
+
+::: {.column width="65%"}
+
 ::: {style="font-size:30px;"}
 
 Background:
@@ -89,22 +98,29 @@ Background:
 1. `Crossings at or within the spread` rule was introduced in the late 2011
 2.  Amendment in May 2013 -> `Trade with price improvement`
     -   more trading in the lit market, ensuring better price and liquidity - [ASIC Report 394](https://asic.gov.au/about-asic/news-centre/find-a-media-release/2014-releases/14-105mr-asic-reports-on-dark-liquidity-rules/)
-    -   Other POV: ASX as a public owned and for-profit organisation seeks for profit -> Fees from trading on their platform 
-    
-    
-3.  ASIC review of TWPI in 2022:
-    -   TWPI reported not exactly occurred at better prices.
+    -   Other POV: ASX as a for-profit organisation seeks profit -> Fees from trading on their platform 
+3.  **Recent finding by ASIC: violation of TWPI rule**
 
 :::
 
+:::
+
+::: {.column width="35%"}
+
+<br>
+
+<img data-src="image/wilson.png" height="350" width=700" />
+
+:::
+
+::::
+
 ## Key Questions
 
-- Decline in the `crossings at best price` after 26 May 2013?
-- How many violations on TWPI rule after the rule change?
-- Who did the violation?
-- What conditions that make the violation occurred? Develop a model ...
-
-
+1. Decline in the `crossings at best price` after 26 May 2013?
+2. How many violations on TWPI rule after the rule change?
+3. Who did the violation?
+4. What conditions that make the violation occurred? Develop a model ...
 
 ## Data
 
