@@ -832,9 +832,9 @@ importance(rf_model2) |>
 
 ## Conclusion
 
-- The purpose of TWPI has been met as the number of transactions at the same price as the market price drastically reduced. 
--   Violation of TWPI is mostly correlated with the depth of the liquidity  available just before the trades (Ask and Bid Volume available in the open market). Date, Volume, and the transaction values also play important role in the TWPI violation pattern.
--   There is no measure from ASX to reject TWPI from being reported if the condition is not met -> ASX need to address this issue
+- The purpose of the rule amendment in May 2013 has been met, as the number of `crossings at the spread` drastically reduced. These kind of trades moves to ASX platform. 
+- Violation of `TWPI` can be associated with the depth of the liquidity  available just before the trades. Date, Volume, and the transaction values also play important role in the `TWPI` violation pattern.
+- There is no measure from ASX to reject `TWPI` from being reported if the condition is not met -> ASX need to address this issue
 
 ## Future Work
 
