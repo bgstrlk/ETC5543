@@ -59,7 +59,7 @@ Rule: Equity market products (stocks) must be traded on an **open market**, like
 
 When the stocks can be traded in a dark pool?
 
-::: {.column width="60%"}
+::: {.column width="55%"}
 
 <div style="font-size: 30px;">
 1. block trade: large volume
@@ -67,17 +67,17 @@ When the stocks can be traded in a dark pool?
 3. out-of-hours trade: outside open-session 
 4. **Trade with price improvement**:
     
-    - better price than what available on the lit-market 
+    - crossings (trades within a broker) on a better price than what available on the lit-market 
     - benefit traders
-    - reported to ASX, not occurred on ASX. Hence, can be violated, e.g. reported as TWPI but actually traded at market price 
+    - reported to ASX, not occurred on ASX. Hence, can be violated, e.g. reported as TWPI but actually traded at the spread 
 
 </div>
 
 :::
 
-::: {.column width="40%"}
+::: {.column width="45%"}
 
-<img data-src="image/orderbook.jpg" height="400" width="400" />
+<img data-src="image/orderbook2.jpg" height="400" width="700" />
 
 :::
 
@@ -128,7 +128,7 @@ Background:
 - ASX200 data from 2012 to 2015
 - Source: Securities Industry Research Centre of Asia-Pacific (SIRCA)
 - Extracted with Nectar Cloud Computing
-- 10Million+ of `TWPI` observations
+- 10Million+ of `TWPI` observations.
 
 Nectar Cloud Computing
 
@@ -193,7 +193,7 @@ head(all_1pg_session) |>
 :::
 
 ::: column
-[L1 Data]{style="font-size: 20px; color: red;"}
+[Best Bid/Ask Data]{style="font-size: 20px; color: red;"}
 
 ```{r}
 head(l1) |>
@@ -330,7 +330,7 @@ broker_table |>
 ::: {style="font-size: 25px;"}
 - Significant decrease on the number of `crossings at the spread` TWPI after the rule change, from 52% to 1.23% -> more trades on ASX platform, more fees
 - Violation of the rule increased from 1.05% to approximately 4.46% after the rule change -> still marginal
-- HFT Brokers have done the most TWPI, as well as violation. Look closer at individual brokers:
+- HFT Brokers have done the most TWPI, as well as violation. Look closer at individual brokers (Top 10):
 :::
 
 ```{r}
