@@ -360,7 +360,7 @@ rio_af |>
 :::
 :::
 
-## Result and Discussion - Modelling
+## Modelling
 
 ```{r, include=FALSE}
 # prepare and cleaning the data 
@@ -411,7 +411,7 @@ log_fit <- log_mod |>
   fit(Violation ~ .,
       data = df_train[-1])
 
-saveRDS(log_fit, file = "data/model/log_fit.rds")
+# saveRDS(log_fit, file = "data/model/log_fit.rds")
 
 
 tidy(log_fit) 
@@ -508,7 +508,7 @@ fit_tree <- tree |>
   fit(Violation ~ .,
       data = df_train[-1])
 
-saveRDS(fit_tree, file = "data/model/fit_tree.rds")
+# saveRDS(fit_tree, file = "data/model/fit_tree.rds")
 
 # fit_tree |>
 #   extract_fit_engine() |>
@@ -631,7 +631,7 @@ data_rec <- recipe(Violation ~ ., data = df_train) |>
 data_prep <- prep(data_rec)
 data_juice <- juice(data_prep)
 
-saveRDS(data_prep, file = "data/model/data_prep.rds")
+# saveRDS(data_prep, file = "data/model/data_prep.rds")
 
 ```
 
@@ -639,7 +639,6 @@ saveRDS(data_prep, file = "data/model/data_prep.rds")
 data_prep <- readRDS("data/model/data_prep.rds")
 data_juice <- juice(data_prep)
 ```
-
 
 ```{r, eval = FALSE}
 # tuning hyperparameters
@@ -688,7 +687,7 @@ rf_workflow2 <- workflow() |>
 fit_rf2 <- rf_workflow2 |> 
   fit(data = data_juice)
 
-saveRDS(fit_rf2, file = "data/model/fit_rf2.rds")
+# saveRDS(fit_rf2, file = "data/model/fit_rf2.rds")
 ```
 
 ```{r}
@@ -700,18 +699,18 @@ df_ts_pred_rf2 <- bake(data_prep, df_test) |>
   mutate(pviol = predict(fit_rf2,
                          bake(data_prep, df_test))$.pred_class)
 
+# save(df_ts_pred_rf2, file = "data/model/df_ts_pred_rf2.csv")
+```
+
+```{r}
+load("data/model/df_ts_pred_rf2.csv")
+
 cf_rf_ts2 <- df_ts_pred_rf2 |>
   count(Violation, pviol) |>
   group_by(Violation) |>
   mutate(Accuracy = n[Violation==pviol]/sum(n)) |>
   pivot_wider(names_from = "pviol", 
               values_from = n, values_fill = 0)
-
-save(df_ts_pred_rf2, file = "data/model/df_ts_pred_rf2.csv")
-```
-
-```{r}
-load("data/model/df_ts_pred_rf2.csv")
 ```
 
 ```{r, include = FALSE}
@@ -747,14 +746,26 @@ bt_bacc_ts <- bal_accuracy(df_ts_pred_rf, Violation, pviol)
 rbind(bt_acc_ts, bt_bacc_ts)
 ```
 
-For machine learning modelling to understand violation pattern:
+- Only TWPI data on the top 5 brokers used to model the **violation**, due to their dominant proportion.
+- Preprocessing and cleaning the data, include data scaling
+- Choosing relevant variables
+- The independent variable is a binary whether violation or not
+- Dependend variables:
+
+```{r}
+data |> select(-Instrument, -Violation) |> names()
+```
+
+## Modelling 
+
+We try four machine learning modelling to understand violation pattern:
 
 -   Logistic Regression
 -   Decision Tree
 -   Random Forest
 -   Boosted Tree (xgboost)
 
-Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.
+**Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.**
 
 ## Result and Discussion - Modelling
 

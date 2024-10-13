@@ -447,7 +447,7 @@
 <ul>
 <li>crossings (trades within a broker) on a better price than what available on the lit-market</li>
 <li>benefit traders</li>
-<li>reported to ASX, not occurred on ASX. Hence, can be violated, e.g.&nbsp;reported as TWPI but actually traded at market price</li>
+<li>reported to ASX, not occurred on ASX. Hence, can be violated, e.g.&nbsp;reported as TWPI but actually traded at the spread</li>
 </ul></li>
 </ol>
 </div>
@@ -982,18 +982,35 @@ PERCENTAGE
 </div>
 </div></div>
 </section>
-<section id="result-and-discussion---modelling" class="slide level2">
-<h2>Result and Discussion - Modelling</h2>
-<p>For machine learning modelling to understand violation pattern:</p>
+<section id="modelling" class="slide level2">
+<h2>Modelling</h2>
+<ul>
+<li>Only TWPI data on the top 5 brokers used to model the <strong>violation</strong>, due to their dominant proportion.</li>
+<li>Preprocessing and cleaning the data, include data scaling</li>
+<li>Choosing relevant variables</li>
+<li>The independent variable is a binary whether violation or not</li>
+<li>Dependend variables:</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "DollarValue"   "AskVol_before" "BidVol_before" "Volume"       
+[5] "Hour"          "Year"          "Month"         "Date"         
+[9] "Dayofweek"    </code></pre>
+</div>
+</div>
+</section>
+<section id="modelling-1" class="slide level2">
+<h2>Modelling</h2>
+<p>We try four machine learning modelling to understand violation pattern:</p>
 <ul>
 <li>Logistic Regression</li>
 <li>Decision Tree</li>
 <li>Random Forest</li>
 <li>Boosted Tree (xgboost)</li>
 </ul>
-<p>Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.</p>
+<p><strong>Random Forest gives the best result for this classification problem. Highest balance accuracy score on the test set.</strong></p>
 </section>
-<section id="result-and-discussion---modelling-1" class="slide level2">
+<section id="result-and-discussion---modelling" class="slide level2">
 <h2>Result and Discussion - Modelling</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
@@ -1040,7 +1057,7 @@ Logistic Regression
 </div>
 <div style="font-size: 0.75em;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>bal_accuracy_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>bal_accuracy_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6419309</code></pre>
 </div>
@@ -1071,15 +1088,15 @@ Random Forest
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">0</td>
-<td style="text-align: right;">0.7900105</td>
-<td style="text-align: right;">936352</td>
-<td style="text-align: right;">248888</td>
+<td style="text-align: right;">0.7899835</td>
+<td style="text-align: right;">936320</td>
+<td style="text-align: right;">248920</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">1</td>
-<td style="text-align: right;">0.7723347</td>
-<td style="text-align: right;">13682</td>
-<td style="text-align: right;">46415</td>
+<td style="text-align: right;">0.7721517</td>
+<td style="text-align: right;">13693</td>
+<td style="text-align: right;">46404</td>
 </tr>
 </tbody>
 </table>
@@ -1089,9 +1106,9 @@ Random Forest
 </div>
 <div style="font-size: 0.75em;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>bal_accuracy_rf2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>bal_accuracy_rf2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.7811726</code></pre>
+<pre><code>[1] 0.7810676</code></pre>
 </div>
 </div>
 </div>
