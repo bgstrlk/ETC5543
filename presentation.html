@@ -445,8 +445,9 @@
 <li><p>out-of-hours trade: outside open-session</p></li>
 <li><p><strong>Trade with price improvement</strong>:</p>
 <ul>
-<li>Better price than the price on the open-market</li>
+<li>better price than what available on the lit-market</li>
 <li>benefit traders</li>
+<li>reported to ASX, not occurred on ASX. Hence, can be violated, e.g.&nbsp;reported as TWPI but actually traded at market price</li>
 </ul></li>
 </ol>
 </div>
@@ -461,7 +462,7 @@
 <div style="font-size:30px;">
 <p>Background:</p>
 <ol type="1">
-<li><code>Crossings at or within the spread</code> rule was introduced in the late 2011</li>
+<li><code>Crossings at or within the spread</code> rule was introduced in the late 2011.</li>
 <li>Amendment in May 2013 -&gt; <code>Trade with price improvement</code>
 <ul>
 <li>more trading in the lit market, ensuring better price and liquidity - <a href="https://asic.gov.au/about-asic/news-centre/find-a-media-release/2014-releases/14-105mr-asic-reports-on-dark-liquidity-rules/">ASIC Report 394</a></li>
@@ -478,8 +479,8 @@
 <section id="key-questions" class="slide level2">
 <h2>Key Questions</h2>
 <ol type="1">
-<li>Decline in the <code>crossings at best price</code> after 26 May 2013?</li>
-<li>How many violations on TWPI rule after the rule change?</li>
+<li>Are there any significant decrease on the number of <code>crossings at the spread</code> after the rule amendment on May 2013?</li>
+<li>How many <code>TWPI</code> violations after the rule change?</li>
 <li>Who did the violation?</li>
 <li>What conditions that make the violation occurred? Develop a model …</li>
 </ol>
@@ -488,14 +489,15 @@
 <h2>Data</h2>
 <ul>
 <li>ASX200 data from 2012 to 2015</li>
-<li>Source: SIRCA</li>
+<li>Source: Securities Industry Research Centre of Asia-Pacific (SIRCA)</li>
 <li>Extracted with Nectar Cloud Computing</li>
+<li>10Million+ of <code>TWPI</code> observations</li>
 </ul>
 <p>Nectar Cloud Computing</p>
 <div style="font-size:30px;">
 <ul>
-<li>aaaaa</li>
-<li>bbbbb</li>
+<li>Developed and maintained by Australian Research Data Commons (ARDC)</li>
+<li>Provide large scale computing infrastructure</li>
 </ul>
 </div>
 </section>
@@ -860,27 +862,26 @@
 </div>
 </div>
 </section>
-<section id="challenges" class="slide level2">
-<h2>Challenges</h2>
-<ul>
-<li>Latest open data available only until 2016</li>
-<li>Handling large amount of data need huge processing power</li>
-<li>Nectar can handle it, but …
-<ul>
-<li>still need days</li>
-<li>new issues every weeks</li>
-</ul></li>
-</ul>
-</section>
 <section id="result-and-discussion" class="slide level2">
 <h2>Result and Discussion</h2>
 <div class="columns">
-<div class="column" style="width:32%;">
+<div class="column" style="width:33%;">
 <div class="cell">
 <div class="cell-output-display">
 <table class="table caption-top" data-quarto-postprocess="true" style="font-size: 20px; width: auto !important; ">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
 <thead>
 <tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+PERCENTAGE
+</div></th>
+</tr>
+<tr class="odd">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Marks</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Before</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">After</th>
@@ -888,17 +889,17 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">1</td>
+<td style="text-align: left;">Within</td>
 <td style="text-align: right;">46.94</td>
 <td style="text-align: right;">95.54</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">2</td>
+<td style="text-align: left;">At Spread</td>
 <td style="text-align: right;">52.00</td>
 <td style="text-align: right;">1.23</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">3</td>
+<td style="text-align: left;">Outside</td>
 <td style="text-align: right;">1.05</td>
 <td style="text-align: right;">3.23</td>
 </tr>
@@ -916,45 +917,45 @@
 <th style="text-align: left;" data-quarto-table-cell-role="th">Broker Type</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">TWPI</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">Violation</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Percentage</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Percent</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">HFT-Broker</td>
-<td style="text-align: right;">2014948</td>
-<td style="text-align: right;">108635</td>
-<td style="text-align: right;">5.39</td>
+<td style="text-align: right;">2,014,948</td>
+<td style="text-align: right;">108,635</td>
+<td style="text-align: center;">5.39</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HFT-Prop</td>
-<td style="text-align: right;">261795</td>
-<td style="text-align: right;">7309</td>
-<td style="text-align: right;">2.79</td>
+<td style="text-align: right;">261,795</td>
+<td style="text-align: right;">7,309</td>
+<td style="text-align: center;">2.79</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Institution</td>
-<td style="text-align: right;">1916287</td>
-<td style="text-align: right;">71323</td>
-<td style="text-align: right;">3.72</td>
+<td style="text-align: right;">1,916,287</td>
+<td style="text-align: right;">71,323</td>
+<td style="text-align: center;">3.72</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Retail-Discount</td>
-<td style="text-align: right;">6126</td>
+<td style="text-align: right;">6,126</td>
 <td style="text-align: right;">113</td>
-<td style="text-align: right;">1.84</td>
+<td style="text-align: center;">1.84</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Retail-Full Service</td>
-<td style="text-align: right;">2445</td>
+<td style="text-align: right;">2,445</td>
 <td style="text-align: right;">86</td>
-<td style="text-align: right;">3.52</td>
+<td style="text-align: center;">3.52</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Unclassified</td>
-<td style="text-align: right;">5709</td>
+<td style="text-align: right;">5,709</td>
 <td style="text-align: right;">250</td>
-<td style="text-align: right;">4.38</td>
+<td style="text-align: center;">4.38</td>
 </tr>
 </tbody>
 </table>
@@ -962,11 +963,12 @@
 
 </div>
 </div>
-</div><div class="column" style="width:68%;">
-<div style="font-size: 30px;">
+</div><div class="column" style="width:67%;">
+<div style="font-size: 25px;">
 <ul>
-<li>13% of reported TWPIs violated the rule</li>
-<li>HFT Brokers have done the most TWPI, as well as violation</li>
+<li>Significant decrease on the number of <code>crossings at the spread</code> TWPI after the rule change, from 52% to 1.23% -&gt; more trades on ASX platform, more fees</li>
+<li>Violation of the rule increased from 1.05% to approximately 4.46% after the rule change -&gt; still marginal</li>
+<li>HFT Brokers have done the most TWPI, as well as violation. Look closer at individual brokers:</li>
 </ul>
 </div>
 <div class="cell">

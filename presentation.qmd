@@ -67,8 +67,9 @@ When the stocks can be traded in a dark pool?
 3. out-of-hours trade: outside open-session 
 4. **Trade with price improvement**:
     
-    - Better price than the price on the open-market 
+    - better price than what available on the lit-market 
     - benefit traders
+    - reported to ASX, not occurred on ASX. Hence, can be violated, e.g. reported as TWPI but actually traded at market price 
 
 </div>
 
@@ -95,7 +96,7 @@ When the stocks can be traded in a dark pool?
 
 Background:
 
-1. `Crossings at or within the spread` rule was introduced in the late 2011
+1. `Crossings at or within the spread` rule was introduced in the late 2011. 
 2.  Amendment in May 2013 -> `Trade with price improvement`
     -   more trading in the lit market, ensuring better price and liquidity - [ASIC Report 394](https://asic.gov.au/about-asic/news-centre/find-a-media-release/2014-releases/14-105mr-asic-reports-on-dark-liquidity-rules/)
     -   Other POV: ASX as a for-profit organisation seeks profit -> Fees from trading on their platform 
@@ -117,22 +118,23 @@ Background:
 
 ## Key Questions
 
-1. Decline in the `crossings at best price` after 26 May 2013?
-2. How many violations on TWPI rule after the rule change?
+1. Are there any significant decrease on the number of `crossings at the spread` after the rule amendment on May 2013?
+2. How many `TWPI` violations after the rule change?
 3. Who did the violation?
 4. What conditions that make the violation occurred? Develop a model ...
 
 ## Data
 
 - ASX200 data from 2012 to 2015
-- Source: SIRCA
+- Source: Securities Industry Research Centre of Asia-Pacific (SIRCA)
 - Extracted with Nectar Cloud Computing
+- 10Million+ of `TWPI` observations
 
 Nectar Cloud Computing
 
 ::: {style="font-size:30px;"}
--   aaaaa
--   bbbbb
+-   Developed and maintained by Australian Research Data Commons (ARDC)
+-   Provide large scale computing infrastructure
 :::
 
 ## Data
@@ -211,14 +213,6 @@ head(all_1pg_best) |>
   kable_styling(font_size = 14, full_width = F, position = "left")
 ```
 
-## Challenges
-
--   Latest open data available only until 2016
--   Handling large amount of data need huge processing power
--   Nectar can handle it, but ...
-    -   still need days
-    -   new issues every weeks
-
 ## Result and Discussion
 
 ```{r}
@@ -227,7 +221,7 @@ head(all_1pg_best) |>
 ```
 
 ::: columns
-::: {.column width="32%"}
+::: {.column width="33%"}
 ```{r}
 # twpi <- twpi_df |> select(-Count, -(6:16), -(19:21))
 
@@ -285,8 +279,10 @@ rio_bf |>
   select(Marks, Percentage.x, Percentage.y) |>
   rename(Before = Percentage.x,
          After = Percentage.y) |>
+  mutate(Marks = c("Within", "At Spread", "Outside")) |>
   kbl() |>
-  kable_styling(font_size = 20, full_width = F, position = "left")
+  kable_styling(font_size = 20, full_width = FALSE, position = "left") |>
+  add_header_above(c(" " = 1, "PERCENTAGE" = 2))
 ```
 
 ```{r}
@@ -312,7 +308,7 @@ broker_table <- rio_af |>
     ungroup()
     ), 
     by = "Description") |>
-  mutate(Percentage = round((n.y/n.x) * 100, 2)) |>
+  mutate(Percent = round((n.y/n.x) * 100, 2)) |>
   rename(TWPI = n.x,
          Violation = n.y,
          `Broker Type` = Description) |>
@@ -321,20 +317,25 @@ broker_table <- rio_af |>
   mutate_if(is.character, ~ replace_na(., "Unclassified"))
 
 broker_table |>
-  kbl() |>
+  mutate_if(is.numeric, comma) |>
+  kbl(align = c("l", "r", "r", "c")) |>
   kable_styling(font_size = 20, full_width = F, position = "left")
 
 
 ```
 :::
 
-::: {.column width="68%"}
-::: {style="font-size: 30px;"}
--   13% of reported TWPIs violated the rule
--   HFT Brokers have done the most TWPI, as well as violation
+::: {.column width="67%"}
+
+::: {style="font-size: 25px;"}
+- Significant decrease on the number of `crossings at the spread` TWPI after the rule change, from 52% to 1.23% -> more trades on ASX platform, more fees
+- Violation of the rule increased from 1.05% to approximately 4.46% after the rule change -> still marginal
+- HFT Brokers have done the most TWPI, as well as violation. Look closer at individual brokers:
 :::
 
 ```{r}
+#| fig-height: 4
+
 broker_10 <- rio_af |> 
   count(BuyerBrokerID) |>
   arrange(desc(n)) |>
@@ -344,6 +345,7 @@ broker_10 <- rio_af |>
 rio_af |> 
   filter(BuyerBrokerID %in% broker_10)|>
   filter(Marks != 1) |>
+  mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside")) |>
   group_by(Marks) |>
   count(BuyerBrokerID) |>
   arrange(desc(n)) |>
@@ -353,7 +355,7 @@ rio_af |>
   labs(title = "Crossing Trades Reported as TWPI",
        x = "Broker ID",
        y = NULL) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "right")
 ```
 :::
 :::
