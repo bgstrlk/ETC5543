@@ -419,17 +419,17 @@ Paul Lajbcygier - Project Supervisor
 <p><strong>Background</strong>:</p>
 <ul>
 <li>Recent concern from regulator (ASIC) on the violation of <code>Trade With Price Improvement</code> rule occurred on the <code>ASX TRADE</code> (exchange market for stocks)</li>
-<li>TWPI rule amended in May 2013</li>
+<li>TWPI rule was introduced in May 2013</li>
 </ul>
 </div>
 <div class="fragment">
-<p><strong>Purpose</strong>: <br> Understand how effective is the rule change, and understand the pattern of the violation</p>
+<p><strong>Purpose</strong>: <br> Understand how effective the rule change was, and understand the pattern of the violation</p>
 </div>
 <div class="fragment">
 <p><strong>Data</strong>: <br> ASX200 trading data from 2012 - 2015. Source: Securities Industry Research Centre of Asia-Pacific (SIRCA)</p>
 </div>
 <div class="fragment">
-<p><strong>Method</strong>: <br> Compare TWPI before and after the rule change, then finding the pattern of violation on May 2013 onward</p>
+<p><strong>Method</strong>: <br> Compare TWPI before and after the rule change, then examine the pattern of violation from May 2013 onward</p>
 </div>
 </div>
 <div style="font-size: 90%;">
@@ -444,7 +444,7 @@ Paul Lajbcygier - Project Supervisor
 <p><strong>Result</strong></p>
 </div>
 <div class="callout-content">
-<p>TWPI amendment in 2013 did significantly decrease the proportion of <code>at-the-spread</code> TWPI from 52% to 1.23%. However, the proportion of the violation rose from 1% to 4.5%.</p>
+<p>The rule change in 2013 significantly decreased the proportion of <code>at-the-spread</code> crossings from 52% to 1.23%. However, the proportion of the violation rose from 1% to 4.5%.</p>
 </div>
 </div>
 </div>
@@ -467,14 +467,14 @@ Paul Lajbcygier - Project Supervisor
 <p>Lit pool:</p>
 <ul>
 <li>traders can see the price and volume of all orders, real time</li>
-<li>ASX trading platform</li>
+<li>Ex: ASX trading platform</li>
 <li>establish fair price, transparency</li>
 </ul>
 <p>Dark pool:</p>
 <ul>
 <li>details of orders are not disclosed, until transactions are completed</li>
-<li>brokers internal system (reported to ASX)</li>
-<li>less fluctuation to the market</li>
+<li>Ex: brokers internal crossing system (reported to ASX)</li>
+<li>cause less fluctuation to the market</li>
 </ul>
 </div>
 </div>
@@ -494,7 +494,7 @@ Paul Lajbcygier - Project Supervisor
 <li><p><strong>Trade with price improvement</strong>:</p>
 <ul>
 <li>crossings (trades within a broker) at a better price than what is available on the lit-market</li>
-<li>benefit traders</li>
+<li>benefit the traders</li>
 <li>reported, but not executed on ASX. Hence, can be violated, e.g.&nbsp;reported as TWPI but actually traded at the spread</li>
 </ul></li>
 </ol>
@@ -512,11 +512,12 @@ Paul Lajbcygier - Project Supervisor
 <div class="column" style="width:65%;">
 <div style="font-size:30px;">
 <ol type="1">
-<li><code>Crossings at or within the spread</code> rule was introduced in the late 2011.</li>
-<li>Amendment in May 2013 -&gt; <code>Trade with price improvement</code>
+<li>Before TWPI, <code>Crossings at or within the spread</code> rule was introduced in the late 2011.</li>
+<li>Amendment in May 2013 <span class="math inline">\(\rightarrow\)</span> <code>Trade with price improvement</code>
 <ul>
+<li>the only difference: exclude <code>at-the-spread</code> crossings</li>
 <li>more trading in the lit market, ensuring better price and liquidity - <a href="https://asic.gov.au/about-asic/news-centre/find-a-media-release/2014-releases/14-105mr-asic-reports-on-dark-liquidity-rules/">ASIC Report 394</a></li>
-<li>Other POV: ASX as a for-profit organisation seeks profit -&gt; Fees from trading on their platform</li>
+<li>Other POV: ASX as a for-profit organisation seeks profit <span class="math inline">\(\rightarrow\)</span> Fees from trading on their platform</li>
 </ul></li>
 <li><strong>Recent finding by ASIC: violation of TWPI rule</strong></li>
 </ol>
@@ -531,10 +532,10 @@ Paul Lajbcygier - Project Supervisor
 <section id="key-questions" class="slide level2">
 <h2>Key Questions</h2>
 <ol type="1">
-<li>Are there any significant decrease on the number of <code>crossings at the spread</code> after the rule amendment on May 2013?</li>
-<li>How many <code>TWPI</code> violations after the rule change?</li>
-<li>Who did the violation?</li>
-<li>What conditions that make the violation occurred? Develop a model …</li>
+<li>Is there any significant decrease in the number of <code>crossings at the spread</code> after the rule amendment on May 2013?</li>
+<li>How many <code>TWPI</code> violations occurred after the rule change?</li>
+<li>Who did the violations?</li>
+<li>What conditions contributed to the occurrence of the violations? Develop a model …</li>
 </ol>
 </section>
 <section id="data" class="slide level2">
@@ -1019,9 +1020,9 @@ PERCENTAGE
 <div class="fragment">
 <div style="font-size: 25px;">
 <ul>
-<li>Significant decrease on the number of <code>crossings at the spread</code> TWPI after the rule change, from 52% to 1.23% -&gt; more trades on ASX platform, more fees</li>
-<li>Violation of the rule increased from 1.05% to approximately 4.46% after the rule change -&gt; still marginal</li>
-<li>HFT Brokers have done the most TWPI, as well as violation. Look closer at individual brokers (Top 10):</li>
+<li>Significant decrease in the number of <code>at-the-spread</code> crossings after the rule change, dropping from 52% to 1.23% <span class="math inline">\(\rightarrow\)</span> more trades on ASX platform, more fees</li>
+<li>Violation of the rule increased from 1.05% to approximately 4.46% after the rule change <span class="math inline">\(\rightarrow\)</span> still marginal</li>
+<li>HFT Brokers have done the most TWPI, as well as the most violation. Look closer at individual brokers (Top 10):</li>
 </ul>
 </div>
 </div>
@@ -1041,11 +1042,11 @@ PERCENTAGE
 <section id="modelling" class="slide level2">
 <h2>Modelling</h2>
 <ul>
-<li>Only TWPI data on the top 5 brokers used to model the <strong>violation</strong>, due to their dominant proportion.</li>
+<li>Only TWPI data from the top 5 brokers is used to model the <strong>violation</strong>, due to their dominant proportion.</li>
 <li>Preprocessing and cleaning the data, include data scaling</li>
-<li>Choosing relevant variables</li>
-<li>The independent variable is a binary whether violation or not</li>
-<li>Dependend variables:</li>
+<li>Selecting relevant variables</li>
+<li>The independent variable is binary, violation or non-violation</li>
+<li>Dependent variables:</li>
 </ul>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -1169,9 +1170,9 @@ Random Forest
 </div>
 </div>
 </div>
-</div><div class="column" style="width:65%;">
+</div><div class="column fragment" style="width:65%;">
 <div style="font-size: 60%;">
-<p>Variable importance from the Random Forest Model:</p>
+<p>Variables importance from the Random Forest Model:</p>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1257,9 +1258,9 @@ Random Forest
 </div>
 <div style="font-size: 60%;">
 <ul>
-<li><code>Ask/BidVol_before</code> are the volume of the best ask/bid price in the lit market. They have the greatest value based on the Gini, meaning they are important for splitting the result between violation or not violation.</li>
-<li><code>DollarValue</code>, <code>Volume</code>, and <code>Date</code> are also important for splitting the result.</li>
-<li>Meanwhile, <code>Year</code> and <code>Month</code> have roles on increasing accuracy of the model.</li>
+<li><code>Ask/BidVol_before</code> refers to the volume of the best ask/bid price in the lit market. They have the highest Gini coefficient, indicating their importance in distinguishing between violation and non-violation.</li>
+<li><code>DollarValue</code>, <code>Volume</code>, <code>Date</code> are also important factors in differentiating result.</li>
+<li>Meanwhile, <code>Year</code> and <code>Month</code> play a role in enhancing the accuracy of the model.</li>
 </ul>
 </div>
 </div></div>
@@ -1267,20 +1268,20 @@ Random Forest
 <section id="conclusion" class="slide level2">
 <h2>Conclusion</h2>
 <ul>
-<li>The purpose of the rule amendment in May 2013 has been met, as the number of <code>crossings at the spread</code> drastically reduced. These kind of trades moves to ASX platform.</li>
-<li>Violation of <code>TWPI</code> can be associated with the depth of the liquidity available just before the trades. Date, Volume, and the transaction values also play important role in the <code>TWPI</code> violation pattern.</li>
-<li>There is no measure from ASX to reject <code>TWPI</code> from being reported if the condition is not met -&gt; ASX need to address this issue</li>
+<li>The purpose of the rule amendment in May 2013 has been met, as the number of <code>at-the-spread</code> crossings has drastically reduced. This type of trades moves to ASX platform.</li>
+<li>Violation of <code>TWPI</code> can be associated with the depth of the liquidity available just before the trades. Date, Volume, and the transaction values also play important roles in the <code>TWPI</code> violation pattern.</li>
+<li>There are no measures from ASX to reject <code>TWPI</code> reports if the conditions are not met <span class="math inline">\(\rightarrow\)</span> ASX need to address this issue</li>
 </ul>
 </section>
 <section id="future-work" class="slide level2">
 <h2>Future Work</h2>
 <ul>
-<li><p>Analyse violation pattern with other variables, such as stock’s industry sector, market cap, lagged price values, bid-ask spread, etc.</p></li>
-<li><p>Try different method to analyse the pattern, such as PCA and factor modelling.</p></li>
+<li><p>Analyse violation pattern with other variables, such as stock industry sector, market cap, lagged price values, bid-ask spread, etc.</p></li>
+<li><p>Try different methods to analyse the pattern, such as PCA and factor modelling.</p></li>
 <li><p>More research questions:</p>
 <ul>
 <li>How much profit did ASX make due to the rule amendment in May 2013?</li>
-<li>Why there were only several brokers dominate the TWPI?</li>
+<li>Why do only a few brokers dominate the TWPI?</li>
 </ul></li>
 </ul>
 </section>
@@ -1448,7 +1449,7 @@ Random Forest
         previewLinks: false,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'slide',
+        transition: 'fade',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
@@ -1468,7 +1469,7 @@ Random Forest
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: '110%',
+        width: '100%',
 
         height: 700,
 
