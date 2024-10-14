@@ -54,34 +54,37 @@ TWPI amendment in 2013 did significantly decrease the proportion of `at-the-spre
 :::
 </div>
 
-## Background - Trading on Stock Exchange
+## Background - Lit vs Dark Pool
 
+:::: {.columns}
 
-::: {.fragment}
-<span style="font-size: 80%;"> Open market / lit pool: </span> 
-    
-    -> traders can see the price and volume of all orders on a trading platform, real time 
-    -> ASX trading platform
-    -> establish fair price, transparency
-
-<span style="font-size: 80%;"> Dark pool: </span>
-
-    -> details of orders are not disclosed to the public, until a transaction is completed
-    -> brokers internal system (reported to ASX)
-    -> less fluctuation to the market
+::: {.column width="70%"}
+![](image/ASX.PNG){fig-align=center height="100%" width="100%"}
 :::
 
-<div style="height: 20px;"></div>
-
+::: {.column width="30%"}
 ::: {.fragment}
-<span style="color: red;">**Both pools are just trading venues, they are still in a same stock exchange: ASX TRADE**</span>
+<div style="font-size: 60%;"> 
+
+Lit pool: 
+
+- traders can see the price and volume of all orders, real time
+- ASX trading platform
+- establish fair price, transparency
+
+Dark pool:
+
+- details of orders are not disclosed, until transactions are completed
+- brokers internal system (reported to ASX)
+- less fluctuation to the market
+
+</div> 
 :::
 
-## Background - Trading on Stock Exchange
+:::
+::::
 
-![](image/ASX.PNG){fig-align=center height="75%" width="75%"}
-
-## Background
+## Background - Trade With Price Improvement
 
 Rule: Equity market products (stocks) must be traded on **lit market**, like ASX trading platform. Except ...
 
@@ -92,15 +95,15 @@ Rule: Equity market products (stocks) must be traded on **lit market**, like ASX
 
 ::: {.fragment}
 
-<div style="font-size: 30px;">
+<div style="font-size: 26px;">
 1. block trade: large volume
 2. portfolio trade: a number of different stocks, on a single agreement
 3. out-of-hours trade: outside open-session 
 4. **Trade with price improvement**:
 
-    - crossings (trades within a broker) on a better price than what available on the lit-market 
-    - benefit traders
-    - reported to ASX, not occurred on ASX. Hence, can be violated, e.g. reported as TWPI but actually traded at the spread 
+    - crossings (trades within a broker) at a better price than what is available on the lit-market 
+    - benefit the traders
+    - reported, but not executed on ASX. Hence, can be violated, e.g. reported as TWPI but actually traded at the spread 
 </div>
 
 :::

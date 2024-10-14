@@ -452,49 +452,50 @@ Paul Lajbcygier - Project Supervisor
 </div>
 </div>
 </section>
-<section id="background---trading-on-stock-exchange" class="slide level2">
-<h2>Background - Trading on Stock Exchange</h2>
-<div class="fragment">
-<p><span style="font-size: 80%;"> Open market / lit pool: </span></p>
-<pre><code>-&gt; traders can see the price and volume of all orders on a trading platform, real time 
--&gt; ASX trading platform
--&gt; establish fair price, transparency</code></pre>
-<p><span style="font-size: 80%;"> Dark pool: </span></p>
-<pre><code>-&gt; details of orders are not disclosed to the public, until a transaction is completed
--&gt; brokers internal system (reported to ASX)
--&gt; less fluctuation to the market</code></pre>
-</div>
-<div style="height: 20px;">
-
-</div>
-<div class="fragment">
-<p><span style="color: red;"><strong>Both pools are just trading venues, they are still in a same stock exchange: ASX TRADE</strong></span></p>
-</div>
-</section>
-<section id="background---trading-on-stock-exchange-1" class="slide level2">
-<h2>Background - Trading on Stock Exchange</h2>
+<section id="background---lit-vs-dark-pool" class="slide level2">
+<h2>Background - Lit vs Dark Pool</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="image/ASX.PNG" class="quarto-figure quarto-figure-center" style="width:75.0%;height:75.0%"></p>
+<p><img data-src="image/ASX.PNG" class="quarto-figure quarto-figure-center" style="width:100.0%;height:100.0%"></p>
 </figure>
 </div>
+</div><div class="column" style="width:30%;">
+<div class="fragment">
+<div style="font-size: 60%;">
+<p>Lit pool:</p>
+<ul>
+<li>traders can see the price and volume of all orders, real time</li>
+<li>ASX trading platform</li>
+<li>establish fair price, transparency</li>
+</ul>
+<p>Dark pool:</p>
+<ul>
+<li>details of orders are not disclosed, until transactions are completed</li>
+<li>brokers internal system (reported to ASX)</li>
+<li>less fluctuation to the market</li>
+</ul>
+</div>
+</div>
+</div></div>
 </section>
-<section id="background" class="slide level2">
-<h2>Background</h2>
+<section id="background---trade-with-price-improvement" class="slide level2">
+<h2>Background - Trade With Price Improvement</h2>
 <p>Rule: Equity market products (stocks) must be traded on <strong>lit market</strong>, like ASX trading platform. Except …</p>
 <div class="columns">
 <div class="column" style="width:55%;">
 <div class="fragment">
-<div style="font-size: 30px;">
+<div style="font-size: 26px;">
 <ol type="1">
 <li><p>block trade: large volume</p></li>
 <li><p>portfolio trade: a number of different stocks, on a single agreement</p></li>
 <li><p>out-of-hours trade: outside open-session</p></li>
 <li><p><strong>Trade with price improvement</strong>:</p>
 <ul>
-<li>crossings (trades within a broker) on a better price than what available on the lit-market</li>
+<li>crossings (trades within a broker) at a better price than what is available on the lit-market</li>
 <li>benefit traders</li>
-<li>reported to ASX, not occurred on ASX. Hence, can be violated, e.g.&nbsp;reported as TWPI but actually traded at the spread</li>
+<li>reported, but not executed on ASX. Hence, can be violated, e.g.&nbsp;reported as TWPI but actually traded at the spread</li>
 </ul></li>
 </ol>
 </div>
@@ -1112,7 +1113,7 @@ Logistic Regression
 </div>
 <div style="font-size: 1em;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>bal_accuracy_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>bal_accuracy_logistic</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.6419309</code></pre>
 </div>
@@ -1162,7 +1163,7 @@ Random Forest
 </div>
 <div style="font-size: 1em;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>bal_accuracy_rf2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>bal_accuracy_rf2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.7810676</code></pre>
 </div>
