@@ -7,7 +7,7 @@ format:
   revealjs:
     slide-number: true
     footer: "ETC5543 - Business Analytics Creative Activity"
-    theme: default
+    theme: dark
     transition: fade
     title-slide-attributes: 
       data-background-image: image/background_title.png
@@ -54,7 +54,7 @@ The rule change in 2013 significantly decreased the proportion of `at-the-spread
 :::
 </div>
 
-## Background - Lit vs Dark Pool
+## Definition - Lit vs Dark Pool
 
 :::: {.columns}
 
@@ -66,13 +66,13 @@ The rule change in 2013 significantly decreased the proportion of `at-the-spread
 ::: {.fragment}
 <div style="font-size: 60%;"> 
 
-Lit pool: 
+**Lit pool**: 
 
 - traders can see the price and volume of all orders, real time
 - Ex: ASX trading platform
 - establish fair price, transparency
 
-Dark pool:
+**Dark pool**:
 
 - details of orders are not disclosed, until transactions are completed
 - Ex: brokers internal crossing system (reported to ASX)
@@ -84,9 +84,9 @@ Dark pool:
 :::
 ::::
 
-## Background - Trade With Price Improvement
+## Definition - Trade With Price Improvement
 
-Rule: Equity market products (stocks) must be traded on **lit market**, like ASX trading platform. Except ...
+ASIC Rule: Stocks must be traded on **lit market**, like ASX trading platform. Except ...
 
 :::: {.columns}
 
@@ -133,8 +133,8 @@ Rule: Equity market products (stocks) must be traded on **lit market**, like ASX
 2.  Amendment in May 2013 $\rightarrow$ `Trade with price improvement`
     - the only difference: exclude `at-the-spread` crossings
     - more trading in the lit market, ensuring better price and liquidity - [ASIC Report 394](https://asic.gov.au/about-asic/news-centre/find-a-media-release/2014-releases/14-105mr-asic-reports-on-dark-liquidity-rules/)
-    - Other POV: ASX as a for-profit organisation seeks profit $\rightarrow$ Fees from trading on their platform 
-3.  **Recent finding by ASIC: violation of TWPI rule**
+    - Other POV: ASX as a for-profit organisation get fees from trading in their platform $\rightarrow$ more trading, more fees
+3.  Key motivation: **Recent finding by ASIC on the violation of TWPI rule** <br> $\rightarrow$ TWPI should be done `within-the-spread` <br> $\rightarrow$ not `at-the-spread` or `outside-the-spread`
 
 :::
 
@@ -154,7 +154,7 @@ Rule: Equity market products (stocks) must be traded on **lit market**, like ASX
 
 ## Key Questions
 
-1. Is there any significant decrease in the number of `crossings at the spread` after the rule amendment on May 2013?
+1. Is there any significant decrease in the number of `at-the-spread` crossings after the rule amendment on May 2013?
 2. How many `TWPI` violations occurred after the rule change?
 3. Who did the violations?
 4. What conditions contributed to the occurrence of the violations? Develop a model ...
@@ -173,7 +173,7 @@ Nectar Cloud Computing
 -   Provide large scale computing infrastructure
 :::
 
-## Data
+## Data - Example
 
 ```{r}
 library(tidyverse)
@@ -373,15 +373,13 @@ broker_table |>
 
 ::: {.fragment}
 ```{r}
-#| fig-height: 4
-
 broker_10 <- rio_af |> 
   count(BuyerBrokerID) |>
   arrange(desc(n)) |>
   head(10) |>
   pull(BuyerBrokerID)
 
-rio_af |> 
+p <- rio_af |> 
   filter(BuyerBrokerID %in% broker_10)|>
   filter(Marks != 1) |>
   mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside")) |>
@@ -390,18 +388,55 @@ rio_af |>
   arrange(desc(n)) |>
   ggplot(aes(x = reorder(BuyerBrokerID, -n), y = n, fill = Marks)) +
   geom_col(position = "dodge") +
-  theme_bw() +
-  labs(title = "Crossing Trades Reported as TWPI",
+  labs(title = "Number of Violations",
        x = "Broker ID",
        y = NULL) +
-  theme(legend.position = "right")
+  theme(legend.position = "right",
+        panel.background = ggplot2::element_rect(fill='transparent'),
+        plot.background = ggplot2::element_rect(fill='transparent', color=NA),
+        # panel.grid.major = ggplot2::element_blank(),
+        panel.grid.minor = ggplot2::element_blank(),
+        legend.background = ggplot2::element_rect(fill='transparent'),
+        axis.title.x = element_text(color = "white", size = 14),
+        axis.text.x = element_text(color = "white"),
+        axis.text.y = element_text(color = "white"),
+        plot.title = element_text(color = "white", size = 16, face = "bold", hjust = 0.5),
+        legend.text = element_text(color = "white", size = 12),
+        legend.title = element_blank())   
 ```
+
+```{r, dev = "png", dev.args=list(bg="transparent")}
+#| fig-height: 3.5
+
+p
+```
+
+```{r, eval=FALSE}
+# path <- here::here("image/plot.png")
+# 
+# suppressMessages(
+#   ggplot2::ggsave(
+#     plot = p,
+#     path = dirname(path),
+#     filename = basename(path),
+#     bg = "transparent",
+#     height = 4,
+#     scale = 2,
+#     dpi = 300,
+#     units = "in"
+#   )
+# )
+#   
+# knitr::include_graphics(path)
+
+```
+
 :::
 
 :::
 :::
 
-## Modelling
+## Modelling (1)
 
 ```{r, include=FALSE}
 # prepare and cleaning the data 
@@ -797,7 +832,7 @@ rbind(bt_acc_ts, bt_bacc_ts)
 data |> select(-Instrument, -Violation) |> names()
 ```
 
-## Modelling 
+## Modelling (2)
 
 We try four machine learning modelling to understand violation pattern:
 
@@ -808,7 +843,7 @@ We try four machine learning modelling to understand violation pattern:
 
 **Random Forest gives the best result for this classification problem: highest balance accuracy score on the test set.**
 
-## Modelling
+## Modelling (3)
 
 :::: columns
 ::: {.column width="35%"}
@@ -873,7 +908,7 @@ importance(rf_model2) |>
 
 ## Conclusion
 
-- The purpose of the rule amendment in May 2013 has been met, as the number of `at-the-spread` crossings has drastically reduced. This type of trades moves to ASX platform. 
+- The purpose of the rule amendment in May 2013 has been met, as the number of `at-the-spread` crossings has drastically reduced. This type of trades moves to ASX platform $\rightarrow$ more trades, more fees
 - Violation of `TWPI` can be associated with the depth of the liquidity  available just before the trades. Date, Volume, and the transaction values also play important roles in the `TWPI` violation pattern.
 - There are no measures from ASX to reject `TWPI` reports if the conditions are not met $\rightarrow$ ASX need to address this issue
 
