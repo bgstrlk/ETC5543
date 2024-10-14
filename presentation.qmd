@@ -59,7 +59,7 @@ The rule change in 2013 significantly decreased the proportion of `at-the-spread
 :::: {.columns}
 
 ::: {.column width="70%"}
-![](image/ASX.PNG){fig-align=center height="100%" width="100%"}
+![](image/ASX2.PNG){fig-align=center height="100%" width="100%"}
 :::
 
 ::: {.column width="30%"}
