@@ -1,0 +1,500 @@
+---
+title: "Pattern Analysis"
+author: "Bagas Trilaksonoaji"
+date: "`r Sys.Date()`"
+format: 
+  html:
+    toc: true
+    number-sections: true
+execute: 
+  echo: false
+  message: false
+  warning: false
+cache: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+library(hms)
+library(knitr)
+library(kableExtra)
+options(knitr.table.html.attr = "quarto-disable-processing=true")
+library(tidymodels)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(themis)
+```
+
+
+```{r}
+#load data
+load("data/twpi3")
+
+twpi_bf <- twpi3 |>
+  filter(RecordDate < lubridate::ymd("20130526"))
+
+twpi_af <- twpi3 |>
+  filter(RecordDate >= lubridate::ymd("20130526"))
+```
+
+```{r}
+# load broker classification data
+
+broker <- read.csv("data/BrokerClassifications.csv")
+class <- read.csv("data/Classifications.csv")
+broker2 <- broker |> left_join(class, by = "Classification") |>
+  mutate(No = as.factor(No))
+```
+
+```{r}
+# sort top 10 broker 
+
+broker_10 <- twpi_af |> 
+  count(BuyerBrokerID) |>
+  arrange(desc(n)) |>
+  head(10) |>
+  pull(BuyerBrokerID)
+
+twpi_af |> 
+  filter(BuyerBrokerID %in% broker_10) |>
+  group_by(Marks) |>
+  count(BuyerBrokerID) |>
+  mutate(percentage = round(n / sum(n) * 100), 2) |>
+  ungroup() |>
+  filter(Marks != 1) |>
+  mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside")) |>
+  ggplot(aes(x = reorder(BuyerBrokerID, -n), y = percentage, fill = Marks)) +
+  geom_col(position = "dodge") +
+  labs(title = "Violation in Percentage to TWPI",
+       x = "Broker ID",
+       y = "Percentage to TWPI") +
+  theme_bw()
+```
+
+```{r}
+# prepare data to model, only top 2 brokers
+
+data <- twpi_af |> 
+  filter(BuyerBrokerID %in% c(210,361),
+         Hour != 16) |>
+  # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+  mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
+         Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
+         Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
+  select(2, 4, 6:13, 15:17) |>
+  na.omit()
+
+viol_at <- data |> select(-11, -13) 
+viol_out <- data |> select(-11, -12) 
+
+set.seed(1010)
+va_split <- initial_split(viol_at, 2/3, strata = Violation_1)
+va_train <- training(va_split)
+va_test <- testing(va_split)
+
+vo_split <- initial_split(viol_out, 2/3, strata = Violation_2)
+vo_train <- training(vo_split)
+vo_test <- testing(vo_split)
+
+```
+
+# Logistic Regression
+
+```{r, eval = FALSE}
+log_mod <- logistic_reg() |>
+  set_engine("glm") |>
+  set_mode("classification") |>
+  translate()
+log_fit1 <- log_mod |>
+  fit(Violation_1 ~ .,
+      data = va_train[-1])
+log_fit2 <- log_mod |>
+  fit(Violation_2 ~ .,
+      data = vo_train[-1])
+
+tidy(log_fit1) 
+glance(log_fit1)
+
+tidy(log_fit2) 
+glance(log_fit2)
+
+saveRDS(log_fit1, file = "data/pattern/log_fit1.rds")
+saveRDS(log_fit2, file = "data/pattern/log_fit2.rds")
+```
+
+Balance accuracy of at-the-spread violation on the test set:
+```{r}
+# measure accuracy logistic regression on at-spread violation 
+log_fit1 <- readRDS("data/pattern/log_fit1.rds")
+
+treshold <- 0.015
+
+va_tr_pred <- log_fit1 |> 
+  augment(new_data = va_train) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+va_ts_pred <- log_fit1 |> 
+  augment(new_data = va_test) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+
+matrix_va_tr <- va_tr_pred |>
+  count(Violation_1, pred_viol) |>
+  group_by(Violation_1) |>
+  mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+matrix_va_ts <- va_ts_pred |>
+  count(Violation_1, pred_viol) |>
+  group_by(Violation_1) |>
+  mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+bal_accuracy_logistic_va <- bal_accuracy(va_ts_pred, Violation_1, pred_viol)$.estimate
+bal_accuracy_logistic_va
+```
+
+
+Balance accuracy of outside-the-spread violation on the test set:
+```{r}
+# measure accuracy logistic regression on outside violation 
+log_fit2 <- readRDS("data/pattern/log_fit2.rds")
+
+treshold <- 0.04
+
+vo_tr_pred <- log_fit2 |> 
+  augment(new_data = vo_train) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+vo_ts_pred <- log_fit2 |> 
+  augment(new_data = vo_test) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+
+matrix_vo_tr <- vo_tr_pred |>
+  count(Violation_2, pred_viol) |>
+  group_by(Violation_2) |>
+  mutate(cl_acc = n[pred_viol == Violation_2]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+matrix_vo_ts <- vo_ts_pred |>
+  count(Violation_2, pred_viol) |>
+  group_by(Violation_2) |>
+  mutate(cl_acc = n[pred_viol == Violation_2]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+
+bal_accuracy_logistic_vo <- bal_accuracy(vo_ts_pred, Violation_2, pred_viol)$.estimate
+bal_accuracy_logistic_vo
+```
+
+## Apply model to twpi data outside broker 210 and 361
+
+```{r}
+# filter data
+data_2 <- twpi_af |> 
+  filter(!(BuyerBrokerID %in% c(210,361)),
+         Hour != 16) |>
+  # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+  mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
+         Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
+         Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
+  select(2, 4, 6:13, 15:17) |>
+  na.omit()
+```
+
+Balance accuracy of at-the-spread violation on other brokers TWPI:
+```{r}
+# apply at-spread violation model and measure accuracy 
+treshold <- 0.015
+
+data_2_va_pred <- log_fit1 |> 
+  augment(new_data = data_2) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+
+matrix_data_2_va <- data_2_va_pred |>
+  count(Violation_1, pred_viol) |>
+  group_by(Violation_1) |>
+  mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+
+bal_accuracy_logistic_data2_1 <- bal_accuracy(data_2_va_pred, Violation_1, pred_viol)$.estimate
+bal_accuracy_logistic_data2_1
+```
+
+Balance accuracy of outside-the-spread violation on other brokers TWPI:
+```{r}
+# apply outside violation model and measure accuracy 
+treshold <- 0.04
+
+data_2_vo_pred <- log_fit2 |> 
+  augment(new_data = data_2) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+
+matrix_data_2_vo <- data_2_vo_pred |>
+  count(Violation_2, pred_viol) |>
+  group_by(Violation_2) |>
+  mutate(cl_acc = n[pred_viol == Violation_2]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+
+bal_accuracy_logistic_data2_2 <- bal_accuracy(data_2_vo_pred, Violation_2, pred_viol)$.estimate
+bal_accuracy_logistic_data2_2
+```
+
+# Random Forest
+
+## At-The-Spread
+
+```{r}
+data_rec1 <- recipe(Violation_1 ~ ., data = va_train) |>
+  step_downsample(Violation_1) |>
+  step_rm(Instrument)
+```
+
+```{r}
+# data_prep1 <- prep(data_rec1)
+# saveRDS(data_prep1, file = "data/pattern/data_prep1.rds")
+
+data_prep1 <- readRDS("data/pattern/data_prep1.rds")
+data_juice1 <- juice(data_prep1)
+```
+
+```{r, eval = FALSE}
+# tuning hyperparameters
+rf_tune1 <- rand_forest(
+  mtry = tune(),
+  trees = 1000,
+  min_n = tune()) |>
+  set_mode("classification") |>
+  set_engine("randomForest")
+
+tune_wf1 <- workflow() |>
+  add_recipe(data_rec1) |>
+  add_model(rf_tune1)
+  
+doParallel::registerDoParallel() # for parallel processing
+
+set.seed(3344)
+w_folds1 <- vfold_cv(va_train)
+
+rf_grid1 <- grid_regular(mtry(range = c(2, 8)),
+                        min_n(range = c(1, 4)),
+                        levels = 3)
+
+tune_res1 <- 
+  tune_grid(tune_wf1,
+            resamples = w_folds1,
+            grid = rf_grid1
+            )
+
+# select best combination based on accuracy
+best_hp1 <- tune_res1 |> select_best(metric = "accuracy")
+```
+
+```{r, eval = FALSE}
+# fit the model
+set.seed(3344)
+rf1 <- rand_forest(mtry = 5, 
+                     min_n = 4) |>
+  set_mode("classification") |>
+  set_engine("randomForest", importance = TRUE)
+
+rf_workflow1 <- workflow() |>
+  add_model(rf1) |>
+  add_formula(Violation_1 ~ .)
+
+fit_rf1 <- rf_workflow1 |> 
+  fit(data = data_juice1)
+
+saveRDS(fit_rf1, file = "data/pattern/fit_rf1.rds")
+```
+
+```{r}
+# apply the model to test set
+fit_rf1 <- readRDS("data/pattern/fit_rf1.rds")
+
+va_ts_pred_rf <- bake(data_prep1, va_test) |>
+  mutate(pviol = predict(fit_rf1,
+                         bake(data_prep1, va_test))$.pred_class)
+```
+
+Balance accuracy of at-the-spread violation on the test set, and the variable importance:
+```{r}
+# measure accuracy
+
+cf_rf_ts1 <- va_ts_pred_rf |>
+  count(Violation_1, pviol) |>
+  group_by(Violation_1) |>
+  mutate(Accuracy = n[Violation_1==pviol]/sum(n)) |>
+  pivot_wider(names_from = "pviol", 
+              values_from = n, values_fill = 0)
+
+
+bal_accuracy_rf1 <- bal_accuracy(va_ts_pred_rf, Violation_1, pviol)$.estimate
+
+bal_accuracy_rf1
+
+rf_model1 <- pull_workflow_fit(fit_rf1)$fit
+importance(rf_model1)
+```
+
+## Outside the Spread
+
+```{r}
+data_rec2 <- recipe(Violation_2 ~ ., data = vo_train) |>
+  step_downsample(Violation_2) |>
+  step_rm(Instrument)
+```
+
+```{r}
+# data_prep2 <- prep(data_rec2)
+# saveRDS(data_prep2, file = "data/pattern/data_prep2.rds")
+
+data_prep2 <- readRDS("data/pattern/data_prep2.rds")
+
+data_juice2 <- juice(data_prep2)
+```
+
+```{r, eval = FALSE}
+# tuning hyperparameters
+rf_tune2 <- rand_forest(
+  mtry = tune(),
+  trees = 1000,
+  min_n = tune()) |>
+  set_mode("classification") |>
+  set_engine("randomForest")
+
+tune_wf2 <- workflow() |>
+  add_recipe(data_rec2) |>
+  add_model(rf_tune2)
+  
+doParallel::registerDoParallel() # for parallel processing
+
+set.seed(3344)
+w_folds2 <- vfold_cv(vo_train)
+
+rf_grid2 <- grid_regular(mtry(range = c(2, 8)),
+                        min_n(range = c(1, 4)),
+                        levels = 3)
+
+tune_res2 <- 
+  tune_grid(tune_wf2,
+            resamples = w_folds2,
+            grid = rf_grid2
+            )
+
+# select best combination based on accuracy
+best_hp2 <- tune_res2 |> select_best(metric = "accuracy")
+```
+
+```{r, eval = FALSE}
+# fit the model
+set.seed(3344)
+rf2 <- rand_forest(mtry = 5, 
+                     min_n = 4) |>
+  set_mode("classification") |>
+  set_engine("randomForest", importance = TRUE)
+
+rf_workflow2 <- workflow() |>
+  add_model(rf2) |>
+  add_formula(Violation_2 ~ .)
+
+fit_rf2 <- rf_workflow2 |> 
+  fit(data = data_juice2)
+
+saveRDS(fit_rf2, file = "data/pattern/fit_rf2.rds")
+```
+
+```{r}
+# apply the model to test set
+fit_rf2 <- readRDS("data/pattern/fit_rf2.rds")
+
+vo_ts_pred_rf <- bake(data_prep2, vo_test) |>
+  mutate(pviol = predict(fit_rf2,
+                         bake(data_prep2, vo_test))$.pred_class)
+```
+
+
+Balance accuracy of outside-the-spread violation on the test set, and the variable importance:
+```{r}
+# measure accuracy
+cf_rf_ts2 <- vo_ts_pred_rf |>
+  count(Violation_2, pviol) |>
+  group_by(Violation_2) |>
+  mutate(Accuracy = n[Violation_2==pviol]/sum(n)) |>
+  pivot_wider(names_from = "pviol", 
+              values_from = n, values_fill = 0)
+
+bal_accuracy_rf2 <- bal_accuracy(vo_ts_pred_rf, Violation_2, pviol)$.estimate
+
+bal_accuracy_rf2
+
+rf_model2 <- pull_workflow_fit(fit_rf2)$fit
+importance(rf_model2)
+```
+
+## Apply model to twpi data outside broker 210 and 361
+
+Balance accuracy of at-the-spread violation on the other brokers TWPI:
+```{r}
+# apply at-spread violation model and measure accuracy 
+data_2_va_pred_rf <- bake(data_prep1, data_2) |>
+  mutate(pviol = predict(fit_rf1,
+                         bake(data_prep1, data_2))$.pred_class)
+
+cf_rf_data_2_1 <- data_2_va_pred_rf |>
+  count(Violation_1, pviol) |>
+  group_by(Violation_1) |>
+  mutate(Accuracy = n[Violation_1==pviol]/sum(n)) |>
+  pivot_wider(names_from = "pviol", 
+              values_from = n, values_fill = 0)
+
+bal_accuracy_rf_data2_1 <- bal_accuracy(data_2_va_pred_rf, Violation_1, pviol)$.estimate
+bal_accuracy_rf_data2_1
+```
+
+Balance accuracy of outside-the-spread violation on the other brokers TWPI:
+```{r}
+# apply outside violation model and measure accuracy 
+data_2_vo_pred_rf <- bake(data_prep2, data_2) |>
+  mutate(pviol = predict(fit_rf2,
+                         bake(data_prep2, data_2))$.pred_class)
+
+cf_rf_data_2_2 <- data_2_vo_pred_rf |>
+  count(Violation_2, pviol) |>
+  group_by(Violation_2) |>
+  mutate(Accuracy = n[Violation_2==pviol]/sum(n)) |>
+  pivot_wider(names_from = "pviol", 
+              values_from = n, values_fill = 0)
+
+bal_accuracy_rf_data2_2 <- bal_accuracy(data_2_vo_pred_rf, Violation_2, pviol)$.estimate
+bal_accuracy_rf_data2_2
+```
+
+# Summary
+
+```{r}
+#| tbl-colwidths: 3
+
+summary <- data.frame(
+  Violation = c("at-spread", "outside-spread"),
+  # GLM_top2 = c(bal_accuracy_logistic_va, bal_accuracy_logistic_vo),
+  GLM_others = c(bal_accuracy_logistic_data2_1, bal_accuracy_logistic_data2_2),
+  # RF_top2 = c(bal_accuracy_rf1, bal_accuracy_rf2),
+  RF_others = c(bal_accuracy_rf_data2_1, bal_accuracy_rf_data2_2)
+)
+
+
+summary |>
+  kbl() |>
+  kable_styling(full_width = FALSE, position = "left")
+```
+

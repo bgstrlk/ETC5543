@@ -2,7 +2,7 @@
 title: "Trades With Price Improvement, Always Better Than Market Price?"
 author: 
   - Bagas Trilaksonoaji
-  - Paul Lajbcygier - Project Supervisor
+  - Assoc. Prof. Paul Lajbcygier - Project Supervisor
 format: 
   revealjs:
     slide-number: true
@@ -59,7 +59,7 @@ The rule change in 2013 significantly decreased the proportion of `at-the-spread
 :::: {.columns}
 
 ::: {.column width="70%"}
-![](image/ASX2.PNG){fig-align=center height="100%" width="100%"}
+![](image/ASX.PNG){fig-align=center height="100%" width="100%"}
 :::
 
 ::: {.column width="30%"}
@@ -129,9 +129,9 @@ ASIC Rule: Stocks must be traded on **lit market**, like ASX trading platform. E
 
 ::: {style="font-size:30px;"}
 
-1. Before TWPI, `Crossings at or within the spread` rule was introduced in the late 2011. 
+1. Before TWPI, crossings in the dark pool can be done `at-the-spread` and `within-the-spread`. 
 2.  Amendment in May 2013 $\rightarrow$ `Trade with price improvement`
-    - the only difference: exclude `at-the-spread` crossings
+    - exclude `at-the-spread` crossings
     - more trading in the lit market, ensuring better price and liquidity - [ASIC Report 394](https://asic.gov.au/about-asic/news-centre/find-a-media-release/2014-releases/14-105mr-asic-reports-on-dark-liquidity-rules/)
     - Other POV: ASX as a for-profit organisation get fees from trading in their platform $\rightarrow$ more trading, more fees
 3.  Key motivation: **Recent finding by ASIC on the violation of TWPI rule** <br> $\rightarrow$ TWPI should be done `within-the-spread` <br> $\rightarrow$ not `at-the-spread` or `outside-the-spread`
@@ -145,7 +145,7 @@ ASIC Rule: Stocks must be traded on **lit market**, like ASX trading platform. E
 <br>
 
 ::: {.fragment}
-<img data-src="image/wilson.png" height="350" width=700" />
+<img data-src="image/wilson.png" height="450" width=700" />
 :::
 
 :::
@@ -914,6 +914,7 @@ importance(rf_model2) |>
 
 ## Future Work
 
+- Use better accuracy measure.
 - Analyse violation pattern with other variables, such as stock industry sector, market cap, lagged price values, bid-ask spread, etc.
 - Try different methods to analyse the pattern, such as PCA and factor modelling.
 - More research questions:

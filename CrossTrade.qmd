@@ -7,13 +7,13 @@ format:
     toc: true
     number-sections: true
 editor: visual
-editor_options: 
-  chunk_output_type: console
 execute: 
   echo: false
   message: false
   warning: false
 cache: TRUE
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r}
@@ -24,6 +24,12 @@ options(knitr.table.html.attr = "quarto-disable-processing=true")
 library(chron)
 library(hms)
 library(lubridate)
+library(tidymodels)
+library(discrim)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(themis)
 ```
 
 # Introduction
@@ -585,7 +591,6 @@ twpi_df <- bind_rows(df_list)
 
 ```
 
-
 ```{r}
 twpi_2014 <- bind_rows(df_list_2014)
 
@@ -595,4 +600,5 @@ tes <- twpi_2014 |> filter(Mykey %in% c("368013045", "368013048"))
 
 twpi_df$Mykey |> duplicated() |> sum()
 ```
+
 
