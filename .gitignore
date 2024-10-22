@@ -4,6 +4,9 @@
 *.rds
 *.rdb
 presentation_cache/
+topics_cache/
+report_cache/
+CrossTrade_cache/
 twpi_2012-2015
 twpi2
 twpi3
