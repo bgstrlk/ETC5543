@@ -34,6 +34,37 @@ library(themis)
 select(-Count, -(6:11), -(14:16), -(19:21))
 ```
 
+```{r, eval = FALSE}
+# list all csv files
+list_2012 <- list.files(path = "data/2012/", pattern = "*.csv", full.names = TRUE)
+list_2013 <- list.files(path = "data/2013/", pattern = "*.csv", full.names = TRUE)
+list_2014 <- list.files(path = "data/2014/", pattern = "*.csv", full.names = TRUE)
+list_2015 <- list.files(path = "data/2015/", pattern = "*.csv", full.names = TRUE)
+
+# read all CSV files into a list of data frames
+df_list_2012 <- lapply(list_2012, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+df_list_2013 <- lapply(list_2013, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+df_list_2014 <- lapply(list_2014, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+df_list_2015 <- lapply(list_2015, function(file) {
+  read.csv(file, colClasses = c(Mykey = "character", BidID = "character", AskID = "character"))
+  })
+
+df_list <- c(df_list_2012, df_list_2013, df_list_2014, df_list_2015)
+
+# combine the data frames into a single data frame
+twpi_df <- bind_rows(df_list)
+
+# save the df
+save(twpi_df, file = "data/twpi_2012-2015")
+
+```
+
 ```{r}
 load("data/twpi_2012-2015")
 twpi4 <- twpi_df |>
@@ -158,7 +189,7 @@ Balance accuracy of at-the-spread violation on the test set:
 
 ```{r}
 # measure accuracy logistic regression on at-spread violation 
-# log_fit1 <- readRDS("data/report/log_fit1.rds")
+log_fit1 <- readRDS("data/report/log_fit1.rds")
 
 treshold <- 0.01625
 
@@ -191,7 +222,7 @@ Balance accuracy of outside-the-spread violation on the test set:
 
 ```{r}
 # measure accuracy logistic regression on outside violation 
-# log_fit2 <- readRDS("data/report/log_fit2.rds")
+log_fit2 <- readRDS("data/report/log_fit2.rds")
 
 treshold <- 0.045
 
@@ -518,9 +549,9 @@ bal_accuracy_rf_data2_2
 
 summary <- data.frame(
   Violation = c("at-spread", "outside-spread"),
-  # GLM_top2 = c(bal_accuracy_logistic_va, bal_accuracy_logistic_vo),
+  GLM_top2 = c(bal_accuracy_logistic_va, bal_accuracy_logistic_vo),
   GLM_others = c(bal_accuracy_logistic_data2_1, bal_accuracy_logistic_data2_2),
-  # RF_top2 = c(bal_accuracy_rf1, bal_accuracy_rf2),
+  RF_top2 = c(bal_accuracy_rf1, bal_accuracy_rf2),
   RF_others = c(bal_accuracy_rf_data2_1, bal_accuracy_rf_data2_2)
 )
 
