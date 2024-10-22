@@ -191,7 +191,7 @@ Balance accuracy of outside-the-spread violation on the test set:
 
 ```{r}
 # measure accuracy logistic regression on outside violation 
-# log_fit2 <- readRDS("data/pattern/log_fit2.rds")
+# log_fit2 <- readRDS("data/report/log_fit2.rds")
 
 treshold <- 0.045
 
@@ -280,21 +280,21 @@ bal_accuracy_logistic_data2_2 <- bal_accuracy(data_2_vo_pred, Violation_2, pred_
 bal_accuracy_logistic_data2_2
 ```
 
-# Random Forest
+## Random Forest
 
-## At-The-Spread
+### At-The-Spread
 
 ```{r}
 data_rec1 <- recipe(Violation_1 ~ ., data = va_train) |>
   step_downsample(Violation_1) |>
-  step_rm(Instrument)
+  step_rm(Instrument, Year, Month)
 ```
 
 ```{r}
 # data_prep1 <- prep(data_rec1)
-# saveRDS(data_prep1, file = "data/pattern/data_prep1.rds")
+# saveRDS(data_prep1, file = "data/report/data_prep1.rds")
 
-data_prep1 <- readRDS("data/pattern/data_prep1.rds")
+data_prep1 <- readRDS("data/report/data_prep1.rds")
 data_juice1 <- juice(data_prep1)
 ```
 
@@ -345,7 +345,7 @@ rf_workflow1 <- workflow() |>
 fit_rf1 <- rf_workflow1 |> 
   fit(data = data_juice1)
 
-saveRDS(fit_rf1, file = "data/pattern/fit_rf1.rds")
+saveRDS(fit_rf1, file = "data/report/fit_rf1.rds")
 ```
 
 ```{r}
@@ -378,20 +378,19 @@ rf_model1 <- pull_workflow_fit(fit_rf1)$fit
 importance(rf_model1)
 ```
 
-## Outside the Spread
+### Outside the Spread
 
 ```{r}
 data_rec2 <- recipe(Violation_2 ~ ., data = vo_train) |>
   step_downsample(Violation_2) |>
-  step_rm(Instrument)
+  step_rm(Instrument, Year, Month)
 ```
 
 ```{r}
 # data_prep2 <- prep(data_rec2)
-# saveRDS(data_prep2, file = "data/pattern/data_prep2.rds")
+# saveRDS(data_prep2, file = "data/report/data_prep2.rds")
 
-data_prep2 <- readRDS("data/pattern/data_prep2.rds")
-
+data_prep2 <- readRDS("data/report/data_prep2.rds")
 data_juice2 <- juice(data_prep2)
 ```
 
@@ -442,12 +441,12 @@ rf_workflow2 <- workflow() |>
 fit_rf2 <- rf_workflow2 |> 
   fit(data = data_juice2)
 
-saveRDS(fit_rf2, file = "data/pattern/fit_rf2.rds")
+saveRDS(fit_rf2, file = "data/report/fit_rf2.rds")
 ```
 
 ```{r}
 # apply the model to test set
-fit_rf2 <- readRDS("data/pattern/fit_rf2.rds")
+fit_rf2 <- readRDS("data/report/fit_rf2.rds")
 
 vo_ts_pred_rf <- bake(data_prep2, vo_test) |>
   mutate(pviol = predict(fit_rf2,
@@ -473,7 +472,7 @@ rf_model2 <- pull_workflow_fit(fit_rf2)$fit
 importance(rf_model2)
 ```
 
-## Apply model to twpi data outside broker 210 and 361
+### Apply model to twpi data outside broker 210 and 361
 
 Balance accuracy of at-the-spread violation on the other brokers TWPI:
 
@@ -512,7 +511,24 @@ cf_rf_data_2_2 <- data_2_vo_pred_rf |>
 bal_accuracy_rf_data2_2 <- bal_accuracy(data_2_vo_pred_rf, Violation_2, pviol)$.estimate
 bal_accuracy_rf_data2_2
 ```
+## Summary
 
+```{r}
+#| tbl-colwidths: 3
+
+summary <- data.frame(
+  Violation = c("at-spread", "outside-spread"),
+  # GLM_top2 = c(bal_accuracy_logistic_va, bal_accuracy_logistic_vo),
+  GLM_others = c(bal_accuracy_logistic_data2_1, bal_accuracy_logistic_data2_2),
+  # RF_top2 = c(bal_accuracy_rf1, bal_accuracy_rf2),
+  RF_others = c(bal_accuracy_rf_data2_1, bal_accuracy_rf_data2_2)
+)
+
+
+summary |>
+  kbl() |>
+  kable_styling(full_width = FALSE, position = "left")
+```
 
 
 
