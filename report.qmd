@@ -7,29 +7,127 @@ editor: visual
 # Research Problem
 
 1.  ASIC found that many brokers reported TWPI that do not actually with improvement. Either they were at best bid/ask or worse than that. But ASIC does not published the report. Therefore, we want to know how the violation occurred since the introduction of the rule in 2011.
+
 2.  The purposes of rule change in 2013 (limit TWPI to within best bid/ask exclusively) are:
 
-    - encourage more trading to occur in lit market
-    - protect lit orders from being traded ahead of by dark trades at the same price
-    - address the impact of dark liquidity on price formation, market quality and fairness 
+    -   encourage more trading to occur in lit market
+    -   protect lit orders from being traded ahead of by dark trades at the same price
+    -   address the impact of dark liquidity on price formation, market quality and fairness
 
     Therefore, we want to know how effective is this rule change in 2013: did TWPI trades significantly decrease in percentage of total trades? (to answer purpose no 1)
 
 # Data
 
-- TWPI trades on ASX200 since the introduction of the TWPI rule in 2011, until 2016. New columns of within, at, or outside best bid/ask.
-- Everything about Big Machine, where can I read about it?
-- Brokers with the most special trades (Fill and Kill, All or Nothing, Iceberg), to analyse the correlation to the TWPI
+```{r}
+library(tidyverse)
+
+select(-Count, -(6:11), -(14:16), -(19:21))
+```
+
+```{r}
+load("data/twpi_2012-2015")
+twpi4 <- twpi_df |>
+  select(-Count, -(6:11), -(14:16), -(19:21)) |>
+  mutate(spread = abs(Ask_before - Bid_before),
+         RecordDate = lubridate::ymd(RecordDate),
+         Hour = substr(HourMinuteSecond, 1, 2),
+         Year = lubridate::year(RecordDate),
+         Month = lubridate::month(RecordDate),
+         Date = lubridate::day(RecordDate),
+         Dayofweek = lubridate::wday(RecordDate)) |>
+  select(1:3, 5:11, 13:18, Marks) |>
+  mutate(BuyerBrokerID = as.factor(BuyerBrokerID),
+         across(12:14, as.factor),
+         across(16:17, as.factor)) |>
+  group_by(Instrument) |>
+  mutate_if(is.numeric, function(x) (x-mean(x, na.rm = TRUE))/sd(x, na.rm = TRUE)) |>
+  ungroup()
+
+twpi4 <- twpi4 |> # remove duplicates
+  group_by(Mykey) |>
+  filter(n() == 1) |>
+  ungroup()
+```
+
+```{r}
+twpi_bf <- twpi4 |>
+  filter(RecordDate < lubridate::ymd("20130526"))
+
+twpi_af <- twpi4 |>
+  filter(RecordDate >= lubridate::ymd("20130526"))
+```
+
+```{r}
+# load broker classification data
+
+broker <- read.csv("data/BrokerClassifications.csv")
+class <- read.csv("data/Classifications.csv")
+broker2 <- broker |> left_join(class, by = "Classification") |>
+  mutate(No = as.factor(No))
+```
 
 # Analysis
 
-- Violation of TWPI by numbers, from 2011 - 2016
-- Rules change in 2013, how they impact the numbers of TWPI
-- What type of brokers did the most violation? Are they informed brokers (institutional)?
-- Do brokers with the most special orders tend to do TWPI? if yes, then we have initial connection that TWPI is informed transaction (for future work)
+```{r}
+# sort top 10 broker 
 
-- simple regression model to predict: when the TWPI is violated
-reason: 
-1. simpler data, whole data can be extracted
-2. more interesting than looking at informative trade. 
-3. 
+broker_10 <- twpi_af |> 
+  count(BuyerBrokerID) |>
+  arrange(desc(n)) |>
+  head(10) |>
+  pull(BuyerBrokerID)
+
+twpi_af |> 
+  filter(BuyerBrokerID %in% broker_10) |>
+  group_by(Marks) |>
+  count(BuyerBrokerID) |>
+  mutate(percentage = round(n / sum(n) * 100), 2) |>
+  ungroup() |>
+  filter(Marks != 1) |>
+  mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside")) |>
+  ggplot(aes(x = reorder(BuyerBrokerID, -n), y = percentage, fill = Marks)) +
+  geom_col(position = "dodge") +
+  labs(title = "Violation in Percentage to TWPI",
+       x = "Broker ID",
+       y = "Percentage to TWPI") +
+  theme_bw()
+```
+
+```{r}
+# prepare data to model, only top 2 brokers
+
+data <- twpi_af |> 
+  filter(BuyerBrokerID %in% c(210,361),
+         Hour != 16) |>
+  # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+  mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
+         Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
+         Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
+  select(2, 4, 6:13, 15:17) |>
+  na.omit()
+
+viol_at <- data |> select(-11, -13) 
+viol_out <- data |> select(-11, -12) 
+
+set.seed(1010)
+va_split <- initial_split(viol_at, 2/3, strata = Violation_1)
+va_train <- training(va_split)
+va_test <- testing(va_split)
+
+vo_split <- initial_split(viol_out, 2/3, strata = Violation_2)
+vo_train <- training(vo_split)
+vo_test <- testing(vo_split)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
