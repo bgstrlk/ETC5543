@@ -15,22 +15,55 @@ editor_options:
   chunk_output_type: inline
 ---
 
+<!-- link git repo:  -->
+
 # Abstract 150
 
 # Introduction 1500
 
-link git repo: 
+There were numerous equities exchange established in the long history of Australia. Almost every big cities in Australia once had their own stock exchange, namely Sydney, Brisbane, Melbourne, Adelaide, Perth, even Hobart. In 1987, all six stock exchanges were merged under legislation of Australian Parliament and became Australian Stock Exchange [ASX-Story](https://www.asx.com.au/about/asx-story). Forward to two decades, this equities exchange merged with Sydney Futures Exchange to become Australian Securities Exchange. Now, its official name is ASX Limited, but it is easier to just cite its three leters: ASX. In this report, however, we will use the term ASX to refer the company or the equities market.
+
+As a market operator, ASX main tasks include reviewing listing applications, supervising listed entities as well as listed brokers, operate and maintain electronic trading platform for buying and selling stocks, and clearing and settlement services [ASX-About-Us](https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.). 
+
+ASX operates under the regulatory framework of two government agencies, the Australia Securities and Investments Commission (ASIC) and the Reserve Bank of Australia (RBA) [ASX-Regulatory-Framework](https://www.asx.com.au/about/regulation). ASIC role is to supervise the stock market trading and also enforce its law related to financial market conduct, whereas RBA is responsible for supervising clearing and settlement related services.
 
 ## Background and Motivation 500
 
+Anyone who wants to buy or sell stocks can place an order on the ASX trading platform. Where the price of the buy and sell side is match, the trade can be executed. Any outstanding orders will still on the platform and are visible to anyone who have access to the market. This mechanism promote transparency and market equilibrium of supply and demand, hence ensure fair stock price discovery. 
+
+
+- there is dark pool and lit pool
+- one of dark pool is crossing system
+- history of crossing system: priority crossing, crossing at or within the spread, twpi
+- rule change to twpi because regulator wants more trading in the lit market (asic report 394), and other reasons
+- other pov: asx is a for profit organisation. regulator also wants asx to get profit. ASX became the first exchange in the world to demutualise and directly list on itself on 14 October.
+- motivation: ASIC recent findings on the breach of twpi rule. there is also penalty to the violator 
+
 ## Purpose and Key Questions 500
 
-objectives
-brief information about method and data
+- understand how the rule change in 2013 impact at-spread crossing (percentage of at spread crossing to all twpi before and after rule change)
+- how the rule change in 2013 moves the at-spread crossings to lit market (percentage of total twpi to total on market trade before and after rule change, also percentage of within-spread, at-spread, outside-spread, to total market trade)
+- understand the violations after the rule change, how many (in dollar value), who did it, and the pattern (develop a model for finding the pattern)
+
+Key Questions:
+- any significant decrease in the percentage of at-spread crossings after the rule change?
+- significant decrease in the percentage of TWPI after the rule change? meaning the twpi move to lit market
+- how many violations after the rule change (in number and dollar value)
+- who did the most violations? what kind of brokers?
+- what conditions contributed to the occurrence of the violations?
+
+
+- Brief information about method and data
 
 ## Significance and Contributions 500
 
-novel features
+- economic significance: how twpi violations contribute xxx dollar transaction. how many fees should be paid to market operator (ASX) 
+- policy/regulatory significance: do asx need to address the policy of twpi reporting? now, reported twpi cannot be rejected. give them the pattern or model, to predict violation
+- theoretical significance: give contribution to the academic understanding on what variables contributed to the occurrence of twpi violations
+
+Novel features:
+- new study related to twpi violation. before, many paper talks about special order and hidden orders
+- the study includes detection model to help determine the violation pattern. never been used for twpi violation prediction
 
 # Data and Methodology 1000
 
@@ -589,10 +622,9 @@ summary |>
 
 # References
 
+ASX-Story https://www.asx.com.au/about/asx-story
 
+ASX-About Us https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.
 
-
-
-
-
+ASX-About-Regulation https://www.asx.com.au/about/regulation
 
