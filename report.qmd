@@ -19,25 +19,44 @@ editor_options:
 
 # Abstract 150
 
-# Introduction 1500
+# Introduction 
 
 There were numerous equities exchange established in the long history of Australia. Almost every big cities in Australia once had their own stock exchange, namely Sydney, Brisbane, Melbourne, Adelaide, Perth, even Hobart. In 1987, all six stock exchanges were merged under legislation of Australian Parliament and became Australian Stock Exchange [ASX-Story](https://www.asx.com.au/about/asx-story). Forward to two decades, this equities exchange merged with Sydney Futures Exchange to become Australian Securities Exchange. Now, its official name is ASX Limited, but it is easier to just cite its three leters: ASX. In this report, however, we will use the term ASX to refer the company or the equities market.
 
-As a market operator, ASX main tasks include reviewing listing applications, supervising listed entities as well as listed brokers, operate and maintain electronic trading platform for buying and selling stocks, and clearing and settlement services [ASX-About-Us](https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.). 
+As a market operator, ASX main tasks include reviewing listing applications, supervising listed entities as well as listed brokers, operate and maintain electronic trading platform for buying and selling stocks, and clearing and settlement services. [ASX-About-Us](https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.).
 
 ASX operates under the regulatory framework of two government agencies, the Australia Securities and Investments Commission (ASIC) and the Reserve Bank of Australia (RBA) [ASX-Regulatory-Framework](https://www.asx.com.au/about/regulation). ASIC role is to supervise the stock market trading and also enforce its law related to financial market conduct, whereas RBA is responsible for supervising clearing and settlement related services.
 
-## Background and Motivation 500
+## Background and Motivation 
 
-Anyone who wants to buy or sell stocks can place an order on the ASX trading platform. Where the price of the buy and sell side is match, the trade can be executed. Any outstanding orders will still on the platform and are visible to anyone who have access to the market. This mechanism promote transparency and market equilibrium of supply and demand, hence ensure fair stock price discovery. 
+Anyone who wants to buy or sell stocks can place an order on the ASX trading platform. Where the price of the buy and sell side is match, the trade can be executed. Any outstanding orders will still on the platform and are visible to anyone who have access to the market. This mechanism promote transparency and market equilibrium of supply and demand, hence ensure fair stock price formation [ASIC, 2022](https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/). That is why we often call this trading venue provided by the ASX trading platform as `lit market` or `lit pool`. 
 
+On the other hand, there are other venues that do not disclose the orders placed, at least until the transaction is executed. We will use the term `dark pool` to refer this kind of trading venue. There are several `dark pool` available for stock trading in Australia. However, in this project we will focus on the `dark pool` executed on the broker's internal crossing system. 
 
-- there is dark pool and lit pool
-- one of dark pool is crossing system
-- history of crossing system: priority crossing, crossing at or within the spread, twpi
-- rule change to twpi because regulator wants more trading in the lit market (asic report 394), and other reasons
-- other pov: asx is a for profit organisation. regulator also wants asx to get profit. ASX became the first exchange in the world to demutualise and directly list on itself on 14 October.
-- motivation: ASIC recent findings on the breach of twpi rule. there is also penalty to the violator 
+Crossing system is an electronic platform provided by the brokers to match orders placed by their clients with their other clients or with their own account (ASIC, 2014). On other words, orders can be matched on the broker's internal system before they are passed through to the ASX trading platform. 
+
+What is the benefit for brokers and traders if they trades on the crossing system instead of ASX `lit pool`? One of the main reason is because the trading fees are much cheaper. Trades on the ASX platform are charged about 0.15 basis points per trade, whereas internal crossing charged as much as 0.04 basis points per trade, capped at $1,000 per month ([ASX Schedule Fees](https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf)). The difference is quite huge given how much a broker can trade in daily basis.  
+
+One important thing to note is that there was a difference in the internal crossing rule before and after 26 May 2013:
+
+1. ***Before***
+        
+    Based on the Rule 4.2.3(1)(b) of the ASIC Market Integrity Rules (Competition in Exchange Markets) 2011, the trades done in the broker's internal crossing system are referred as `Trades At or Within The Spread`. As the name suggests, the executed trade price must be at the same as the best available bid or best available offer of the `lit market` (at-the-spread), or better (within-the-spread). Meaning that the price executed on this `dark pool` cannot be less than the best bid price or more than the best offer price in the `lit market`. 
+2. ***After***
+    
+    The rule had changed, based on the Rule 4.2.3 of the ASIC Market Integrity Rules (Competition in Exchange Markets) Amendment 2012 (No. 1), the trades on the crossing system must provide meaningful price improvement (ASIC, 2014). Trades at the best bid or best offer price of the `lit market` is not in the option anymore. This rule was effective on 26 May 2013. ASIC and ASX refer this internal crossing trade as `Trades With Price Improvement`, or next we can refer this as TWPI. This report will focus on this kind of dark trades.
+
+The amendment of the rule in May 2013 was to address the negative impact of the dark trades on the price formation, specifically from the `at-the-spread` trades (ASIC, 2014), due to traders may prefer to do the trades on the `dark pool` as it has less fees compared to `lit pool`. The adverse effect on the price discovery was one of the main reason why the regulator wants more trading to occur on the `lit pool`.
+
+On the other side of point of view, there was also economic incentive of this to the ASX. On  14 October 1998, ASX become a public-owned companies after demutualising itself. The main analysis behind this was that "***ASX needed to become more flexible, responsive and commercially focused, capable of quickly taking up emerging commercial opportunities***" (ASIC, 2004). Therefore, as an all for-profit enterprise, ASX would take any business opportunity to raise their source of income to maximize their returns to shareholders. ASIC amended the rules in order to provide meaningful price improvement would move a significant portion of the dark trades to the ASX platform, which in turn rise its profit from trading fees.
+
+**Key Motivation**
+
+On May 2022, ASIC release a Market Integrity Update (Issue 137) article reviewing TWPI. In the article, ASIC mentioned that several participants were reporting a significant number of their TWPIs without price improvement. ASIC emphasized that such trades must be done on `lit market` because it will promote liquidity and price formation. TWPI is an exception because it offers better prices for the investor, the price that the `lit market` cannot provide. 
+
+Following up this Market Integrity Update, ASIC issued an infringement notice to Wilson Advisory and Stockbroking Pty Ltd to pay to ASIC, behalf of the Commonwealth, in the sum of $548,328. The notice given on 16 December 2022, while published on ASIC media release on 3 February 2023. 
+
+The penalty shows that ASIC has started to taken into account the breach of TWPI rule more seriously. However, since the rule was long introduced (in 2011 and amended in 2013), but only occurred to be ASIC concern until recently, I am intrigued to understand what happened to the TWPI just after the rule amendment in 26 May 2013. Were there no violation on the TWPI rule in its early establishment? Or there were other reasons that regulator had not put serious concern towards this issue? 
 
 ## Purpose and Key Questions 500
 
@@ -627,4 +646,16 @@ ASX-Story https://www.asx.com.au/about/asx-story
 ASX-About Us https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.
 
 ASX-About-Regulation https://www.asx.com.au/about/regulation
+
+[ASIC, 2022](https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/)
+
+ASIC Review of recent rule changes affecting dark liquidity, report 394, may 2014
+
+ASIC Market demutualisation and privatisation: The Australian experience, 20 may 2004
+
+ASX Trade: Markets Participant and Trading Schedule of Fees https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf
+
+Market Integrity Update (Issue 137) https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/#review-of-trades-with-price-improvement
+
+wilson advisory infringement notice https://asic.gov.au/about-asic/news-centre/find-a-media-release/2023-releases/23-016mr-wilsons-advisory-and-stockbroking-ltd-acn-010-529-665-pays-548-328-infringement-notice/
 
