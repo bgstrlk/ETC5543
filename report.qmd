@@ -3,11 +3,11 @@ title: "Trade With Price Improvement"
 author: "Bagas Trilaksonoaji"
 date: "`r Sys.Date()`"
 format: 
-  pdf:
+  html:
     toc: true
     number-sections: true
 execute: 
-  eval: false
+  eval: TRUE
   echo: false
   message: false
   warning: false
@@ -395,7 +395,7 @@ confusionMatrix(vo_ts_pred$pred_viol, vo_ts_pred$Violation_2)
 # 
 # save(data_2, file = "data/report/data_2")
 
-load("data/report/data2")
+load("data/report/data_2")
 ```
 
 ```{r}
