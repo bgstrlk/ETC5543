@@ -1,0 +1,334 @@
+---
+title: "ETF5560"
+format: html
+editor: visual
+---
+
+## Data
+
+All data is from HILDA, wave 20. Students can use R or STATA. HILDA data comes in SAS, STATA and SPSS formats. R users need to install the `haven` package to read the data
+
+```{r}
+#install.packages("haven")
+library(haven)
+```
+
+Using the HILDA User Manual and online search, students will explore the proxies for financial stress and measures of household debt available in HILDA.
+
+```{r}
+#| echo: false
+library(tidyverse)
+```
+
+```{r}
+b_data <- read_dta("c:/Users/plajbcyg/Documents/ETF5560DATA/Combined_b200c.dta")
+
+cpi <- read.csv("c:/Users/plajbcyg/Documents/ETF5560DATA/CPI.csv")
+min_consumption <- read.csv("c:/Users/plajbcyg/Documents/ETF5560DATA/minconsumption.csv")
+```
+
+```{r}
+
+#variables to keep. Add _hwobdt from wave 6 onwards. Paul added FIVE FM variables
+
+to_keep <- c("xwaveid", "bhhrhid", "bfiprbeg", "bfiprbmr", "bfiprbps", "bfiprbwm", "bfiprbuh", "bfiprbfh","bfiprbwo" , "bhifditp", "bhifditn", "bhifditf", "bhhtype", "bhwassei", "bhwassef", "bhwdebt", "bhhyng", "bhhold", "bhwtpdt", "bhwbusdt", "bhwccdt", "bhwhecdt", "bhhpers", "bedhigh1", "bhelth", "btifeftf", "btifeftn", "btifeftp", "bhhwths", "bhsmg", "bhssl","bhwothdt","bhwccdt", "bhhadult","btcr", "bhsrnt") 
+
+b_fs <- b_data |> select(all_of(to_keep))
+
+for (var in names(b_fs)) {print(attr(b_fs[[var]],"label"))}
+```
+
+HILDA convention is that all negative values are missing values (different negative integers denote different cause of missingness). So, we need to convert all negative values to missing before we do any computations.
+
+```{r}
+ b_fs1 <- b_fs %>% mutate(across(everything(), function(x){replace(x, which(x<0), NA)})) %>% zap_labels() %>% as.data.frame()
+```
+
+All financial stress variables start with "bfipr". So take the mean of all of those variables and call it "fsmean":
+
+```{r}
+b_fs1 <- mutate(b_fs1, fsmean = rowMeans(select(b_fs1, starts_with("bfipr")), na.rm = TRUE))
+```
+
+Let's delete all observations with missing 'fsmean' because they are probably from household members who are too young or too old, or if none of the household members answered these questions, then the data from that household is of no use for us.
+
+```{r}
+b_fs1 <- b_fs1 %>% filter(!is.na(fsmean))
+```
+
+Now, if we define that a household is in financial stress if at least one of its members has responded positively to any of the financial stress questions, then we can assign the minimum of 'fsmean' to all members of the household. Then if the minimum is less than 2, then we consider the household to be in financial stress.
+
+```{r}
+b_fs1 <- b_fs1 %>%
+  group_by(bhhrhid) %>%
+  mutate(fs_min = min(fsmean, na.rm = TRUE)) %>%
+  ungroup()
+
+```
+
+Finally, keep only one observation from each household. Since we are mainly interested in the household level financial stress, debt and income, we may take one person at random, but since later we may want to use a panel, we choose the person with highest personal income in the household. In case two people in a household may have identical incomes, we use highest education as a tie breaker. Note that the education codes are in the reverse order to years of educations, e.g. 1 is for master and PhD. But before doing this, we need to combine the positive and negative parts of income, both at individual and household level.
+
+```{r}
+b_fs1 <- b_fs1 %>%
+  mutate(bhtinc = bhifditp - bhifditn, bptinc = btifeftp - btifeftn)
+```
+
+```{r}
+bfs <- b_fs1 %>%
+  group_by(bhhrhid) %>%
+  arrange(desc(bptinc), bedhigh1) %>%
+  slice(1) %>%
+  ungroup()
+```
+
+One last step is to map 'fs_min' to zero if its value is 2 and to 1 if its value is less than 2.
+
+```{r}
+bfs <- bfs %>%
+  mutate(fs = (fs_min != 2))
+```
+
+Finally, we can run a logistic regression of the binary financial stress on household debt and household disposable income!
+
+```{r}
+m0 <- glm(bfs$fs ~ bfs$bhwdebt + bfs$bhtinc , family = "binomial")
+summary(m0)
+```
+
+I had to fix a problem with NAs. R produced an NA if one variable is added to another and either or both are NAs. As many of the constitute variabels for FM had NAs I was getting many NAs for FM. To fix this problem i turned NA to zero. Another smaller problem, which I can fix later is that a household can have up to 8 adults and 10 children. Do I need to update my minimum consumption table.To calculate the FM, it is necessary to calculate the minimum consumption (MC) for each household that depends on the number of adults and children in a household.
+
+MC excludes rent which varies across Australian states as rental is provided in HILDA. MC was obtained from an online ( https://www.homeloanexperts.com.au/mortgage-calculators/living-expenses-calculator/#lciaCalcForm) Housing Expenditure Measure calculator.
+
+The MC is given in 2024 dollars and must be adjusted for bfsinflation given that we are focused on 2002 data (wave b). Must convert MC into numeric and set it to zero if it is NA. Using the CPI file for the second wave (FY 2001) of HILDA the inflation discount factor that should be applied to the min_consumption dollar amount is 0.808454
+
+```{r}
+bfs_2<-bfs %>% left_join(min_consumption, by=c("bhhadult", "btcr"))
+
+bfs_2$min_consumption<-as.numeric(bfs_2$min_consumption)
+bfs_2$min_consumption[is.na(bfs_2$min_consumption)]<-0
+bfs_2$min_consumption<-bfs_2$min_consumption/1.808454
+```
+
+Now, calculate the debt servicing costs DS=PM+SM+P+C. Now PM and SM are payments, whereas P and C are total loan amounts. Must convert DS to zero if it is NA. **This means an annual interest rate must be used for P and C. The RBA cash rate in 2002 was 4.5% and the credit card premium is about 15% so we take the annual interest rate to be 20% for P and C.**
+
+Needed to multiply \_HSMG, \_HSSL and \_HSRNT by 12 to convert from monthly to annual
+
+```{r}
+bfs_2$bhsmg[is.na(bfs_2$bhsmg)]<-0
+bfs_2$bhssl[is.na(bfs_2$bhssl)]<-0
+bfs_2$bhwothdt[is.na(bfs_2$bhwothdt)]<-0
+bfs_2$bhwccdt[is.na(bfs_2$bhwccdt)]<-0
+
+bfs_2$DS<-bfs_2$bhsmg*12+bfs_2$bhssl*12+bfs_2$bhwothdt*0.2+bfs_2$bhwccdt*0.2
+bfs_2$DS[is.na(bfs_2$DS)]<-0
+
+```
+
+Now the FM=Y-DS-MC-R
+
+Note the \_HSRNT needs to be multiplied by 12 to convert it from montly to annual
+
+```{r}
+bfs_2$bhsrnt[is.na(bfs_2$bhsrnt)]<-0
+bfs_2$bhifditp[is.na(bfs_2$bhifditp)]<-0
+
+bfs_2$FM<-bfs_2$bhifditp-bfs_2$DS-bfs_2$min_consumption-bfs_2$bhsrnt*12
+```
+
+The choice is either to use the FM (0.1) as an alternative to the La Cava HILDA survey approach or use FM to augment the La Cava approach. Not sure which is best yet.
+
+The preliminary results are interesting as they suggest the FM approach of Bilson provide quite different results to the approach of La Cava et al.
+
+La Cava et al find 2534 stressed households. In contrast Bilson's FM finds only 1152 stressed households in total. We should not be too surprised as La Cava states that if *any* household member says yes to any of 7 questions then the whole household is deemed to be in financial stress.
+
+It makes sense to compare and contrast the two sets of households and ascertain where they are similar and where they are different. (e.g. is answering yes to one particular question resulting in many catgorizations to hosehold stress in the La Cava approach?)
+
+The two approach results accord: households that are both both stressed and unstressed according to both #measures (4231 of 6779 or 62% of households). Futhermore, many households are stressed according to both measures (479 of 6779 or 6% of households). BUT of the 965 stressed FM households 43% are also La Cava stressed. This is very good.
+
+```{r}
+#converts FM to a default probability (0/1) if FM is less than zero it is TRUE
+# Farshid's bfs$fs uses the criterion that if any membr of the houshold has answered Yes to any othe 7 indicators the whole household is in financial stress
+
+bfs_2$FM_fs<-ifelse(bfs_2$FM<0,TRUE,FALSE)
+
+#There are a total of 5164+1615=6779 households
+table(bfs_2$FM_fs)
+
+#Compare the total number of stressed households using the La Cava method (2354) (Farshid) and Bilson's FM apprroach (1615). You would expect less FM stressed households than La Cava because *any* member of the hosehold who reports that they are stressed to any of the seven questions makes the who household stressed
+
+FM_no_households_stressed<-sum(bfs_2$FM_fs)
+print(FM_no_households_stressed)
+
+Cava_no_households_stressed<-sum(bfs$fs)
+print(Cava_no_households_stressed)
+
+#find how many households are both both stressed and unstressed according to both #measures (4284 of 6779 or 62% of households) 
+
+same_values<- bfs$fs==bfs_2$FM_fs
+count_same_value<-sum(same_values)
+print(count_same_value)
+
+#find how many households are stressed according to both measures (737 of 6779 or 11% of total households BUT of the 1615 stressed FM households 42% are also La Cava stressed 
+
+both_true<- bfs$fs & bfs_2$FM_fs
+count_both_true <- sum(both_true,na.rm=TRUE)
+print(count_both_true)
+
+
+
+
+
+```
+
+Now we wish to make a number of comparisons between the La Cava and the Bilson approaches.
+
+1.  **Model 1:** Using the FM household categorization (\$FM_fs) of household financial stress (FM\<0 household is stressed) and seeing if the same variables that Farshid used can predict this version of household distress \[Model 1 below\]. Model 1 has a much smaller AIC than Model 0 suggesting better fit to the stressed FM households.
+2.  **Model 2:** Augmenting La Cava with FM (\$FM) but using the La Cava HILDA survey data to categorize a household as distressed or not and adding FM to the La Cava approach to see whether it can enhance the Model 0 approach \[Model 2 below\]. Model 2 is better than Model 0 and \$FM is significant.
+3.  **Model 3:** Just using FM as an explanatory variable on its own (cut down version of Model 2). Model 3 has &FM as significant but the AIC is not as low as Model 2.
+4.  **Model 4:** Use OLS regeression and fit FM \~ using household characteristcs.
+
+```{r}
+#Model 1
+m1 <- glm(bfs_2$FM_fs ~ bfs_2$bhwdebt + bfs_2$bhtinc , family = "binomial")
+summary(m1)
+```
+
+```{r}
+#Model 2
+m2 <- glm(bfs_2$fs ~ bfs_2$bhwdebt + bfs_2$bhtinc + bfs_2$FM, family = "binomial")
+summary(m2)
+```
+
+```{r}
+#Model 3
+m3 <- glm(bfs_2$fs ~ bfs_2$FM, family = "binomial")
+summary(m3)
+```
+
+```{r}
+
+m4 <- glm(bfs_2$FM ~ bfs_2$bhwdebt + bfs_2$bhtinc, family = "gaussian")
+summary(m4)
+```
+
+**AIC & BIC**
+
+```{r}
+print(AIC(m0))
+print(BIC(m0))
+
+print(AIC(m1))
+print(BIC(m1))
+
+print(AIC(m2))
+print(BIC(m2))
+
+print(AIC(m3))
+print(BIC(m3))
+
+print(AIC(m4))
+print(BIC(m4))
+
+
+```
+
+**ROC PLOT**
+
+Now I iwsh to compare models visually. I can begin with ROC curves.
+
+```{r}
+
+#install.packages("pROC")
+library(pROC)
+
+m0_predicted_probabilities<-predict(m0, type="response")
+m1_predicted_probabilities<-predict(m1, type="response")
+m2_predicted_probabilities<-predict(m2, type="response")
+m3_predicted_probabilities<-predict(m3, type="response")
+
+rocm0 <- roc(m0$y, m0_predicted_probabilities)
+#find optimal threshold
+m0_optimal_threshold<-coords(rocm0, "best", ret="threshold")
+print(m0_optimal_threshold)
+
+rocm1 <- roc(m1$y, m1_predicted_probabilities)
+#find optimal threshold
+m1_optimal_threshold<-coords(rocm1, "best", ret="threshold")
+print(m1_optimal_threshold)
+
+
+rocm2 <- roc(m2$y, m2_predicted_probabilities) 
+rocm3 <- roc(m3$y, m3_predicted_probabilities) 
+
+print(rocm0)
+print(rocm1)
+print(rocm2)
+print(rocm3)
+
+# Plot ROC curves
+plot(rocm0, col = "blue", main = "ROC Curves")
+lines(rocm1, col = "green")
+lines(rocm2, col = "red") 
+lines(rocm3, col = "black")
+legend("bottomright", legend = c("Model 0", "Model 1","Model 2", "Model 3"), col = c("blue", "green","red", "black"), lwd = 2)
+
+
+```
+
+**RESIDUAL PLOT**
+
+```{r}
+
+```
+
+Residual plots help diagnose model fit by showing residuals (differences between observed and predicted values).
+
+```{r}
+
+residuals0 <- residuals(m0, type = "deviance")
+residuals2 <- residuals(m2, type = "deviance")
+residuals3 <- residuals(m3, type = "deviance")
+
+par(mfrow = c(1, 3))  # Set up a 1x3 plotting area
+plot(residuals0, main = "Residuals Model 0", ylab = "Residuals", xlab = "Index", col = "blue", pch = 16)
+plot(residuals2, main = "Residuals Model 2", ylab = "Residuals", xlab = "Index", col = "red", pch = 16)
+plot(residuals3, main = "Residuals Model 3", ylab = "Residuals", xlab = "Index", col = "black", pch = 16)
+
+
+```
+
+**CONFUSION MATRIX**
+
+```{r}
+install.packages("caret")
+library(caret)
+
+m0_predicted_probabilities<-predict(m0, type="response")
+m1_predicted_probabilities<-predict(m1, type="response")
+m2_predicted_probabilities<-predict(m2, type="response")
+m3_predicted_probabilities<-predict(m3, type="response")
+
+#optimal threshold for m0 from ROC analysis above
+predicted_classes0 <- ifelse(m0_predicted_probabilities > 0.3275227, 1, 0)
+
+#naive threshold
+predicted_classes0 <- ifelse(m0_predicted_probabilities > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted_classes0), as.factor(m0$y))
+
+#optimal threshold for m1 from ROC analysis above
+predicted_classes1 <- ifelse(m1_predicted_probabilities > 0.3208009, 1, 0)
+
+predicted_classes1 <- ifelse(m1_predicted_probabilities > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted_classes1), as.factor(m1$y))
+
+predicted_classes2 <- ifelse(m2_predicted_probabilities > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted_classes2), as.factor(m2$y))
+
+predicted_classes3 <- ifelse(m3_predicted_probabilities > 0.5, 1, 0)
+confusionMatrix(as.factor(predicted_classes3), as.factor(m3$y))
+
+
+
+
+
+```
