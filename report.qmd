@@ -116,8 +116,9 @@ library(rpart)
 library(rpart.plot)
 library(randomForest)
 library(themis)
+library(caret)
+library(pROC)
 
-select(-Count, -(6:11), -(14:16), -(19:21))
 ```
 
 ```{r, eval = FALSE}
@@ -151,7 +152,7 @@ save(twpi_df, file = "data/twpi_2012-2015")
 
 ```
 
-```{r}
+```{r, eval = FALSE}
 load("data/twpi_2012-2015")
 twpi4 <- twpi_df |>
   select(-Count, -(6:11), -(14:16), -(19:21)) |>
@@ -176,7 +177,7 @@ twpi4 <- twpi4 |> # remove duplicates
   ungroup()
 ```
 
-```{r}
+```{r, eval = FALSE}
 twpi_bf <- twpi4 |>
   filter(RecordDate < lubridate::ymd("20130526"))
 
@@ -184,7 +185,7 @@ twpi_af <- twpi4 |>
   filter(RecordDate >= lubridate::ymd("20130526"))
 ```
 
-```{r}
+```{r, eval = FALSE}
 # load broker classification data
 
 broker <- read.csv("data/BrokerClassifications.csv")
@@ -195,7 +196,7 @@ broker2 <- broker |> left_join(class, by = "Classification") |>
 
 ## Analysis
 
-```{r}
+```{r, eval = FALSE}
 # sort top 10 broker 
 
 broker_10 <- twpi_af |> 
@@ -223,15 +224,19 @@ twpi_af |>
 ```{r}
 # prepare data to model, only top 2 brokers
 
-data <- twpi_af |> 
-  filter(BuyerBrokerID %in% c(210,361),
-         Hour != 16) |>
-  # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
-  mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
-         Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
-         Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
-  select(2, 6, 8:16, 18:20) |>
-  na.omit()
+# data <- twpi_af |> 
+#   filter(BuyerBrokerID %in% c(210,361),
+#          Hour != 16) |>
+#   # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+#   mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
+#          Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
+#          Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
+#   select(2, 6, 8:16, 18:20) |>
+#   na.omit()
+
+# save(data, file = "data/report/data")
+
+load("data/report/data")
 
 viol_at <- data |> select(-12, -14) 
 viol_out <- data |> select(-12, -13) 
@@ -271,20 +276,32 @@ saveRDS(log_fit1, file = "data/report/log_fit1.rds")
 saveRDS(log_fit2, file = "data/report/log_fit2.rds")
 ```
 
-Balance accuracy of at-the-spread violation on the test set:
-
 ```{r}
 # measure accuracy logistic regression on at-spread violation 
 log_fit1 <- readRDS("data/report/log_fit1.rds")
 
-treshold <- 0.01625
 
+# choose threshold
+log1_pred <- log_fit1 |> 
+  augment(new_data = va_train) |>
+  select(1:3, 15)
+
+roc_log1 <- roc(log1_pred$Violation_1, log1_pred$.pred_1)
+
+# plot(roc_log1, col = "blue", main = "ROC Curves")
+
+roc_log1_optimal_threshold <- coords(roc_log1, "best", ret="threshold")
+
+
+```
+
+```{r}
 va_tr_pred <- log_fit1 |> 
   augment(new_data = va_train) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log1_optimal_threshold[1,1], 1, 0)))
 va_ts_pred <- log_fit1 |> 
   augment(new_data = va_test) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log1_optimal_threshold[1,1], 1, 0)))
 
 matrix_va_tr <- va_tr_pred |>
   count(Violation_1, pred_viol) |>
@@ -301,23 +318,40 @@ matrix_va_ts <- va_ts_pred |>
               values_from = n, values_fill=0)
 
 bal_accuracy_logistic_va <- bal_accuracy(va_ts_pred, Violation_1, pred_viol)$.estimate
-bal_accuracy_logistic_va
+
 ```
 
-Balance accuracy of outside-the-spread violation on the test set:
+Confusion Matrix and Statistics of `at-the-spread` violations on the test dataset:
+
+```{r}
+# confusion matrix best threshold
+confusionMatrix(va_ts_pred$pred_viol, va_ts_pred$Violation_1)
+```
 
 ```{r}
 # measure accuracy logistic regression on outside violation 
 log_fit2 <- readRDS("data/report/log_fit2.rds")
 
-treshold <- 0.045
+# choose threshold
+log2_pred <- log_fit2 |> 
+  augment(new_data = vo_train) |>
+  select(1:3, 15)
 
+roc_log2 <- roc(log2_pred$Violation_2, log2_pred$.pred_1)
+
+# plot(roc_log2, col = "blue", main = "ROC Curves")
+
+roc_log2_optimal_threshold <- coords(roc_log2, "best", ret="threshold")
+```
+
+
+```{r}
 vo_tr_pred <- log_fit2 |> 
   augment(new_data = vo_train) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
 vo_ts_pred <- log_fit2 |> 
   augment(new_data = vo_test) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
 
 matrix_vo_tr <- vo_tr_pred |>
   count(Violation_2, pred_viol) |>
@@ -335,33 +369,41 @@ matrix_vo_ts <- vo_ts_pred |>
 
 
 bal_accuracy_logistic_vo <- bal_accuracy(vo_ts_pred, Violation_2, pred_viol)$.estimate
-bal_accuracy_logistic_vo
+
+```
+
+Confusion Matrix and Statistics of `outside-spread` violations on the test dataset:
+
+```{r}
+# confusion matrix best threshold
+confusionMatrix(vo_ts_pred$pred_viol, vo_ts_pred$Violation_2)
 ```
 
 #### Apply model to twpi data outside broker 210 and 361
 
 ```{r}
 # filter data
-data_2 <- twpi_af |> 
-  filter(!(BuyerBrokerID %in% c(210,361)),
-         Hour != 16) |>
-  # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
-  mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
-         Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
-         Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
-  select(2, 6, 8:16, 18:20) |>
-  na.omit()
-```
+# data_2 <- twpi_af |> 
+#   filter(!(BuyerBrokerID %in% c(210,361)),
+#          Hour != 16) |>
+#   # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+#   mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
+#          Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
+#          Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
+#   select(2, 6, 8:16, 18:20) |>
+#   na.omit()
+# 
+# save(data_2, file = "data/report/data_2")
 
-Balance accuracy of at-the-spread violation on other brokers TWPI:
+load("data/report/data2")
+```
 
 ```{r}
 # apply at-spread violation model and measure accuracy 
-treshold <- 0.01625
 
 data_2_va_pred <- log_fit1 |> 
   augment(new_data = data_2) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log1_optimal_threshold[1,1], 1, 0)))
 
 matrix_data_2_va <- data_2_va_pred |>
   count(Violation_1, pred_viol) |>
@@ -375,15 +417,19 @@ bal_accuracy_logistic_data2_1 <- bal_accuracy(data_2_va_pred, Violation_1, pred_
 bal_accuracy_logistic_data2_1
 ```
 
-Balance accuracy of outside-the-spread violation on other brokers TWPI:
+Confusion Matrix and Statistics of `at-the-spread` violations on the new dataset:
+
+```{r}
+# confusion matrix best threshold
+confusionMatrix(data_2_va_pred$pred_viol, data_2_va_pred$Violation_1)
+```
 
 ```{r}
 # apply outside violation model and measure accuracy 
-treshold <- 0.045
 
 data_2_vo_pred <- log_fit2 |> 
   augment(new_data = data_2) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > treshold, 1, 0)))
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
 
 matrix_data_2_vo <- data_2_vo_pred |>
   count(Violation_2, pred_viol) |>
@@ -395,6 +441,13 @@ matrix_data_2_vo <- data_2_vo_pred |>
 
 bal_accuracy_logistic_data2_2 <- bal_accuracy(data_2_vo_pred, Violation_2, pred_viol)$.estimate
 bal_accuracy_logistic_data2_2
+```
+
+Confusion Matrix and Statistics of `outside-spread` violations on the new dataset:
+
+```{r}
+# confusion matrix best threshold
+confusionMatrix(data_2_vo_pred$pred_viol, data_2_vo_pred$Violation_2)
 ```
 
 ### Random Forest
@@ -467,14 +520,14 @@ saveRDS(fit_rf1, file = "data/report/fit_rf1.rds")
 
 ```{r}
 # apply the model to test set
-fit_rf1 <- readRDS("data/pattern/fit_rf1.rds")
+fit_rf1 <- readRDS("data/report/fit_rf1.rds")
 
 va_ts_pred_rf <- bake(data_prep1, va_test) |>
   mutate(pviol = predict(fit_rf1,
                          bake(data_prep1, va_test))$.pred_class)
 ```
 
-Balance accuracy of at-the-spread violation on the test set, and the variable importance:
+Variable importance of `at-the-spread` violations:
 
 ```{r}
 # measure accuracy
@@ -489,10 +542,14 @@ cf_rf_ts1 <- va_ts_pred_rf |>
 
 bal_accuracy_rf1 <- bal_accuracy(va_ts_pred_rf, Violation_1, pviol)$.estimate
 
-bal_accuracy_rf1
-
 rf_model1 <- pull_workflow_fit(fit_rf1)$fit
 importance(rf_model1)
+```
+
+Confusion Matrix and Statistics of `at-the-spread` violations on the test dataset:
+
+```{r}
+confusionMatrix(va_ts_pred_rf$pviol, va_ts_pred_rf$Violation_1)
 ```
 
 #### Outside the Spread
@@ -570,7 +627,7 @@ vo_ts_pred_rf <- bake(data_prep2, vo_test) |>
                          bake(data_prep2, vo_test))$.pred_class)
 ```
 
-Balance accuracy of outside-the-spread violation on the test set, and the variable importance:
+Variable importance of `outside-the-spread` violation:
 
 ```{r}
 # measure accuracy
@@ -583,15 +640,17 @@ cf_rf_ts2 <- vo_ts_pred_rf |>
 
 bal_accuracy_rf2 <- bal_accuracy(vo_ts_pred_rf, Violation_2, pviol)$.estimate
 
-bal_accuracy_rf2
-
 rf_model2 <- pull_workflow_fit(fit_rf2)$fit
 importance(rf_model2)
 ```
 
-#### Apply model to twpi data outside broker 210 and 361
+Confusion Matrix and Statistics of `outside-spread` violations on the test dataset:
 
-Balance accuracy of at-the-spread violation on the other brokers TWPI:
+```{r}
+confusionMatrix(vo_ts_pred_rf$pviol, vo_ts_pred_rf$Violation_2)
+```
+
+#### Apply model to twpi data outside broker 210 and 361
 
 ```{r}
 # apply at-spread violation model and measure accuracy 
@@ -607,10 +666,14 @@ cf_rf_data_2_1 <- data_2_va_pred_rf |>
               values_from = n, values_fill = 0)
 
 bal_accuracy_rf_data2_1 <- bal_accuracy(data_2_va_pred_rf, Violation_1, pviol)$.estimate
-bal_accuracy_rf_data2_1
+
 ```
 
-Balance accuracy of outside-the-spread violation on the other brokers TWPI:
+Confusion Matrix and Statistics of `at-the-spread` violations on the new dataset:
+
+```{r}
+confusionMatrix(data_2_va_pred_rf$pviol, data_2_va_pred_rf$Violation_1)
+```
 
 ```{r}
 # apply outside violation model and measure accuracy 
@@ -626,7 +689,13 @@ cf_rf_data_2_2 <- data_2_vo_pred_rf |>
               values_from = n, values_fill = 0)
 
 bal_accuracy_rf_data2_2 <- bal_accuracy(data_2_vo_pred_rf, Violation_2, pviol)$.estimate
-bal_accuracy_rf_data2_2
+
+```
+
+Confusion Matrix and Statistics of `outside-spread` violations on the new dataset:
+
+```{r}
+confusionMatrix(data_2_vo_pred_rf$pviol, data_2_vo_pred_rf$Violation_2)
 ```
 
 ### Summary
@@ -646,7 +715,6 @@ summary |>
   kbl() |>
   kable_styling(full_width = FALSE, position = "left")
 ```
-
 
 ### Limitation
 
