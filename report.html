@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Bagas Trilaksonoaji">
+<meta name="dcterms.date" content="2024-10-24">
 
-<title>Report</title>
+<title>Trade With Price Improvement</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -37,22 +39,74 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#abstract-150" id="toc-abstract-150" class="nav-link active" data-scroll-target="#abstract-150"><span class="header-section-number">1</span> Abstract 150</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#background-and-motivation" id="toc-background-and-motivation" class="nav-link" data-scroll-target="#background-and-motivation"><span class="header-section-number">2.1</span> Background and Motivation</a></li>
+  <li><a href="#purpose-and-key-questions" id="toc-purpose-and-key-questions" class="nav-link" data-scroll-target="#purpose-and-key-questions"><span class="header-section-number">2.2</span> Purpose and Key Questions</a>
+  <ul class="collapse">
+  <li><a href="#understand-the-impact-on-at-the-spread-crossings" id="toc-understand-the-impact-on-at-the-spread-crossings" class="nav-link" data-scroll-target="#understand-the-impact-on-at-the-spread-crossings"><span class="header-section-number">2.2.1</span> Understand the Impact on At-the-Spread Crossings</a></li>
+  <li><a href="#proofing-the-shifting-to-lit-markets" id="toc-proofing-the-shifting-to-lit-markets" class="nav-link" data-scroll-target="#proofing-the-shifting-to-lit-markets"><span class="header-section-number">2.2.2</span> Proofing the Shifting to Lit Markets</a></li>
+  <li><a href="#identify-the-violation-pattern" id="toc-identify-the-violation-pattern" class="nav-link" data-scroll-target="#identify-the-violation-pattern"><span class="header-section-number">2.2.3</span> Identify the Violation Pattern</a></li>
+  </ul></li>
+  <li><a href="#significance-and-contributions-500" id="toc-significance-and-contributions-500" class="nav-link" data-scroll-target="#significance-and-contributions-500"><span class="header-section-number">2.3</span> Significance and Contributions 500</a>
+  <ul class="collapse">
+  <li><a href="#economic-significance" id="toc-economic-significance" class="nav-link" data-scroll-target="#economic-significance"><span class="header-section-number">2.3.1</span> Economic Significance</a></li>
+  <li><a href="#regulatory-significance" id="toc-regulatory-significance" class="nav-link" data-scroll-target="#regulatory-significance"><span class="header-section-number">2.3.2</span> Regulatory Significance</a></li>
+  <li><a href="#academic-significance" id="toc-academic-significance" class="nav-link" data-scroll-target="#academic-significance"><span class="header-section-number">2.3.3</span> Academic Significance</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#data-and-methodology-1000" id="toc-data-and-methodology-1000" class="nav-link" data-scroll-target="#data-and-methodology-1000"><span class="header-section-number">3</span> Data and Methodology 1000</a></li>
+  <li><a href="#result-and-discussion-2000" id="toc-result-and-discussion-2000" class="nav-link" data-scroll-target="#result-and-discussion-2000"><span class="header-section-number">4</span> Result and Discussion 2000</a>
+  <ul class="collapse">
+  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis"><span class="header-section-number">4.1</span> Analysis</a>
+  <ul class="collapse">
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression"><span class="header-section-number">4.1.1</span> Logistic Regression</a></li>
+  <li><a href="#random-forest" id="toc-random-forest" class="nav-link" data-scroll-target="#random-forest"><span class="header-section-number">4.1.2</span> Random Forest</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">4.1.3</span> Summary</a></li>
+  <li><a href="#limitation" id="toc-limitation" class="nav-link" data-scroll-target="#limitation"><span class="header-section-number">4.1.4</span> Limitation</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion-500" id="toc-conclusion-500" class="nav-link" data-scroll-target="#conclusion-500"><span class="header-section-number">5</span> Conclusion 500</a>
+  <ul class="collapse">
+  <li><a href="#potential-future-work" id="toc-potential-future-work" class="nav-link" data-scroll-target="#potential-future-work"><span class="header-section-number">5.1</span> Potential Future Work</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">6</span> References</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Report</h1>
+<h1 class="title">Trade With Price Improvement</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Bagas Trilaksonoaji </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 24, 2024</p>
+    </div>
+  </div>
   
     
   </div>
@@ -62,34 +116,135 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="research-problem" class="level1">
-<h1>Research Problem</h1>
+<!-- link git repo:  -->
+<section id="abstract-150" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Abstract 150</h1>
+</section>
+<section id="introduction" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Introduction</h1>
+<p>There were numerous equities exchanges established in the long history of Australia. Almost every big city in Australia once had their own stock exchange, namely Sydney, Brisbane, Melbourne, Adelaide, Perth, and even Hobart. The Australian Parliament merged all six stock exchanges in 1987, creating the Australian Stock Exchange <a href="https://www.asx.com.au/about/asx-story">(Australian Stock Exchange, n.d.)</a>. Two decades later, this equities exchange merged with Sydney Futures Exchange to become the Australian Securities Exchange. Although its official name is now ASX Limited, it is more convenient to simply refer to it as ASX. In this report, however, we will use the term ASX to refer to the company or the equities market.</p>
+<p>As a market operator, ASX’s main tasks include reviewing listing applications, supervising listed entities as well as listed brokers, operating and maintaining an electronic trading platform for buying and selling stocks, and providing clearing and settlement services. <a href="https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.">(Australian Stock Exchange, n.d.)</a>.</p>
+<p>ASX operates under the regulatory framework of two government agencies, the Australia Securities and Investments Commission (ASIC) and the Reserve Bank of Australia (RBA) <a href="https://www.asx.com.au/about/regulation">(Australian Stock Exchange, n.d.)</a>. ASIC oversees stock market trading and enforces financial market conduct laws, while the Reserve Bank of Australia (RBA) oversees clearing and settlement-related services.</p>
+<section id="background-and-motivation" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="background-and-motivation"><span class="header-section-number">2.1</span> Background and Motivation</h2>
+<p>Anyone who wants to buy or sell stocks can place an order on the ASX trading platform. When the price of the buy and sell side matches, the trade can be executed. Outstanding orders will remain on the platform and visible to market participants. This mechanism promotes transparency and market equilibrium in supply and demand, thereby ensuring fair stock price formation <a href="https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/">(Australian Securities and Investments Commission, 2022)</a>. That is why we often call this trading venue provided by the ASX trading platform <code>lit market</code> or <code>lit pool</code>.</p>
+<p>On the other hand, there are other venues that do not disclose the orders placed, at least until the transaction is executed. We will use the term <code>dark pool</code> to refer to this kind of trading venue. There are several <code>dark pools</code> available for stock trading in Australia. However, in this project, we will focus on the <code>dark pool</code> executed on the broker’s internal crossing system.</p>
+<p>Crossing system is an electronic platform provided by the brokers to match orders placed by their clients with their other clients or with their own account <a href="https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf">(Australian Securities and Investments Commission, 2014)</a>. In other words, orders can be matched on the broker’s internal system before they are passed through to the ASX trading platform. For the next section, we will use the term <code>crossing</code> to refer to the trades in the broker’s internal crossing system.</p>
+<p>What is the benefit for brokers and traders if they trade on the crossing system instead of the ASX <code>lit pool</code>? One of the primary benefits is the significantly lower trading fees. Trades on the ASX platform are charged about 0.15 basis points per trade, whereas internal crossing charges as much as 0.04 basis points per trade, capped at $1,000 per month <a href="https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf">(Australian Securities Exchange, 2024)</a>). The difference is quite huge given how much a broker can trade on a daily basis.</p>
+<p>It is important to note that the internal crossing rule differed before and after 26 May 2013.</p>
 <ol type="1">
-<li>ASIC found that many brokers reported TWPI that do not actually with improvement. Either they were at best bid/ask or worse than that. But ASIC does not published the report. Therefore, we want to know how the violation happened since the introduction of the rule in 2011.</li>
-<li>The purposes of rule change in 2013 (limit TWPI to within best bid/ask exclusively) are:</li>
+<li><p><strong><em>Before</em></strong></p>
+<p>Based on Rule 4.2.3(1)(b) of the ASIC Market Integrity Rules (Competition in Exchange Markets) 2011, the trades done in the broker’s internal crossing system are referred to as <code>Trades At or Within the Spread</code>. As the name suggests, the executed trade price must be at the same as the best available bid or best available offer of the <code>lit market</code> (at-the-spread), or better (within-the-spread). This implies that the price executed in this “dark pool” cannot be lower than the best bid price or higher than the best offer price in the “lit market”.</p></li>
+<li><p><strong><em>After</em></strong></p>
+<p>The rule had changed, based on Rule 4.2.3 of the ASIC Market Integrity Rules (Competition in Exchange Markets) Amendment 2012 (No.&nbsp;1), the trades on the crossing system must provide meaningful price improvement <a href="https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf">(Australian Securities and Investments Commission, 2014)</a>. Trades at the best bid or best offer price of the <code>lit market</code> are not in the option anymore. This rule was effective on 26 May 2013. ASIC and ASX refer to this internal crossing trade as <code>Trades With Price Improvement</code>, or next we can refer to this as TWPI. This report will specifically focus on this type of dark trading.</p></li>
 </ol>
-<ul>
-<li>encourage more trading to occur in lit market</li>
-<li>protect lit orders from being traded ahead of by dark trades at the same price</li>
-<li>address the impact of dark liquidity on price formation, market quality and fairness Therefore, we want to know how effective is this rule change in 2013: did TWPI trades significantly decrease in percentage of total trades?</li>
-</ul>
+<p>The amendment of the rule in May 2013 was to address the negative impact of the dark trades on the price formation, specifically from the <code>at-the-spread</code> trades <a href="https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf">(Australian Securities and Investments Commission, 2014)</a>, due to traders may prefer to do the trades on the <code>dark pool</code> as it costs less fees compared to the <code>lit pool</code>. The adverse effect on price discovery was one of the main reasons why the regulator wanted more trading to occur in the <code>lit pool</code>.</p>
+<p>On the other hand, the ASX was also motivated by an economic incentive. On October 14, 1998, ASX became a publicly owned company after demutualising itself. The main analysis behind this was that “<strong><em>ASX needed to become more flexible, responsive, and commercially focused, capable of quickly taking up emerging commercial opportunities</em></strong>” <a href="https://asic.gov.au/about-asic/news-centre/speeches/market-demutualisation-and-privatisation-the-australian-experience/">(Australian Securities and Investments Commission, 2004)</a>. Therefore, ASX, being an all-for-profit enterprise, would seize any business opportunity to increase its revenue and maximize its returns to shareholders. ASIC amended the rules to provide meaningful price improvements, which would shift a significant portion of dark trades to the ASX platform, thereby increasing its profit from trading fees.</p>
+<p><strong>Key Motivation</strong></p>
+<p>In May 2022, ASIC published a Market Integrity Update (Issue 137), which included a review of TWPI. In the article, ASIC mentioned that several participants were reporting a significant number of their TWPIs without any price improvement. ASIC emphasized that such trades must be done in the <code>lit market</code> because they will promote liquidity and price formation. TWPI is an exception because it offers better prices for the investor—a price that the <code>lit market</code> cannot provide.</p>
+<p>Following up on the Market Integrity Update, ASIC issued an infringement notice to Wilson Advisory and Stockbroking Pty Ltd, requiring them to pay $548,328 to ASIC on behalf of the Commonwealth. The notice was given on 16 December 2022, while published on an ASIC media release on 3 February 2023.</p>
+<p>The penalty shows that ASIC has started to take the breach of the TWPI rule more seriously. However, despite the rule’s lengthy introduction (in 2011 and amended in 2013), ASIC’s concern didn’t surface until recently. Therefore, I’m intrigued to analyse the TWPI trades following the amendment on 26 May 2013. Were there no violations of the TWPI rule in its early establishment? Or were there other factors that prevented the regulator from taking this issue seriously?</p>
 </section>
-<section id="data" class="level1">
-<h1>Data</h1>
-<ul>
-<li>TWPI trades on ASX200 since the introduction of the TWPI rule in 2011, until 2016. New columns of within, at, or outside best bid/ask.</li>
-<li>Everything about Big Machine, where can I read about it?</li>
-<li>Brokers with the most special trades (Fill and Kill, All or Nothing, Iceberg), to analyse the correlation to the TWPI</li>
-</ul>
+<section id="purpose-and-key-questions" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="purpose-and-key-questions"><span class="header-section-number">2.2</span> Purpose and Key Questions</h2>
+<p>The main objective of this study is to look into how the rule change in 2013 affected <code>at-the-spread</code> crossings reported as TWPI. The way brokers act and trade on the <code>dark pool</code> should be greatly affected by this change, as they must move the <code>at-the-spread</code> crossings to the <code>lit pool</code>. Moreover, this study will also examine the violation of the TWPI after the rule change, as this is the key motivation of this study.</p>
+<p>The study will compare transaction data before and after the 2013 regulation change, with a focus on TWPI and <code>at-the-spread</code> crossings. Trade volumes, prices, time stamps, broker IDs, and several other variables will be included in the analysis. There will be simple statistical methods used to compare trade distributions, and machine learning methods may be used to find trends of the violations in the TWPI rule.</p>
+<section id="understand-the-impact-on-at-the-spread-crossings" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="understand-the-impact-on-at-the-spread-crossings"><span class="header-section-number">2.2.1</span> Understand the Impact on At-the-Spread Crossings</h3>
+<p><code>At-the-spread</code> crossings were possible before the rule change, which meant that trades could be made at the best bid or best offer price available on the <code>lit market</code>. However, the 2013 amendment says that trades must lead to price improvements, in other words, <code>at-the-spread</code> crossings are no longer allowed. The main question is the number of <code>at-the-spread</code> crossings among all TWPI-reported trades before and after 26 May 2013. This comparison will help to figure out whether the rule change stopped people from doing ’at the spread<code>crossings at the</code>dark pool`.</p>
+<p><strong><em>Key Question</em></strong>: Did the number of <code>at-the-spread</code> crossings drop significantly after 26 May 2013?</p>
 </section>
-<section id="analysis" class="level1">
-<h1>Analysis</h1>
-<ul>
-<li>Violation of TWPI by numbers, from 2011 - 2016</li>
-<li>Rules change in 2013, how they impact the numbers of TWPI</li>
-<li>What type of brokers did the most violation? Are they informed brokers (institutional)?</li>
-<li>Do brokers with the most special orders tend to do TWPI? if yes, then we have initial connection that TWPI is informed transaction (for future work)</li>
-</ul>
+<section id="proofing-the-shifting-to-lit-markets" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="proofing-the-shifting-to-lit-markets"><span class="header-section-number">2.2.2</span> Proofing the Shifting to Lit Markets</h3>
+<p>The TWPI rules in 2013 were meant to encourage more trades to happen on the ASX <code>lit market</code>, which then promote liquidity and price formation <a href="https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/">(Australian Securities and Investments Commission, 2022)</a>. To find out if the dark trades really shift towards the <code>lit market</code>, the study will compare the number of all TWPI trades to all trades on the `lit market’ before and after the rule change.</p>
+<p><strong><em>Key Question</em></strong>: Did the change in rules in 2013 cause a big drop in the number of TWPI trades, indicating a move toward the lit market?</p>
+</section>
+<section id="identify-the-violation-pattern" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="identify-the-violation-pattern"><span class="header-section-number">2.2.3</span> Identify the Violation Pattern</h3>
+<p>ASIC’s media release and publication in the last couple of years suggested that there have been TWPI rule violations in spite of the rule amendment. The study will examine the monetary worth of the violations, identify which brokers do the most violations, and find any pattern by creating a model to help spot non-compliance in the future.</p>
+<p><strong><em>Key Question</em></strong>:</p>
+<ol type="1">
+<li>How many violations, both in terms of the quantity of trades and the dollar value, occurred following the rule change?</li>
+<li>What kind of brokers violate the rules the most? Are some brokers more likely to break TWPI rules than others?</li>
+<li>What conditions contributed to the occurrence of the violations?</li>
+</ol>
+</section>
+</section>
+<section id="significance-and-contributions-500" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="significance-and-contributions-500"><span class="header-section-number">2.3</span> Significance and Contributions 500</h2>
+<p>There are three main areas in which this study may contribute: academic, regulatory, and economic.</p>
+<section id="economic-significance" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="economic-significance"><span class="header-section-number">2.3.1</span> Economic Significance</h3>
+<p>From a financial point of view, it is essential to comprehend TWPI violations since they have the potential to compromise market integrity in general <a href="https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf">(Australian Securities and Investments Commission, 2014)</a>. By figuring out how much value in dollar TWPI violations occurred, this study can show how much value was traded not in a legal manner. If these trades had taken place on the <code>lit market</code>, then there would be trading fees that should be paid to the market operator (ASX). Internal crossing trades, for example, incur a fee of approximately 0.04 basis points per trade, whereas trades on the ASX platform cost 0.15 basis points per trade. This significant difference in trading fees indicates additional economic implications.</p>
+</section>
+<section id="regulatory-significance" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="regulatory-significance"><span class="header-section-number">2.3.2</span> Regulatory Significance</h3>
+<p>Understanding the magnitude of the TWPI violation since its amendment in 2013 may provide regulators with new insights to address the TWPI reporting issues at the prevention level rather than through corrective action. Furthermore, if the detection model developed in this study proves effective, regulators might utilize it as part of an automated enforcement mechanism to ensure TWPI reporting follows the regulations.</p>
+</section>
+<section id="academic-significance" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="academic-significance"><span class="header-section-number">2.3.3</span> Academic Significance</h3>
+<p>There is a lot of academic literature on special orders and hidden orders, but this study adds a new dimension by focusing on TWPI violations. This study’s novel contribution is the use of a prediction model to identify patterns and conditions that result in TWPI rule violations. The study might help academics learn more about how rules are enforced in financial markets and the situations where traders are most likely to take advantage of the system loopholes.</p>
+</section>
+</section>
+</section>
+<section id="data-and-methodology-1000" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Data and Methodology 1000</h1>
+</section>
+<section id="result-and-discussion-2000" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Result and Discussion 2000</h1>
+<section id="analysis" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="analysis"><span class="header-section-number">4.1</span> Analysis</h2>
+<section id="logistic-regression" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="logistic-regression"><span class="header-section-number">4.1.1</span> Logistic Regression</h3>
+<p>Balance accuracy of at-the-spread violation on the test set:</p>
+<p>Balance accuracy of outside-the-spread violation on the test set:</p>
+<section id="apply-model-to-twpi-data-outside-broker-210-and-361" class="level4" data-number="4.1.1.1">
+<h4 data-number="4.1.1.1" class="anchored" data-anchor-id="apply-model-to-twpi-data-outside-broker-210-and-361"><span class="header-section-number">4.1.1.1</span> Apply model to twpi data outside broker 210 and 361</h4>
+<p>Balance accuracy of at-the-spread violation on other brokers TWPI:</p>
+<p>Balance accuracy of outside-the-spread violation on other brokers TWPI:</p>
+</section>
+</section>
+<section id="random-forest" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="random-forest"><span class="header-section-number">4.1.2</span> Random Forest</h3>
+<section id="at-the-spread" class="level4" data-number="4.1.2.1">
+<h4 data-number="4.1.2.1" class="anchored" data-anchor-id="at-the-spread"><span class="header-section-number">4.1.2.1</span> At-The-Spread</h4>
+<p>Balance accuracy of at-the-spread violation on the test set, and the variable importance:</p>
+</section>
+<section id="outside-the-spread" class="level4" data-number="4.1.2.2">
+<h4 data-number="4.1.2.2" class="anchored" data-anchor-id="outside-the-spread"><span class="header-section-number">4.1.2.2</span> Outside the Spread</h4>
+<p>Balance accuracy of outside-the-spread violation on the test set, and the variable importance:</p>
+</section>
+<section id="apply-model-to-twpi-data-outside-broker-210-and-361-1" class="level4" data-number="4.1.2.3">
+<h4 data-number="4.1.2.3" class="anchored" data-anchor-id="apply-model-to-twpi-data-outside-broker-210-and-361-1"><span class="header-section-number">4.1.2.3</span> Apply model to twpi data outside broker 210 and 361</h4>
+<p>Balance accuracy of at-the-spread violation on the other brokers TWPI:</p>
+<p>Balance accuracy of outside-the-spread violation on the other brokers TWPI:</p>
+</section>
+</section>
+<section id="summary" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="summary"><span class="header-section-number">4.1.3</span> Summary</h3>
+</section>
+<section id="limitation" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="limitation"><span class="header-section-number">4.1.4</span> Limitation</h3>
+</section>
+</section>
+</section>
+<section id="conclusion-500" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Conclusion 500</h1>
+<section id="potential-future-work" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="potential-future-work"><span class="header-section-number">5.1</span> Potential Future Work</h2>
+</section>
+</section>
+<section id="references" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> References</h1>
+<p>Australian Securities and Investments Commission. (3 February 2023). <strong><em>Wilson’s Advisory and Stockbroking Ltd ACN 010 529 665 pays $548,328 infringement notice</em></strong> [Media release]. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/news-centre/find-a-media-release/2023-releases/23-016mr-wilsons-advisory-and-stockbroking-ltd-acn-010-529-665-pays-548-328-infringement-notice/</p>
+<p>Australian Securities and Investments Commission. (May 2014). <strong><em>Report 394: Review of recent rule changes affecting dark liquidity</em></strong> (PDF). Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf</p>
+<p>Australian Securities and Investments Commission. (May 2022). <strong><em>Market integrity update: Issue 137</em></strong>. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/</p>
+<p>Australian Securities Exchange. (19 February 2024). <strong><em>ASX Trade: Markets Participant and Trading Schedule of Fees</em></strong> (PDF). Retrieved 24 October 2024, from https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf</p>
+<p>Australian Securities Exchange. (n.d.). ASX regulatory framework. Retrieved 24 October 2024, from https://www.asx.com.au/about/regulation</p>
+<p>Australian Securities Exchange. (n.d.). ASX story. Retrieved 24 October 2024, from https://www.asx.com.au/about/asx-story</p>
+<p>Australian Securities Exchange. (n.d.). About Us. Retrieved 24 October 2024, from https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX’s,equities%20and%20fixed%20income%20markets.</p>
+<p>Australian Securities and Investments Commission. (20 May 2004). <strong><em>Market demutualisation and privatisation: The Australian experience</em></strong> [Speech]. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/news-centre/speeches/market-demutualisation-and-privatisation-the-australian-experience/</p>
+<p>ASIC Market Integrity Rules (Competition in Exchange Markets) 2011.</p>
 </section>
 
 </main>
