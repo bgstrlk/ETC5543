@@ -3,7 +3,7 @@ title: "Trade With Price Improvement"
 author: "Bagas Trilaksonoaji"
 date: "`r Sys.Date()`"
 format: 
-  html:
+  pdf:
     toc: true
     number-sections: true
 execute: 
@@ -16,9 +16,9 @@ editor_options:
   chunk_output_type: inline
 ---
 
-<!-- link git repo:  -->
+\pagebreak
 
-# Abstract 150
+# Abstract
 
 # Introduction 
 
@@ -40,16 +40,16 @@ What is the benefit for brokers and traders if they trade on the crossing system
 
 It is important to note that the internal crossing rule differed before and after 26 May 2013.
 
-1. ***Before***
+1. **Before**
 
     Based on Rule 4.2.3(1)(b) of the ASIC Market Integrity Rules (Competition in Exchange Markets) 2011, the trades done in the broker's internal crossing system are referred to as `Trades At or Within the Spread`. As the name suggests, the executed trade price must be at the same as the best available bid or best available offer of the `lit market` (at-the-spread), or better (within-the-spread). This implies that the price executed in this "dark pool" cannot be lower than the best bid price or higher than the best offer price in the "lit market".
-2. ***After***
+2. **After**
 
     The rule had changed, based on Rule 4.2.3 of the ASIC Market Integrity Rules (Competition in Exchange Markets) Amendment 2012 (No. 1), the trades on the crossing system must provide meaningful price improvement [(Australian Securities and Investments Commission, 2014)](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf). Trades at the best bid or best offer price of the `lit market` are not in the option anymore. This rule was effective on 26 May 2013. ASIC and ASX refer to this internal crossing trade as `Trades With Price Improvement`, or next we can refer to this as TWPI. This report will specifically focus on this type of dark trading.
 
 The amendment of the rule in May 2013 was to address the negative impact of the dark trades on the price formation, specifically from the `at-the-spread` trades [(Australian Securities and Investments Commission, 2014)](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf), due to traders may prefer to do the trades on the `dark pool` as it costs less fees compared to the `lit pool`. The adverse effect on price discovery was one of the main reasons why the regulator wanted more trading to occur in the `lit pool`.
 
-On the other hand, the ASX was also motivated by an economic incentive. On October 14, 1998, ASX became a publicly owned company after demutualising itself. The main analysis behind this was that "***ASX needed to become more flexible, responsive, and commercially focused, capable of quickly taking up emerging commercial opportunities***" [(Australian Securities and Investments Commission, 2004)](https://asic.gov.au/about-asic/news-centre/speeches/market-demutualisation-and-privatisation-the-australian-experience/). Therefore, ASX, being an all-for-profit enterprise, would seize any business opportunity to increase its revenue and maximize its returns to shareholders. ASIC amended the rules to provide meaningful price improvements, which would shift a significant portion of dark trades to the ASX platform, thereby increasing its profit from trading fees.
+On the other hand, the ASX was also motivated by an economic incentive. On October 14, 1998, ASX became a publicly owned company after demutualising itself. The main analysis behind this was that "*ASX needed to become more flexible, responsive, and commercially focused, capable of quickly taking up emerging commercial opportunities*" [(Australian Securities and Investments Commission, 2004)](https://asic.gov.au/about-asic/news-centre/speeches/market-demutualisation-and-privatisation-the-australian-experience/). Therefore, ASX, being an all-for-profit enterprise, would seize any business opportunity to increase its revenue and maximize its returns to shareholders. ASIC amended the rules to provide meaningful price improvements, which would shift a significant portion of dark trades to the ASX platform, thereby increasing its profit from trading fees.
 
 **Key Motivation**
 
@@ -71,14 +71,14 @@ The study will compare transaction data before and after the 2013 regulation cha
 
 `At-the-spread` crossings were possible before the rule change, which meant that trades could be made at the best bid or best offer price available on the `lit market`. However, the 2013 amendment says that trades must lead to price improvements, in other words, `at-the-spread` crossings are no longer allowed. The main question is the number of `at-the-spread` crossings among all TWPI-reported trades before and after 26 May 2013. This comparison will help to figure out whether the rule change stopped people from doing `at the spread` crossings at the `dark pool`.
 
-***Key Question***:
+**Key Question**:
 Did the number of `at-the-spread` crossings drop significantly after 26 May 2013?
 
 ### Identify the Violation Pattern
 
 ASIC's media release and publication in the last couple of years suggested that there have been TWPI rule violations in recent years. This study will examine the monetary worth of the violations, identify which brokers do the most violations, and find any pattern by creating a model to help spot non-compliance in the future.
 
-***Key Question***:
+**Key Question**:
 
 1. How many violations, both in terms of the quantity of trades and the dollar value, occurred following the rule change?
 2. What kind of brokers violate the rules the most? Are some brokers more likely to break TWPI rules than others?
@@ -658,13 +658,13 @@ summary |>
 
 ASIC Market Integrity Rules (Competition in Exchange Markets) 2011.
 
-Australian Securities and Investments Commission. (20 May 2004). ***Market demutualisation and privatisation: The Australian experience*** [Speech]. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/news-centre/speeches/market-demutualisation-and-privatisation-the-australian-experience/
+Australian Securities and Investments Commission. (20 May 2004). *Market demutualisation and privatisation: The Australian experience* [Speech]. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/news-centre/speeches/market-demutualisation-and-privatisation-the-australian-experience/
 
-Australian Securities and Investments Commission. (May 2014). ***Report 394: Review of recent rule changes affecting dark liquidity*** (PDF). Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf
+Australian Securities and Investments Commission. (May 2014). *Report 394: Review of recent rule changes affecting dark liquidity* (PDF). Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf
 
-Australian Securities and Investments Commission. (May 2022). ***Market integrity update: Issue 137***. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/
+Australian Securities and Investments Commission. (May 2022). *Market integrity update: Issue 137*. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/
 
-Australian Securities and Investments Commission. (3 February 2023). ***Wilson's Advisory and Stockbroking Ltd ACN 010 529 665 pays $548,328 infringement notice*** [Media release]. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/news-centre/find-a-media-release/2023-releases/23-016mr-wilsons-advisory-and-stockbroking-ltd-acn-010-529-665-pays-548-328-infringement-notice/
+Australian Securities and Investments Commission. (3 February 2023). *Wilson's Advisory and Stockbroking Ltd ACN 010 529 665 pays $548,328 infringement notice* [Media release]. Retrieved 24 October 2024, from https://asic.gov.au/about-asic/news-centre/find-a-media-release/2023-releases/23-016mr-wilsons-advisory-and-stockbroking-ltd-acn-010-529-665-pays-548-328-infringement-notice/
 
 Australian Securities Exchange. (n.d.). ASX regulatory framework. Retrieved 24 October 2024, from https://www.asx.com.au/about/regulation
 
@@ -672,7 +672,7 @@ Australian Securities Exchange. (n.d.). ASX story. Retrieved 24 October 2024, fr
 
 Australian Securities Exchange. (n.d.). About Us. Retrieved 24 October 2024, from https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.
 
-Australian Securities Exchange. (19 February 2024). ***ASX Trade: Markets Participant and Trading Schedule of Fees*** (PDF). Retrieved 24 October 2024, from https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf
+Australian Securities Exchange. (19 February 2024). *ASX Trade: Markets Participant and Trading Schedule of Fees* (PDF). Retrieved 24 October 2024, from https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf
 
 
 
