@@ -3,7 +3,7 @@ title: "Trade With Price Improvement"
 author: "Bagas Trilaksonoaji"
 date: "`r Sys.Date()`"
 format: 
-  html:
+  pdf:
     toc: true
     number-sections: true
 execute: 
