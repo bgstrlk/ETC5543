@@ -32,7 +32,7 @@ ASX operates under the regulatory framework of two government agencies, the Aust
 
 Anyone who wants to buy or sell stocks can place an order on the ASX trading platform. When the price of the buy and sell side matches, the trade can be executed. Outstanding orders will remain on the platform and visible to market participants. This mechanism promotes transparency and market equilibrium in supply and demand, thereby ensuring fair stock price formation [(Australian Securities and Investments Commission, 2022)](https://asic.gov.au/about-asic/corporate-publications/newsletters/market-integrity-update/miu-issue-137-may-2022/). That is why we often call this trading venue provided by the ASX trading platform `lit market` or `lit pool`.
 
-On the other hand, there are other venues that do not disclose the orders placed, at least until the transaction is executed. We will use the term `dark pool` to refer to this kind of trading venue. There are several `dark pools` available for stock trading in Australia. However, in this project, we will focus on the `dark pool` executed on the broker's internal crossing system. This kind of `dark pool` is often called NBBO trade, which stands for National Best Bid and Offer Prices. 
+On the other hand, there are other venues that do not disclose the orders placed, at least until the transaction is executed. We will use the term `dark pool` to refer to this kind of trading venue. There are several `dark pools` available for stock trading in Australia. However, in this project, we will focus on the `dark pool` executed on the broker's internal crossing system. This kind of `dark pool` is often called NBBO trade, which stands for National Best Bid and Offer Prices ([Charles Lane Advisory Pty Ltd, 2014](https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf)). 
 
 Crossing system is an electronic platform provided by the brokers to match orders placed by their clients with their other clients or with their own account [(Australian Securities and Investments Commission, 2014)](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf). In other words, orders can be matched on the broker's internal system before they are passed through to the ASX trading platform. For the next section, we will use the term `crossing` to refer to the trades in the broker's internal crossing system.
 
@@ -104,7 +104,26 @@ Understanding the magnitude of the TWPI violation since its amendment in 2013 ma
 
 There is a lot of academic literature on special orders and hidden orders, but this study adds a new dimension by focusing on TWPI trades. This study's novel contribution is the use of a prediction model to identify patterns and conditions that result in TWPI rule violations. The study might help academics learn more about how rules are enforced in financial markets and the situations where traders are most likely to take advantage of the system loopholes.
 
-# Data and Methodology 1000
+# Data and Methodology
+
+This study use ASX transaction data and market data sourced from Securities Industry Research Centre of Asia-Pacific (SIRCA). SIRCA is a not-for-profit organization established in 1997, mainly consisting of Australian and New Zealand universities's academics. It has a number of financial market data from Australia, New Zealand, and even USA, including data from ASX. Members of SIRCA can collect the data freely for research purposes, baring the university they are in has to pay for subscription fee.
+
+The ASX transaction data provided by SIRCA consists of the date and time, price, volume, dollar value, stock code, and also broker id. While the ASX market data provides the best bid and best offer order price, as well as the volume of those orders. This best bid and best offer price are used to calculate the spread of the market at each particular time. 
+
+We use datasets from stocks listed on S&P/ASX200 index, as this index represents the group of stocks with the largest market capitalization. Meaning that these companies are the largest and the most valuable companies in the ASX. Market capitalization also often positively correlated with the liquidity. Both characteristics ensuring trading interest from large brokers and also ensure sufficient liquidity (Duong et al., 2018), which is important for measuring the impact of the rule change.
+
+We will use the data from the inducement of `at or within the spread` rule in November 2011. However, as our investigation found that there were no internal crossings in the year 2011, we will use the data from 2012, until the of 2015. This ensure the similar length of the investigation period of before and after the rule change in 26 May 2013.
+
+The transaction dataset we got from SIRCA filtered to include only internal crossing trades, marked as "OFFTR" in the `RecordType` variable and as "NX XT" in the `Qualifiers` variable. We combined the data with the market data, hence we got every transactions with the best bid and offer price and volume of the market. Combining these much data needs enormous processing power, hence we use the help of Nectar Research Cloud, cloud computing service from Australia Research Data Commons.
+
+Methodology
+
+
+- understand rule change impact: compare the proportion before and after at-the-spread crossings
+- understand the economic worth of the dark trades: how much in dollar value at-the-spread crossings before and after the rule change, 30 days before and after to control for transaction trend increase
+- understand violation pattern: using logistic regression and random forest
+- with packages in R to do this
+- statistics to be used: balanced accuracy, specificity, sensitivity
 
 # Result and Discussion 2000
 
@@ -748,3 +767,4 @@ Australian Securities Exchange. (19 February 2024). *ASX Trade: Markets Particip
 
 Charles Lane Advisory Pty Ltd. (May 2014). *Report by Charles Lane Advisory: Review of recent rule changes affecting dark liquidity* (PDF). Attachment to ASIC Report 394: Review of recent rule changes affecting dark liquidity. Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf
 
+Duong, H. N., Lajbcygier, P., Lu, J. S., & Vu, V. H. (2018). The effect of anonymity on price efficiency: Evidence from the removal of broker identities. *Pacific-Basin Finance Journal, 51*, 95–107. https://doi.org/10.1016/j.pacfin.2018.06.004
