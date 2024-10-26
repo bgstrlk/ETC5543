@@ -106,24 +106,35 @@ There is a lot of academic literature on special orders and hidden orders, but t
 
 # Data and Methodology
 
-This study use ASX transaction data and market data sourced from Securities Industry Research Centre of Asia-Pacific (SIRCA). SIRCA is a not-for-profit organization established in 1997, mainly consisting of Australian and New Zealand universities's academics. It has a number of financial market data from Australia, New Zealand, and even USA, including data from ASX. Members of SIRCA can collect the data freely for research purposes, baring the university they are in has to pay for subscription fee.
+This study use transaction and market data provided by The Securities Industry Research Center of Asia-Pacific (SIRCA). Founded in 1997, SIRCA is a non-profit organization mostly consisting of academics from Australian and New Zealand universities. It contains a variety of financial market data, including stock exchanges data, from Australia, New Zealand, and even the United States ([SIRCA, n.d.](https://www.sirca.org.au/about-sirca/)). SIRCA members are free to gather data for research purposes, provided that the university they are at have paid subscription fee to SIRCA.
 
-The ASX transaction data provided by SIRCA consists of the date and time, price, volume, dollar value, stock code, and also broker id. While the ASX market data provides the best bid and best offer order price, as well as the volume of those orders. This best bid and best offer price are used to calculate the spread of the market at each particular time. 
+The ASX transaction data provided by SIRCA consists of the stock code, date and time, price, volume, dollar value, broker ID, and other related variables. In addition, the ASX market data includes the best bid and best offer order prices, as well as the volume of those orders. These best bid and best offer prices are used to calculate the spread, price and volume, at each particular time.
 
-We use datasets from stocks listed on S&P/ASX200 index, as this index represents the group of stocks with the largest market capitalization. Meaning that these companies are the largest and the most valuable companies in the ASX. Market capitalization also often positively correlated with the liquidity. Both characteristics ensuring trading interest from large brokers and also ensure sufficient liquidity (Duong et al., 2018), which is important for measuring the impact of the rule change.
+We use datasets from stocks listed on the S&P/ASX200 index, as this index represents a group of stocks with the biggest market capitalization. This indicates that these stocks are the biggest and most valuable ones on the ASX. Market capitalization and liquidity often have a positive correlation. These traits from the S&P/ASX200 index ensure sufficient trading interest from major brokers (Duong et al., 2018), which is important for gauging the effect of the regulation change.
 
-We will use the data from the inducement of `at or within the spread` rule in November 2011. However, as our investigation found that there were no internal crossings in the year 2011, we will use the data from 2012, until the of 2015. This ensure the similar length of the investigation period of before and after the rule change in 26 May 2013.
+We will use data from the introduction of the `at or within the spread` rule in November 2011. However, since our investigation found that there were no internal crossings in 2011, we will use data from 2012 until the end of 2015. This ensures a similar length of the investigation period before and after the rule change on 26 May 2013.
 
-The transaction dataset we got from SIRCA filtered to include only internal crossing trades, marked as "OFFTR" in the `RecordType` variable and as "NX XT" in the `Qualifiers` variable. We combined the data with the market data, hence we got every transactions with the best bid and offer price and volume of the market. Combining these much data needs enormous processing power, hence we use the help of Nectar Research Cloud, cloud computing service from Australia Research Data Commons.
+The transaction dataset we obtained from SIRCA was filtered to include only internal crossing trades, marked as "OFFTR" in the `RecordType` variable and as "NX XT" in the `Qualifiers` variable. We combined this data with market data, allowing us to include every transactions with the best bid and offer price and volume of the market. Combining these many data requires enormous processing power, therefore, we use the help of Nectar Research Cloud, a cloud computing service from the Australia Research Data Commons.
 
-Methodology
+**Methodology**
 
+This study uses a methodical approach to look at how changes in regulations affect `at-the-spread` crossings in dark pools, particularly on the broker's internal crossing system. This study also looks for trends in TWPI rule violations. With the help of SIRCA's ASX transaction and market data, we hope to comprehend the regulatory and economic effects of the 2013 rule change.
 
-- understand rule change impact: compare the proportion before and after at-the-spread crossings
-- understand the economic worth of the dark trades: how much in dollar value at-the-spread crossings before and after the rule change, 30 days before and after to control for transaction trend increase
-- understand violation pattern: using logistic regression and random forest
-- with packages in R to do this
-- statistics to be used: balanced accuracy, specificity, sensitivity
+*Rule Change Impact on At-the-Spread Crossings*
+
+Analyzing the proportion before and after the rule adjustment on 26 May 2013 is the first step in determining how the rule change would affect `at-the-spread` transactions. The frequency and characteristics of `at-the-spread` crossings in the internal crossing system before and after the rule change will be compared. In order to guarantee sufficient liquidity and representation of the whole market, we concentrate our analysis on the S&P/ASX200 stocks. This allows us to determine if the regulatory adjustment was successful in limiting `at-the-spread` trades to close to none.
+
+*Economic Valuation of Dark Trades*
+
+To assess the economic implications, we evaluate the aggregate dollar value of `at-the-spread` trades over two periods: the 30 days preceding and the 30 days succeeding the rule amendment on 26 May 2013. This controlled period reflects similar transaction trends or patterns. The value-based analysis will measure the economic consequences of trades that may have shifted to the 'lit market' following the amendment, thus assessing the possible enhancement in market transparency and fairness.
+
+*Violation Pattern Analysis*
+
+We utilize logistic regression and random forest models to discover and analyze violations of TWPI rules, as both are frequently employed for binary classification and pattern recognition. These models will assist in identifying circumstances in which TWPI violations are more likely. Every trade will be evaluated for compliance to the TWPI regulations, utilizing parameters such as trade volume, timing, and spread to discern the pattern. Logistic regression yields probabilistic estimates of violations, but random forest facilitates the examination of complex variable interactions, providing both interpretability and robustness.
+
+*Statistical Measures and Tools*
+
+We will evaluate model performance utilizing balanced accuracy, specificity, and sensitivity, especially considering the apparent imbalance between complying and non-compliant trades. `R` machine learning and statistical packages, such as `tidymodels` and `caret`, will be utilized for processing, modeling, and validating outcomes in implementation and classification analysis.
 
 # Result and Discussion 2000
 
@@ -768,3 +779,5 @@ Australian Securities Exchange. (19 February 2024). *ASX Trade: Markets Particip
 Charles Lane Advisory Pty Ltd. (May 2014). *Report by Charles Lane Advisory: Review of recent rule changes affecting dark liquidity* (PDF). Attachment to ASIC Report 394: Review of recent rule changes affecting dark liquidity. Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf
 
 Duong, H. N., Lajbcygier, P., Lu, J. S., & Vu, V. H. (2018). The effect of anonymity on price efficiency: Evidence from the removal of broker identities. *Pacific-Basin Finance Journal, 51*, 95–107. https://doi.org/10.1016/j.pacfin.2018.06.004
+
+Securities Industry Research Centre of Asia-Pacific. (n.d.). *About SIRCA*. SIRCA. Retrieved 26 October 2024, from https://www.sirca.org.au/about-sirca/
