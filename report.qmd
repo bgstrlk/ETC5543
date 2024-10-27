@@ -124,9 +124,7 @@ This study uses a methodical approach to look at how changes in regulations affe
 
 Analyzing the proportion before and after the rule adjustment on 26 May 2013 is the first step in determining how the rule change would affect `at-the-spread` transactions. The frequency and characteristics of `at-the-spread` crossings in the internal crossing system before and after the rule change will be compared. In order to guarantee sufficient liquidity and representation of the whole market, we concentrate our analysis on the S&P/ASX200 stocks. This allows us to determine if the regulatory adjustment was successful in limiting `at-the-spread` trades to close to none.
 
-*Economic Valuation of Dark Trades*
-
-To assess the economic implications, we evaluate the aggregate dollar value of `at-the-spread` trades over two periods: the 30 days preceding and the 30 days succeeding the rule amendment on 26 May 2013. This controlled period reflects similar transaction trends or patterns. The value-based analysis will measure the economic consequences of trades that may have shifted to the 'lit market' following the amendment, thus assessing the possible enhancement in market transparency and fairness.
+To assess the economic implications, we evaluate the aggregate dollar value of `at-the-spread` trades over two periods: the 100 days preceding and the 100 days succeeding the rule amendment on 26 May 2013. This controlled period reflects similar transaction trends or patterns. The value-based analysis will measure the economic consequences of trades that may have shifted to the 'lit market' following the amendment, thus assessing the possible enhancement in market transparency and fairness.
 
 *Violation Pattern Analysis*
 
@@ -136,7 +134,57 @@ We utilize logistic regression and random forest models to discover and analyze 
 
 We will evaluate model performance utilizing balanced accuracy, specificity, and sensitivity, especially considering the apparent imbalance between complying and non-compliant trades. `R` machine learning and statistical packages, such as `tidymodels` and `caret`, will be utilized for processing, modeling, and validating outcomes in implementation and classification analysis.
 
-# Result and Discussion 2000
+# Result and Discussion
+
+## Rule Change Impact on At-the-Spread Crossings
+
+- how many internal crossings before 26 may 2013, show the proportion and dollar value (monthly table), also show the  whole period
+- how many internal crossings after 26 may 2013, show the proportion and dollar value (monthly table), also show the whole period
+- show the time series barplot to compare movement of At-the-Spread internal Crossings
+- there is apparent changes, but still some violation
+
+*Economic Implication*
+
+- explain the change of the dollar value for whole period
+- compare the 100 days change in dollar value, before and after the rule change
+- compare with whole at-or-within-spread dark trades change from CLA report, how much at-the-spread internal crossings compared to priority crossings
+- compare with the whole transaction in the dark and lit market, from CLA report, how significant is the value?
+
+## Violation Pattern After the Rule Change
+
+- still violation, only around 5%, show barplot monthly
+- any broker dominates (show top 10)? show barplot, anonym the broker id
+- 2 dominates the TWPI, how much? tell that no media release of penalty to twpi rule violation in this period
+- what kind of broker who violate the rule? since there are 2 dominating the violation, the broker type may have nothing to do with the tendency. it depends on each broker apparently 
+
+*Modelling*
+
+- we use data from the 2 dominated brokers to train the model, because if not, the pattern will tend to find the broker id as dominant variable causing violation. split the data to train and test
+- then check robustness to other brokers data
+- remind the imbalances in the data
+
+*Logistic Regresion*
+
+- explain how to find the best threshold
+- show the confusion matrix of the test set
+- show the table for the balance accuracy, sensitivity and specificity of the test set
+- show the significance of the variables
+- explain the contribution of the significant variables
+
+*Random Forest*
+
+- explain step downsample, because of the imbalance in the data
+- show the confusion matrix of the test set
+- show the table for the balance accuracy, sensitivity and specificity of the test set
+- show the variable importance, explain
+
+*Robustness Check*
+
+- show the confusion matrix of both model
+- show the balance accuracy, sensitivity and specificity
+- explain which model is preferred
+
+
 
 ```{r}
 library(tidyverse)
