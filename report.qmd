@@ -223,15 +223,6 @@ twpi_af <- twpi4 |>
   filter(RecordDate >= lubridate::ymd("20130526"))
 ```
 
-```{r, eval = FALSE}
-# load broker classification data
-
-broker <- read.csv("data/BrokerClassifications.csv")
-class <- read.csv("data/Classifications.csv")
-broker2 <- broker |> left_join(class, by = "Classification") |>
-  mutate(No = as.factor(No))
-```
-
 ## Rule Change Impact on At-the-Spread Crossings
 
 We compare the number of internal crossings before and after the rule change in 26 May 2013. The `at-the-spread` internal crossings can be done before the meaningful price improvement rule introduction, hence, only `within-the-spread` crossings can be done after 26 May 2013. @tbl-bf and @tbl-af show monthly number and proportion of internal crossings before and after the rule change, respectively. In addition, the total proportion for each trade price group (within/at/outside-the-spread) can be seen from @tbl-bfaf.
@@ -400,10 +391,49 @@ From the report by Charles Lane Advisory, *Review of recent rule changes affecti
 
 ## Violation Pattern After the Rule Change
 
-- there still violation, only around 5%, show barplot monthly
-- any broker dominates (show top 10)? show barplot, anonym the broker id
-- 2 dominates the TWPI, how much? tell that no media release of penalty to twpi rule violation in this period
-- what kind of broker who violate the rule? since there are 2 dominating the violation, the broker type may have nothing to do with the tendency. it depends on each broker apparently 
+@fig-prop shows that there were still violation of TWPI rule after the rule change in 26 May 2013. If we look at the proportion, the percentages were going higher year after year. This trend mainly because of `outside-the-spread` crossings have increasing trend, achieving more than 12% of all internal crossings on December 2015. These number could be higher for the following years after 2015. However, this is out of scope of this study.
+
+Since we have the broker IDs variable on our dataset, we can examine what kind of brokers tend to violate the TWPI rule. We classify broker's type as institutional, retail, and HFT-proprietary. @fig-brokers exhibits top 10 brokers that done the most violation. The plot shows that there were only two brokers that dominate the violation. Both are institutional brokers, so can we imply that institutional brokers tend to do violation than other type of brokers? Since there were only two brokers dominate the violation, it is probably more like individuality reason rather than because of the broker's type.
+
+We also understand that regulators did not take any penalty action towards these violation, as the first release related to TWPI rule violation was in February 2023. This probably because the rule has just introduced and the number of the violation was still insignificant compared to all internal crossings. However, as the proportion was on a rising trend, regulators should have taken an action to prevent the number getting more significant, especially it was already happened since 2015.
+
+```{r, eval = FALSE}
+# load broker classification data
+
+broker <- read.csv("data/BrokerClassifications.csv")
+class <- read.csv("data/Classifications.csv")
+broker2 <- broker |> left_join(class, by = "Classification") |>
+  mutate(No = as.factor(No))
+
+```
+
+```{r}
+#| label: fig-broker
+#| fig_cap: "Top 10 Brokers with the most violation on TWPI rule."
+
+# sort top 10 broker 
+broker_10 <- twpi_af |> 
+  count(BuyerBrokerID) |>
+  arrange(desc(n)) |>
+  head(10) |>
+  pull(BuyerBrokerID)
+
+twpi_af |> 
+  filter(BuyerBrokerID %in% broker_10) |>
+  group_by(Marks) |>
+  count(BuyerBrokerID) |>
+  mutate(percentage = round(n / sum(n) * 100), 2) |>
+  ungroup() |>
+  filter(Marks != 1) |>
+  mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside"),
+         AnonBrokerID = paste("Broker", as.integer(factor(BuyerBrokerID)))) |>
+  ggplot(aes(x = reorder(AnonBrokerID, -n), y = percentage, fill = Marks)) +
+  geom_col(position = "dodge") +
+  labs(title = "Violation in Percentage to TWPI",
+       x = "Brokers (anonym)",
+       y = "Percentage to TWPI") +
+  theme_bw()
+```
 
 *Modelling*
 
@@ -433,35 +463,9 @@ From the report by Charles Lane Advisory, *Review of recent rule changes affecti
 - explain which model is preferred
 
 
-
-
-
 ## Analysis
 
-```{r, eval = FALSE}
-# sort top 10 broker 
 
-broker_10 <- twpi_af |> 
-  count(BuyerBrokerID) |>
-  arrange(desc(n)) |>
-  head(10) |>
-  pull(BuyerBrokerID)
-
-twpi_af |> 
-  filter(BuyerBrokerID %in% broker_10) |>
-  group_by(Marks) |>
-  count(BuyerBrokerID) |>
-  mutate(percentage = round(n / sum(n) * 100), 2) |>
-  ungroup() |>
-  filter(Marks != 1) |>
-  mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside")) |>
-  ggplot(aes(x = reorder(BuyerBrokerID, -n), y = percentage, fill = Marks)) +
-  geom_col(position = "dodge") +
-  labs(title = "Violation in Percentage to TWPI",
-       x = "Broker ID",
-       y = "Percentage to TWPI") +
-  theme_bw()
-```
 
 ```{r}
 # prepare data to model, only top 2 brokers
