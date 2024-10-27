@@ -143,6 +143,7 @@ library(knitr)
 library(kableExtra)
 options(knitr.table.html.attr = "quarto-disable-processing=true")
 library(scales)
+library(viridis)
 library(tidymodels)
 library(discrim)
 library(rpart)
@@ -260,11 +261,12 @@ tbl_bf <- twpi_bf |>
          `% At` = `%_2`,
          Outside = n_3,
          `% Outside` = `%_3`) |>
+  ungroup()
+
+tbl_bf |>
   mutate(Within = format(Within, big.mark = ","),
          At = format(At, big.mark = ","),
-         Outside = format(Outside, big.mark = ","))
-  
-tbl_bf |> 
+         Outside = format(Outside, big.mark = ",")) |>
   kbl(align = "r") |>
   kable_styling(full_width = FALSE)
 ```
@@ -296,13 +298,15 @@ tbl_af <- twpi_af |>
          `% At` = `%_2`,
          Outside = n_3,
          `% Outside` = `%_3`) |>
+  ungroup()
+
+tbl_af |>  
   mutate(Within = format(Within, big.mark = ","),
          At = format(At, big.mark = ","),
-         Outside = format(Outside, big.mark = ","))
-
-tbl_af |>
+         Outside = format(Outside, big.mark = ",")) |>
   kbl(align = "r") |>
   kable_styling(full_width = FALSE)
+  
 
 ```
 
@@ -328,13 +332,39 @@ twpi_bf |>
   kable_styling(full_width = FALSE)
 ```
 
-@fig-1 exhibits the movement better. As we can see from the barplot that the proportion of `at-the-spread` crossings significantly decrease after May 2013. The proportion then dominated by `within-the-spread` crossings, as the rule amendment only allow meaningful price improvement on the dark pool. There were still some breach on the TWPI rule, however the number and proportion were not significant compared to the compliance dark trades.
+@fig-prop exhibits the movement better. As we can see from the barplot that the proportion of `at-the-spread` crossings significantly decrease after May 2013. The proportion then dominated by `within-the-spread` crossings, as the rule amendment only allow meaningful price improvement on the dark pool. There were still some breach on the TWPI rule, however the number and proportion were not significant compared to the compliance dark trades.
 
 ```{r}
+#| label: fig-prop
+#| fig-cap: "Proportion of each trade price groups from Januari 2012 until December 2015. Red dash line is when the meaningful price improvement rule introduced."
+
+combined <- rbind(tbl_bf, tbl_af) |>
+  group_by(Year, Month) |>
+  summarise(Within = sum(Within),
+            At = sum(At),
+            Outside = sum(Outside),
+            `% Within` = round(Within / sum(Within, At, Outside) * 100, 2),
+            `% At` = round(At / sum(Within, At, Outside) * 100, 2),
+            `% Outside` = round(Outside / sum(Within, At, Outside) * 100, 2)) |>
+  mutate(Date = lubridate::ym(paste(Year, Month))) |>
+  ungroup() |>
+  select(6:9) |>
+  pivot_longer(cols = 1:3, names_to = "Price", values_to = "Proportion") 
+  
+combined |> 
+  mutate(Price = ifelse(Price == "% Within", "Within-the-spread", ifelse(Price == "% At", "At-the-spread", "Outside-the-spread")),
+         Price = factor(Price, levels = c("Within-the-spread", "At-the-spread", "Outside-the-spread"))) |>
+  ggplot() +
+  geom_col(aes(x = Date, y = Proportion, fill = Price)) +
+  geom_vline(xintercept = as.Date("2013-05-01"), color = "red", linetype = "dashed", size = 1) +
+  theme_bw() +
+  scale_fill_viridis_d(option = "viridis")
 
 ```
 
 *Economic Implication*
+
+
 
 - compare the 100 days change in dollar value, before and after the rule change
 - compare with whole at-or-within-spread dark trades change from CLA report, how much at-the-spread internal crossings compared to priority crossings
