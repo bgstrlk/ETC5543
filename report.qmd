@@ -112,7 +112,7 @@ The ASX transaction data provided by SIRCA consists of the stock code, date and 
 
 We use datasets from stocks listed on the S&P/ASX200 index, as this index represents a group of stocks with the biggest market capitalization. This indicates that these stocks are the biggest and most valuable ones on the ASX. Market capitalization and liquidity often have a positive correlation. These traits from the S&P/ASX200 index ensure sufficient trading interest from major brokers (Duong et al., 2018), which is important for gauging the effect of the regulation change.
 
-We will use data from the introduction of the `at or within the spread` rule in November 2011. However, since our investigation found that there were no internal crossings in 2011, we will use data from 2012 until the end of 2015. This ensures a similar length of the investigation period before and after the rule change on 26 May 2013.
+We will use data from the introduction of the `at or within the spread` rule in November 2011. However, since our investigation found that there were no internal crossings in 2011, we will use data from 2012 until the end of 2015.
 
 The transaction dataset we obtained from SIRCA was filtered to include only internal crossing trades, marked as "OFFTR" in the `RecordType` variable and as "NX XT" in the `Qualifiers` variable. We combined this data with market data, allowing us to include every transactions with the best bid and offer price and volume of the market. Combining these many data requires enormous processing power, therefore, we use the help of Nectar Research Cloud, a cloud computing service from the Australia Research Data Commons.
 
@@ -142,6 +142,7 @@ library(hms)
 library(knitr)
 library(kableExtra)
 options(knitr.table.html.attr = "quarto-disable-processing=true")
+library(scales)
 library(tidymodels)
 library(discrim)
 library(rpart)
@@ -232,17 +233,109 @@ broker2 <- broker |> left_join(class, by = "Classification") |>
 
 ## Rule Change Impact on At-the-Spread Crossings
 
+We compare the number of internal crossings before and after the rule change in 26 May 2013. The `at-the-spread` internal crossings can be done before the meaningful price improvement rule introduction, hence, only `within-the-spread` crossings can be done after 26 May 2013. @tbl-bf and @tbl-af show monthly number and proportion of internal crossings before and after the rule change, respectively. In addition, the total proportion for each trade price group (within/at/outside-the-spread) can be seen from @tbl-bfaf.
 
+The monthly proportion of `at-the-spread` internal crossings consistent around between 40% - 60% from the start of the rule until the amendment. The highest proportions were at October - December 2012, with 61% - 62% of the total internal crossings. The lowest proportion after taking out January 2012 (lowest number of crossings because of the transition) was at April 2013, with only 39% of the total crossings.
 
+@tbl-bf shows that there was a number of violation in the early rule of internal crossings. However, the proportion were not significant, under 2% all the time except in September 2012. The total proportion of `at-the-spread` crossings from the introduction of the `at or within-the-spread` rule until the amendment in May 2013 was 52%.
 
-- how many internal crossings before 26 may 2013, show the proportion and dollar value (monthly table), also show the  whole period
-- how many internal crossings after 26 may 2013, show the proportion and dollar value (monthly table), also show the whole period
-- show the time series barplot to compare movement of At-the-Spread internal Crossings
-- there is apparent changes, but still some violation
+These number and percentage shows that there were balanced proportion of `within-the-spread` and `at-the-spread` crossings, with only insignificant number of violation (`outside-the-spread`), from the introduction of the rule in November 2011 until the amendment in May 2013.
+
+```{r}
+#| label: tbl-bf
+#| tbl-cap: "The Number and Proportion of Internal Crossings Before 26 May 2013"
+
+tbl_bf <- twpi_bf |>
+  mutate(year = lubridate::year(RecordDate)) |>
+  group_by(Month, Year) |>
+  count(Marks) |>
+  mutate(Month = lubridate::month(as.numeric(Month), label = TRUE),
+         `%` = round(n / sum(n) * 100, 2)) |>
+  pivot_wider(names_from = Marks, values_from = c(n, `%`)) |>
+  select(Year, Month, n_1, `%_1`, n_2, `%_2`, n_3, `%_3`) |>
+  arrange(Year) |>
+  rename(Within = n_1,
+         `% Within` = `%_1`,
+         At = n_2,
+         `% At` = `%_2`,
+         Outside = n_3,
+         `% Outside` = `%_3`) |>
+  mutate(Within = format(Within, big.mark = ","),
+         At = format(At, big.mark = ","),
+         Outside = format(Outside, big.mark = ","))
+  
+tbl_bf |> 
+  kbl(align = "r") |>
+  kable_styling(full_width = FALSE)
+```
+
+Looking at the proportion of `at-the-spread` crossings after the rule change, we can see from @tbl-af that the percentages constantly low under 2%, except the first two months, June and July. (May 2013 here only accounts for 5 days). If we look at the proportion of total `at-the-spread` crossings from 26 May 2013 to December 2015, the percentage was only 1.23% (see @tbl-bfaf).
+
+It is also worth mentioned that the monthly frequency of `within-the-spread` crossings in this period were smaller than the previous period. The frequency were mostly under 150,000 a month, except for the first five months. While the previous period account for a over 150,000 most of the time. 
+
+On the other hand, the percentages of `outside-the-spread` crossings seemed to rise month after month. The proportion were constant at 1%-2% in the year 2013 and 2014, but then they increased significantly to 3% - 8% monthly on the year 2015. 
+
+These number and proportion in this period shows that the amendment of the rule worked as it should be, as the `at-the-spread` trades gone from the dark pool. However, there were still not 100% effective, due to the proportion of `outside-the-spread` rose to 8% at the end of the year 2015.  
+
+```{r}
+#| label: tbl-af
+#| tbl-cap: "The Number and Proportion of Internal Crossings After 26 May 2013"
+
+tbl_af <- twpi_af |>
+  mutate(year = lubridate::year(RecordDate)) |>
+  group_by(Month, Year) |>
+  count(Marks) |>
+  mutate(Month = lubridate::month(as.numeric(Month), label = TRUE),
+         `%` = round(n / sum(n) * 100, 2)) |>
+  pivot_wider(names_from = Marks, values_from = c(n, `%`)) |>
+  select(Year, Month, n_1, `%_1`, n_2, `%_2`, n_3, `%_3`) |>
+  arrange(Year) |>
+  rename(Within = n_1,
+         `% Within` = `%_1`,
+         At = n_2,
+         `% At` = `%_2`,
+         Outside = n_3,
+         `% Outside` = `%_3`) |>
+  mutate(Within = format(Within, big.mark = ","),
+         At = format(At, big.mark = ","),
+         Outside = format(Outside, big.mark = ","))
+
+tbl_af |>
+  kbl(align = "r") |>
+  kable_styling(full_width = FALSE)
+
+```
+
+```{r}
+#| label: tbl-bfaf
+#| tbl-cap: "The Percentage of Within/At/Outside-the-Spread Internal Crossings Before and After the Rule Change"
+
+twpi_bf |>
+  count(Marks) |>
+  mutate(Count = n,
+         Percentage = round(Count / sum(Count) * 100, 2)) |>
+  select(Marks, Count, Percentage) |>
+  left_join(twpi_af |>
+    count(Marks) |>
+    mutate(Count = n,
+           Percentage = round(Count / sum(Count) * 100, 2)) |>
+    select(Marks, Count, Percentage), by = "Marks") |>
+  select(Marks, Percentage.x, Percentage.y) |>
+  rename(Prop_Before = Percentage.x,
+         Prop_After = Percentage.y) |>
+  mutate(Marks = c("Within", "At Spread", "Outside")) |>
+  kbl(align = "lrrrr") |>
+  kable_styling(full_width = FALSE)
+```
+
+@fig-1 exhibits the movement better. As we can see from the barplot that the proportion of `at-the-spread` crossings significantly decrease after May 2013. The proportion then dominated by `within-the-spread` crossings, as the rule amendment only allow meaningful price improvement on the dark pool. There were still some breach on the TWPI rule, however the number and proportion were not significant compared to the compliance dark trades.
+
+```{r}
+
+```
 
 *Economic Implication*
 
-- explain the change of the dollar value for whole period
 - compare the 100 days change in dollar value, before and after the rule change
 - compare with whole at-or-within-spread dark trades change from CLA report, how much at-the-spread internal crossings compared to priority crossings
 - compare with the whole transaction in the dark and lit market, from CLA report, how significant is the value?
