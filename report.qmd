@@ -136,56 +136,6 @@ We will evaluate model performance utilizing balanced accuracy, specificity, and
 
 # Result and Discussion
 
-## Rule Change Impact on At-the-Spread Crossings
-
-- how many internal crossings before 26 may 2013, show the proportion and dollar value (monthly table), also show the  whole period
-- how many internal crossings after 26 may 2013, show the proportion and dollar value (monthly table), also show the whole period
-- show the time series barplot to compare movement of At-the-Spread internal Crossings
-- there is apparent changes, but still some violation
-
-*Economic Implication*
-
-- explain the change of the dollar value for whole period
-- compare the 100 days change in dollar value, before and after the rule change
-- compare with whole at-or-within-spread dark trades change from CLA report, how much at-the-spread internal crossings compared to priority crossings
-- compare with the whole transaction in the dark and lit market, from CLA report, how significant is the value?
-
-## Violation Pattern After the Rule Change
-
-- still violation, only around 5%, show barplot monthly
-- any broker dominates (show top 10)? show barplot, anonym the broker id
-- 2 dominates the TWPI, how much? tell that no media release of penalty to twpi rule violation in this period
-- what kind of broker who violate the rule? since there are 2 dominating the violation, the broker type may have nothing to do with the tendency. it depends on each broker apparently 
-
-*Modelling*
-
-- we use data from the 2 dominated brokers to train the model, because if not, the pattern will tend to find the broker id as dominant variable causing violation. split the data to train and test
-- then check robustness to other brokers data
-- remind the imbalances in the data
-
-*Logistic Regresion*
-
-- explain how to find the best threshold
-- show the confusion matrix of the test set
-- show the table for the balance accuracy, sensitivity and specificity of the test set
-- show the significance of the variables
-- explain the contribution of the significant variables
-
-*Random Forest*
-
-- explain step downsample, because of the imbalance in the data
-- show the confusion matrix of the test set
-- show the table for the balance accuracy, sensitivity and specificity of the test set
-- show the variable importance, explain
-
-*Robustness Check*
-
-- show the confusion matrix of both model
-- show the balance accuracy, sensitivity and specificity
-- explain which model is preferred
-
-
-
 ```{r}
 library(tidyverse)
 library(hms)
@@ -257,9 +207,13 @@ twpi4 <- twpi4 |> # remove duplicates
   group_by(Mykey) |>
   filter(n() == 1) |>
   ungroup()
+
+save(twpi4, file = "data/report/twpi4")
 ```
 
 ```{r, eval = FALSE}
+load("data/report/twpi4")
+
 twpi_bf <- twpi4 |>
   filter(RecordDate < lubridate::ymd("20130526"))
 
@@ -275,6 +229,61 @@ class <- read.csv("data/Classifications.csv")
 broker2 <- broker |> left_join(class, by = "Classification") |>
   mutate(No = as.factor(No))
 ```
+
+## Rule Change Impact on At-the-Spread Crossings
+
+
+
+
+- how many internal crossings before 26 may 2013, show the proportion and dollar value (monthly table), also show the  whole period
+- how many internal crossings after 26 may 2013, show the proportion and dollar value (monthly table), also show the whole period
+- show the time series barplot to compare movement of At-the-Spread internal Crossings
+- there is apparent changes, but still some violation
+
+*Economic Implication*
+
+- explain the change of the dollar value for whole period
+- compare the 100 days change in dollar value, before and after the rule change
+- compare with whole at-or-within-spread dark trades change from CLA report, how much at-the-spread internal crossings compared to priority crossings
+- compare with the whole transaction in the dark and lit market, from CLA report, how significant is the value?
+
+## Violation Pattern After the Rule Change
+
+- still violation, only around 5%, show barplot monthly
+- any broker dominates (show top 10)? show barplot, anonym the broker id
+- 2 dominates the TWPI, how much? tell that no media release of penalty to twpi rule violation in this period
+- what kind of broker who violate the rule? since there are 2 dominating the violation, the broker type may have nothing to do with the tendency. it depends on each broker apparently 
+
+*Modelling*
+
+- we use data from the 2 dominated brokers to train the model, because if not, the pattern will tend to find the broker id as dominant variable causing violation. split the data to train and test
+- then check robustness to other brokers data
+- remind the imbalances in the data
+
+*Logistic Regresion*
+
+- explain how to find the best threshold
+- show the confusion matrix of the test set
+- show the table for the balance accuracy, sensitivity and specificity of the test set
+- show the significance of the variables
+- explain the contribution of the significant variables
+
+*Random Forest*
+
+- explain step downsample, because of the imbalance in the data
+- show the confusion matrix of the test set
+- show the table for the balance accuracy, sensitivity and specificity of the test set
+- show the variable importance, explain
+
+*Robustness Check*
+
+- show the confusion matrix of both model
+- show the balance accuracy, sensitivity and specificity
+- explain which model is preferred
+
+
+
+
 
 ## Analysis
 
