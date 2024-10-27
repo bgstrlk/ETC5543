@@ -124,7 +124,7 @@ This study uses a methodical approach to look at how changes in regulations affe
 
 Analyzing the proportion before and after the rule adjustment on 26 May 2013 is the first step in determining how the rule change would affect `at-the-spread` transactions. The frequency and characteristics of `at-the-spread` crossings in the internal crossing system before and after the rule change will be compared. In order to guarantee sufficient liquidity and representation of the whole market, we concentrate our analysis on the S&P/ASX200 stocks. This allows us to determine if the regulatory adjustment was successful in limiting `at-the-spread` trades to close to none.
 
-To assess the economic implications, we evaluate the aggregate dollar value of `at-the-spread` trades over two periods: the 100 days preceding and the 100 days succeeding the rule amendment on 26 May 2013. This controlled period reflects similar transaction trends or patterns. The value-based analysis will measure the economic consequences of trades that may have shifted to the 'lit market' following the amendment, thus assessing the possible enhancement in market transparency and fairness.
+To assess the economic implications, we evaluate the aggregate dollar value of `at-the-spread` trades over two periods: the 100 trading days preceding and the 100 trading days succeeding the rule amendment on 26 May 2013. This controlled period reflects similar transaction trends or patterns. The value-based analysis will measure the economic consequences of trades that may have shifted to the 'lit market' following the amendment, thus assessing the possible enhancement in market transparency and fairness.
 
 *Violation Pattern Analysis*
 
@@ -332,7 +332,7 @@ twpi_bf |>
   kable_styling(full_width = FALSE)
 ```
 
-@fig-prop exhibits the movement better. As we can see from the barplot that the proportion of `at-the-spread` crossings significantly decrease after May 2013. The proportion then dominated by `within-the-spread` crossings, as the rule amendment only allow meaningful price improvement on the dark pool. There were still some breach on the TWPI rule, however the number and proportion were not significant compared to the compliance dark trades.
+@fig-prop exhibits the movement better. As we can see from the barplot that the proportion of `at-the-spread` crossings significantly decrease after May 2013. The proportion then dominated by `within-the-spread` crossings, as the rule amendment only allow meaningful price improvement on the dark pool. There were still some breach on the TWPI rule, and the proportion were increasing towards the end of 2015, however the number and proportion were not significant compared to the compliance dark trades.
 
 ```{r}
 #| label: fig-prop
@@ -356,23 +356,51 @@ combined |>
          Price = factor(Price, levels = c("Within-the-spread", "At-the-spread", "Outside-the-spread"))) |>
   ggplot() +
   geom_col(aes(x = Date, y = Proportion, fill = Price)) +
-  geom_vline(xintercept = as.Date("2013-05-01"), color = "red", linetype = "dashed", size = 1) +
-  theme_bw() +
-  scale_fill_viridis_d(option = "viridis")
+  geom_vline(xintercept = as.Date("2013-05-01"), color = "blue", linetype = "solid", size = 1) +
+  annotate("text", x = as.Date("2013-05-01"), y = 75, label = "TWPI Rule", color = "blue", hjust = -0.1, size = 4) +
+  theme_bw() 
 
 ```
 
 *Economic Implication*
 
+```{r, eval = FALSE}
+twpi5 <- twpi_df |>
+  select(2,4,17, 25) |>
+  mutate(RecordDate = lubridate::ymd(RecordDate))
 
+twpi5 <- twpi5 |> # remove duplicates
+  group_by(Mykey) |>
+  filter(n() == 1) |>
+  ungroup()
 
-- compare the 100 days change in dollar value, before and after the rule change
-- compare with whole at-or-within-spread dark trades change from CLA report, how much at-the-spread internal crossings compared to priority crossings
-- compare with the whole transaction in the dark and lit market, from CLA report, how significant is the value?
+save(twpi5, file = "data/report/twpi5")
+
+```
+
+```{r, eval = FALSE}
+twpi5 |> 
+  filter(RecordDate > (lubridate::ymd(20121231)) &
+           RecordDate < lubridate::ymd(20130526)) |>
+  group_by(Marks) |>
+  summarise(Dollar = sum(DollarValue))
+  
+twpi5 |> 
+  filter(RecordDate < (lubridate::ymd(20131014)) &
+           RecordDate > lubridate::ymd(20130526)) |>
+  group_by(Marks) |>
+  summarise(Dollar = sum(DollarValue))
+```
+
+Comparing the dollar value of the trades can be useful to examine the economic implication of the rule change. We compare 100 days before and after the rule change in 26 May 2013. The reason of using smaller period of time is to control the change in trend of transaction, as well as minimize the the impact of macro and microeconomics change. One hundred trading days before TWPI rule amendment, `at-the-spread` crossings has value of \$3.97 billion, while 100 trading days after the value dropped to just \$216 million. This decrease in value indicates that there was a movement of around almost \$3.7 billion from `dark pool` to `lit pool`, from the stocks listed on ASX200 index alone.
+
+This number was quite high, given that this was only from the stocks listed on ASX200 index, and only account for 100 trading days. With this number alone, ASX could charge around \$45,000 based on the trading fee on `lit market` around 0.15 basis point. The number will rise much higher if we consider the whole transaction on all stocks listed on ASX.
+
+From the report by Charles Lane Advisory, *Review of recent rule changes affecting dark liquidity* (2014), it is known that there was a decline of total dollar volume in the below block size dark pool 100 days before and after the rule change, from \$54.9 billion to \$21 billion, meaning that there was a movement of more than \$33 billion from `dark pool` to `lit pool`. However, these numbers have taken into account all stocks in ASX and the priority crossings mechanism occurred on the ASX trading platform, in which we will not consider in this study. Based on these numbers, the `at-the-spread` crossings occurred on the ASX200 index listed companies only account for approximately 12% of that from all stocks listed on ASX.
 
 ## Violation Pattern After the Rule Change
 
-- still violation, only around 5%, show barplot monthly
+- there still violation, only around 5%, show barplot monthly
 - any broker dominates (show top 10)? show barplot, anonym the broker id
 - 2 dominates the TWPI, how much? tell that no media release of penalty to twpi rule violation in this period
 - what kind of broker who violate the rule? since there are 2 dominating the violation, the broker type may have nothing to do with the tendency. it depends on each broker apparently 
