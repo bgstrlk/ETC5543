@@ -20,6 +20,8 @@ editor_options:
 
 # Abstract
 
+The effect of the Trade With Price Improvement rule, which went into effect on 26 May 2013, on `at-the-spread` crossings in the `dark pool` of the Australian Securities Exchange (ASX), is examined in this study. The drop in the proportion of trading volume from `at-the-spread` crossings from 52% to 1% following the rule change indicates a notable shift in trading volume. Although the breaching of the rule initially accounted for only about 5% of all internal crossings, monthly statistics showed a steady increase in rule violations, peaking at 12% in December 2015. The majority of rule violations were done by only two brokers. We also use machine learning models to understand violation trends. The result emphasized the importance of market conditions, namely market spread and market depth, as the main contributors to the violation of the TWPI rule.
+
 # Introduction 
 
 There were numerous equities exchanges established in the long history of Australia. Almost every big city in Australia once had their own stock exchange, namely Sydney, Brisbane, Melbourne, Adelaide, Perth, and even Hobart. The Australian Parliament merged all six stock exchanges in 1987, creating the Australian Stock Exchange [(Australian Stock Exchange, n.d.)](https://www.asx.com.au/about/asx-story). Two decades later, this equities exchange merged with Sydney Futures Exchange to become the Australian Securities Exchange. Although its official name is now ASX Limited, it is more convenient to simply refer to it as ASX. In this report, however, we will use the term ASX to refer to the company or the equities market.
@@ -1002,24 +1004,26 @@ metrics |>
 
 ## Limitation
 
-- imbalance data: violation only accounts for 5% of all internal crossings
-- only using stocks on ASX200 index, because limited processing power
-- no recent data available. SIRCA only provide ASX data unti 2016
+These are the limitations of this study that may impact the accuracy of the result:
+
+- **Data Imbalance**: Only about 5% of all internal crossings are violations, hence the dataset is extremely imbalanced. This condition may hinder the models' ability to accurately predict the violation pattern.
+- **ASX200 Index Stocks**: This study uses only stocks from the ASX200 index due to the limited processing power. Therefore, trends that are unique to non-ASX200 stocks might be missed if they are left out.
+- **Not the most recent data**: SIRCA provides ASX transaction data only up to 2016. Hence, this study does not take into consideration data with the most recent trading patterns and behavior.
 
 # Conclusion 
 
-- the TWPI rule in 26 may 2016 effective reduce at-the-spread crossings on the `dark pool`, moving them to `lit market`
-- in 100 trading days, there was approximately \$3.7 billion trades value moving away from `dark pool`
-- the proportion of violation after the rule change until december 2015 is approximately 5%. however if we see it from montly numbers, the proportion is increasing month after month, reaching and toping at 12% at December 2015
-- Only 2 brokers dominate the violation, hence we dont have enough confidence to say that the broker's type play main role in the violation
-- from all models and both types of violation, `at-the-spread` and `outside-the-spread` violation, the important variables that explain the violation pattern are the market condition, specifically market price spread and the market depth, indicated from the best bid/ask volume
+When the TWPI rule went into effect on 26 May 2013, it effectively reduced the `at-the-spread` crossings in the `dark pool`, moving them to the `lit market`. Approximately $3.7 billion worth of trades went from the dark pool to the lit market in the 100 trading days after the rule change. This shows that the rule had a big effect on how trades were distributed. 
+
+In addition, violations are still insignificant, with the proportion of around 5% of all internal crossings. However, monthly numbers show that violations are going up, and by December 2015, they had reached 12%. Looking at the pattern, there are a lot of violations involving just two brokers, which makes it less reliable to attribute violations to certain kinds of brokers. After applying machine learning modeling to the data, we understand that the most important factors for both types of violations (`at-the-spread` and `outside-the-spread`) were the market conditions, especially the price spread and market depth, which could be seen by the best bid/ask volume.
 
 # Potential Future Work
 
-- Analyse violation pattern with other variables, such as stock industry sector, market cap, lagged price values, volatility, etc
-- Try different methods to analyse the pattern, such as PCA and factor modelling to understand the direction of the variables
-- More research questions:
-    -   How much profit did ASX make due to the rule amendment in May 2013?
+- Add Variables in Violation Analysis. To gain a deeper understanding of violation patterns, future research should include more variables including market capitalization, industrial sector, volatility, and lagged price values.
+- Using Other Analysis Techniques. Other approaches, such as factor modeling or Principal Component Analysis (PCA), may give more insight on the directional influence of variables.
+- Extend Research Questions. 
+    
+    - Evaluate the financial effects from the breach of the TWPI rule.
+    - Identify the reasons why market spread and market depth correlate with the violation pattern.
 
 # References
 
