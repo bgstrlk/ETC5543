@@ -472,7 +472,7 @@ vo_test <- testing(vo_split)
 
 ### Logistic Regression
 
-Since our case is a classification problem, logistic regression is one of the most popular methods for predictive modelling. This model uses logistic function and maximum likelihood method to estimate the coefficients of each variable. The logistic function predicts the probability of belonging to one of two classes, with lower balance generally classified to class 0 and higher balance to class 1. A probability threshold can be set to determine the cutoff for classifying an observation into either class. In our example, observations with lower balances may fall into class "non-violation", while higher balances may fall into class "violation", depending on the chosen threshold. We use `roc()` and `coords()` functions from `pROC` package to find the best threshold for given cases.
+Since our case is a classification problem, logistic regression is one of the most popular methods for predictive modelling. This model uses logistic function and maximum likelihood method to estimate the coefficients of each variable (James et al., 2021). The logistic function predicts the probability of belonging to one of two classes, with lower balance generally classified to class 0 and higher balance to class 1. A probability threshold can be set to determine the cutoff for classifying an observation into either class. In our case, observations with lower balances may fall into class "non-violation", while higher balances may fall into class "violation", depending on the chosen threshold. We use `roc()` and `coords()` functions from `pROC` package to find the best threshold for given cases.
 
 ```{r, eval = FALSE}
 log_mod <- logistic_reg() |>
@@ -651,102 +651,11 @@ tidy(log_fit2) |>
 
 ### Random Forest
 
+Random forest is another popular method for classification modelling. This model is an ensemble of decision trees using bootstrapped training samples. Each tree is trained on different subsets of the data using a random sample of predictors (not all variables used in each tree). This method force each split to consider the non-dominant variables (James et al., 2021). The random forest model predicts the probability of classes by aggregating the predictions from each individual tree, typically with the majority vote.
 
+Unlike logistic regression, random forest does not assume a linear relationship between predictors and the outcome (James et al., 2021), making it well-suited to capture complex interactions between variables. We will use `step_downsample` function from `themis` package to handle the imbalance observation on the response variable.
 
-- explain step downsample, because of the imbalance in the data
-- show the confusion matrix of the test set
-- show the table for the balance accuracy, sensitivity and specificity of the test set
-- show the variable importance, explain
-
-*Robustness Check*
-
-- show the confusion matrix of both model
-- show the balance accuracy, sensitivity and specificity
-- explain which model is preferred
-
-
-
-
-Confusion Matrix and Statistics of `at-the-spread` violations on the test dataset:
-
-
-
-
-
-#### Apply model to twpi data outside broker 210 and 361
-
-```{r}
-# filter data
-# data_2 <- twpi_af |> 
-#   filter(!(BuyerBrokerID %in% c(210,361)),
-#          Hour != 16) |>
-#   # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
-#   mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
-#          Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
-#          Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
-#   select(2, 6, 8:16, 18:20) |>
-#   na.omit()
-# 
-# save(data_2, file = "data/report/data_2")
-
-load("data/report/data_2")
-```
-
-```{r}
-# apply at-spread violation model and measure accuracy 
-
-data_2_va_pred <- log_fit1 |> 
-  augment(new_data = data_2) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log1_optimal_threshold[1,1], 1, 0)))
-
-matrix_data_2_va <- data_2_va_pred |>
-  count(Violation_1, pred_viol) |>
-  group_by(Violation_1) |>
-  mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
-  pivot_wider(names_from = pred_viol, 
-              values_from = n, values_fill=0)
-
-
-bal_accuracy_logistic_data2_1 <- bal_accuracy(data_2_va_pred, Violation_1, pred_viol)$.estimate
-bal_accuracy_logistic_data2_1
-```
-
-Confusion Matrix and Statistics of `at-the-spread` violations on the new dataset:
-
-```{r}
-# confusion matrix best threshold
-confusionMatrix(data_2_va_pred$pred_viol, data_2_va_pred$Violation_1)
-```
-
-```{r}
-# apply outside violation model and measure accuracy 
-
-data_2_vo_pred <- log_fit2 |> 
-  augment(new_data = data_2) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
-
-matrix_data_2_vo <- data_2_vo_pred |>
-  count(Violation_2, pred_viol) |>
-  group_by(Violation_2) |>
-  mutate(cl_acc = n[pred_viol == Violation_2]/sum(n)) |>
-  pivot_wider(names_from = pred_viol, 
-              values_from = n, values_fill=0)
-
-
-bal_accuracy_logistic_data2_2 <- bal_accuracy(data_2_vo_pred, Violation_2, pred_viol)$.estimate
-bal_accuracy_logistic_data2_2
-```
-
-Confusion Matrix and Statistics of `outside-spread` violations on the new dataset:
-
-```{r}
-# confusion matrix best threshold
-confusionMatrix(data_2_vo_pred$pred_viol, data_2_vo_pred$Violation_2)
-```
-
-### Random Forest
-
-#### At-The-Spread
+*At-The-Spread Violation*
 
 ```{r}
 data_rec1 <- recipe(Violation_1 ~ ., data = va_train) |>
@@ -845,6 +754,105 @@ Confusion Matrix and Statistics of `at-the-spread` violations on the test datase
 ```{r}
 confusionMatrix(va_ts_pred_rf$pviol, va_ts_pred_rf$Violation_1)
 ```
+
+
+*Outside-The-Spread Violation*
+
+
+
+- explain step downsample, because of the imbalance in the data
+- show the confusion matrix of the test set
+- show the table for the balance accuracy, sensitivity and specificity of the test set
+- show the variable importance, explain
+
+### Robustness Check
+
+- show the confusion matrix of both model
+- show the balance accuracy, sensitivity and specificity
+- explain which model is preferred
+
+
+
+
+
+
+
+
+#### Apply model to twpi data outside broker 210 and 361
+
+```{r}
+# filter data
+# data_2 <- twpi_af |> 
+#   filter(!(BuyerBrokerID %in% c(210,361)),
+#          Hour != 16) |>
+#   # left_join(broker2[, c("No", "Description")], by = c("BuyerBrokerID" = "No")) |>
+#   mutate(Violation = as.factor(ifelse(Marks == 1, 0, 1)),
+#          Violation_1 = as.factor(ifelse(Marks == 2, 1, 0)),
+#          Violation_2 = as.factor(ifelse(Marks == 3, 1, 0))) |>
+#   select(2, 6, 8:16, 18:20) |>
+#   na.omit()
+# 
+# save(data_2, file = "data/report/data_2")
+
+load("data/report/data_2")
+```
+
+```{r}
+# apply at-spread violation model and measure accuracy 
+
+data_2_va_pred <- log_fit1 |> 
+  augment(new_data = data_2) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log1_optimal_threshold[1,1], 1, 0)))
+
+matrix_data_2_va <- data_2_va_pred |>
+  count(Violation_1, pred_viol) |>
+  group_by(Violation_1) |>
+  mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+
+bal_accuracy_logistic_data2_1 <- bal_accuracy(data_2_va_pred, Violation_1, pred_viol)$.estimate
+bal_accuracy_logistic_data2_1
+```
+
+Confusion Matrix and Statistics of `at-the-spread` violations on the new dataset:
+
+```{r}
+# confusion matrix best threshold
+confusionMatrix(data_2_va_pred$pred_viol, data_2_va_pred$Violation_1)
+```
+
+```{r}
+# apply outside violation model and measure accuracy 
+
+data_2_vo_pred <- log_fit2 |> 
+  augment(new_data = data_2) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
+
+matrix_data_2_vo <- data_2_vo_pred |>
+  count(Violation_2, pred_viol) |>
+  group_by(Violation_2) |>
+  mutate(cl_acc = n[pred_viol == Violation_2]/sum(n)) |>
+  pivot_wider(names_from = pred_viol, 
+              values_from = n, values_fill=0)
+
+
+bal_accuracy_logistic_data2_2 <- bal_accuracy(data_2_vo_pred, Violation_2, pred_viol)$.estimate
+bal_accuracy_logistic_data2_2
+```
+
+Confusion Matrix and Statistics of `outside-spread` violations on the new dataset:
+
+```{r}
+# confusion matrix best threshold
+confusionMatrix(data_2_vo_pred$pred_viol, data_2_vo_pred$Violation_2)
+```
+
+### Random Forest
+
+#### At-The-Spread
+
 
 #### Outside the Spread
 
@@ -1039,5 +1047,7 @@ Australian Securities Exchange. (19 February 2024). *ASX Trade: Markets Particip
 Charles Lane Advisory Pty Ltd. (May 2014). *Report by Charles Lane Advisory: Review of recent rule changes affecting dark liquidity* (PDF). Attachment to ASIC Report 394: Review of recent rule changes affecting dark liquidity. Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf
 
 Duong, H. N., Lajbcygier, P., Lu, J. S., & Vu, V. H. (2018). The effect of anonymity on price efficiency: Evidence from the removal of broker identities. *Pacific-Basin Finance Journal, 51*, 95–107. https://doi.org/10.1016/j.pacfin.2018.06.004
+
+James, G., Witten, D., Hastie, T., & Tibshirani, R. (2021). An introduction to statistical learning: With applications in R (2nd ed.). Springer.
 
 Securities Industry Research Centre of Asia-Pacific. (n.d.). *About SIRCA*. SIRCA. Retrieved 26 October 2024, from https://www.sirca.org.au/about-sirca/
