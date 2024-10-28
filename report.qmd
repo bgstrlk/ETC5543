@@ -86,7 +86,7 @@ ASIC's media release and publication in the last couple of years suggested that 
 2. What kind of brokers violate the rules the most? Are some brokers more likely to break TWPI rules than others?
 3. What conditions contributed to the occurrence of the violations?
 
-## Significance and Contributions 500
+## Significance and Contributions
 
 There are three main areas in which this study may contribute: academic, regulatory, and economic.
 
@@ -221,13 +221,13 @@ twpi_af <- twpi4 |>
 
 ## Rule Change Impact on At-the-Spread Crossings
 
-We compare the number of internal crossings before and after the rule change in 26 May 2013. The `at-the-spread` internal crossings can be done before the meaningful price improvement rule introduction, hence, only `within-the-spread` crossings can be done after 26 May 2013. @tbl-bf and @tbl-af show monthly number and proportion of internal crossings before and after the rule change, respectively. In addition, the total proportion for each trade price group (within/at/outside-the-spread) can be seen from @tbl-bfaf.
-
-The monthly proportion of `at-the-spread` internal crossings consistent around between 40% - 60% from the start of the rule until the amendment. The highest proportions were at October - December 2012, with 61% - 62% of the total internal crossings. The lowest proportion after taking out January 2012 (lowest number of crossings because of the transition) was at April 2013, with only 39% of the total crossings.
-
-@tbl-bf shows that there was a number of violation in the early rule of internal crossings. However, the proportion were not significant, under 2% all the time except in September 2012. The total proportion of `at-the-spread` crossings from the introduction of the `at or within-the-spread` rule until the amendment in May 2013 was 52%.
-
-These number and percentage shows that there were balanced proportion of `within-the-spread` and `at-the-spread` crossings, with only insignificant number of violation (`outside-the-spread`), from the introduction of the rule in November 2011 until the amendment in May 2013.
+We compare the number of internal crossings before and after the rule change on 26 May 2013. The `at-the-spread` internal crossings can be done before the meaningful price improvement rule introduction; hence, only `within-the-spread` crossings can be done after 26 May 2013. @tbl-bf and @tbl-af show the monthly number and proportion of internal crossings before and after the rule change, respectively. In addition, the total proportion for each trade price group (within/at/outside-the-spread) can be seen from @tbl-bfaf.
+ 
+From the start of the rule until the amendment, the monthly proportion of 'at-the-spread' internal crossings consistently ranged between 40% and 60%. The highest proportions were in October–December 2012, with 61%–62% of the total internal crossings. After subtracting January 2012, which had the lowest number of crossings due to the transition, April 2013 had the lowest proportion, accounting for only 39% of the total crossings.
+ 
+@tbl-BF shows that there were a number of violations of the early rule of internal crossings. However, the proportion was not significant, consistently falling below 2%, with the exception of September 2012. The total proportion of `at-the-spread` crossings from the introduction of the `at or within-the-spread` rule until the amendment in May 2013 was 52%.
+ 
+These numbers and percentages show that there were a balanced proportion of `within-the-spread` and `at-the-spread` crossings, with only an insignificant number of violations (`outside-the-spread`), from the introduction of the rule in November 2011 until the amendment in May 2013.
 
 ```{r}
 #| label: tbl-bf
@@ -258,13 +258,13 @@ tbl_bf |>
   kable_styling(full_width = FALSE)
 ```
 
-Looking at the proportion of `at-the-spread` crossings after the rule change, we can see from @tbl-af that the percentages constantly low under 2%, except the first two months, June and July. (May 2013 here only accounts for 5 days). If we look at the proportion of total `at-the-spread` crossings from 26 May 2013 to December 2015, the percentage was only 1.23% (see @tbl-bfaf).
-
-It is also worth mentioned that the monthly frequency of `within-the-spread` crossings in this period were smaller than the previous period. The frequency were mostly under 150,000 a month, except for the first five months. While the previous period account for a over 150,000 most of the time. 
-
-On the other hand, the percentages of `outside-the-spread` crossings seemed to rise month after month. The proportion were constant at 1%-2% in the year 2013 and 2014, but then they increased significantly to 3% - 8% monthly on the year 2015. 
-
-These number and proportion in this period shows that the amendment of the rule worked as it should be, as the `at-the-spread` trades gone from the dark pool. However, there were still not 100% effective, due to the proportion of `outside-the-spread` rose to 8% at the end of the year 2015.  
+Looking at the proportion of `at-the-spread` crossings after the rule change, we can see from @tbl-af that the percentages are constantly low under 2%, except for the first two months, June and July. (May 2013 here only accounts for 5 days). If we look at the proportion of total `at-the-spread` crossings from 26 May 2013 to December 2015, the percentage was only 1.23% (see @tbl-bfaf).
+ 
+It is also worth mentioning that the monthly frequency of `within-the-spread` crossings in this period was smaller than the previous period. The frequency was mostly under 150,000 a month, except for the first five months. While the previous period accounted for over 150,000 most of the time.
+ 
+On the other hand, the percentages of `outside-the-spread` crossings seemed to rise month after month. The proportions were constant at 1%–2% in the years 2013 and 2014, but then they increased significantly to 3%–8% monthly in the year 2015.
+ 
+The numbers and proportions during this period demonstrate that the rule amendment effectively eliminated the 'at-the-spread' trades from the dark pool. However, they were still not 100% effective due to the proportion of `outside-the-spread` rising to 8% at the end of the year 2015.
 
 ```{r}
 #| label: tbl-af
@@ -319,7 +319,7 @@ twpi_bf |>
   kable_styling(full_width = FALSE)
 ```
 
-@fig-prop exhibits the movement better. As we can see from the barplot that the proportion of `at-the-spread` crossings significantly decrease after May 2013. The proportion then dominated by `within-the-spread` crossings, as the rule amendment only allow meaningful price improvement on the dark pool. There were still some breach on the TWPI rule, and the proportion were increasing towards the end of 2015, however the number and proportion were not significant compared to the compliance dark trades.
+@fig-prop exhibits the movement better. As we can see from the barplot, the proportion of `at-the-spread` crossings significantly decreased after May 2013. The proportion was then dominated by `within-the-spread` crossings, as the rule amendment only allowed meaningful price improvement on the dark pool. There were still some breaches of the TWPI rule, and the proportion was increasing towards the end of 2015. However, the number and proportion were not significant compared to the compliance of dark trades.
 
 ```{r}
 #| label: fig-prop
@@ -379,19 +379,19 @@ twpi5 |>
   summarise(Dollar = sum(DollarValue))
 ```
 
-Comparing the dollar value of the trades can be useful to examine the economic implication of the rule change. We compare 100 days before and after the rule change in 26 May 2013. The reason of using smaller period of time is to control the change in trend of transaction, as well as minimize the the impact of macro and microeconomics change. One hundred trading days before TWPI rule amendment, `at-the-spread` crossings has value of \$3.97 billion, while 100 trading days after the value dropped to just \$216 million. This decrease in value indicates that there was a movement of around almost \$3.7 billion from `dark pool` to `lit pool`, from the stocks listed on ASX200 index alone.
-
-This number was quite high, given that this was only from the stocks listed on ASX200 index, and only account for 100 trading days. With this number alone, ASX could charge around \$45,000 based on the trading fee on `lit market` around 0.15 basis point. The number will rise much higher if we consider the whole transaction on all stocks listed on ASX.
-
-From the report by Charles Lane Advisory, *Review of recent rule changes affecting dark liquidity* (2014), it is known that there was a decline of total dollar volume in the below block size dark pool 100 days before and after the rule change, from \$54.9 billion to \$21 billion, meaning that there was a movement of more than \$33 billion from `dark pool` to `lit pool`. However, these numbers have taken into account all stocks in ASX and the priority crossings mechanism occurred on the ASX trading platform, in which we will not consider in this study. Based on these numbers, the `at-the-spread` crossings occurred on the ASX200 index listed companies only account for approximately 12% of that from all stocks listed on ASX.
+Comparing the dollar value of the trades can be useful to examine the economic implication of the rule change. We compare 100 days before and after the rule change on 26 May 2013. The reason for using a smaller period of time is to control the change in trend of transactions as well as minimize the impact of macro- and microeconomic change. One hundred trading days before the TWPI rule amendment, `at-the-spread` crossings had a value of \$3.97 billion, while 100 trading days later the value dropped to just \$216 million. This decrease in value indicates that there was a movement of around $3.7 billion from `dark pool` to `lit pool' from the stocks listed on the ASX200 index alone.
+ 
+This number was quite high, given that this was only from the stocks listed on the ASX200 index and only accounts for 100 trading days. With this number alone, ASX could charge around \$45,000 based on the trading fee on `lit market` around 0.15 basis point. The number will rise much higher if we consider the whole transaction on all stocks listed on ASX.
+ 
+From the report by Charles Lane Advisory, *Review of recent rule changes affecting dark liquidity* (2014), it is known that there was a decline of total dollar volume in the below block size dark pool 100 days before and after the rule change, from \$54.9 billion to \$21 billion, meaning that there was a movement of more than \$33 billion from `dark pool` to `lit pool`. However, these numbers have taken into account all stocks in ASX, and the priority crossing mechanism occurred on the ASX trading platform, which we will not consider in this study. Based on these numbers, the `at-the-spread` crossings occurred on the ASX200 index-listed companies accounts only approximately 12% of that from all stocks listed on the ASX.
 
 ## Violation Pattern After the Rule Change
 
-@fig-prop shows that there were still violation of TWPI rule after the rule change in 26 May 2013. If we look at the proportion, the percentages were going higher year after year. This trend mainly because of `outside-the-spread` crossings have increasing trend, achieving more than 12% of all internal crossings on December 2015. These number could be higher for the following years after 2015. However, this is out of scope of this study.
-
-Since we have the broker IDs variable on our dataset, we can examine what kind of brokers tend to violate the TWPI rule. We classify broker's type as institutional, retail, and HFT-proprietary. @fig-brokers exhibits top 10 brokers that done the most violation. The plot shows that there were only two brokers that dominate the violation. Both are institutional brokers, so can we imply that institutional brokers tend to do violation than other type of brokers? Since there were only two brokers dominate the violation, it is probably more like individuality reason rather than because of the broker's type.
-
-We also understand that regulators did not take any penalty action towards these violation, as the first release related to TWPI rule violation was in February 2023. This probably because the rule has just introduced and the number of the violation was still insignificant compared to all internal crossings. However, as the proportion was on a rising trend, regulators should have taken an action to prevent the number getting more significant, especially it was already happened since 2015.
+@fig-prop shows that there were still violations of the TWPI rule after the rule change on 26 May 2013. If we look at the proportion, the percentages were going higher year after year. This trend is primarily due to the increasing trend of 'outside-the-spread' crossings, which accounted for more than 12% of all internal crossings in December 2015. These numbers could potentially rise in the years following 2015. However, this is out of scope of this study.
+ 
+Since we have the broker IDs variable on our dataset, we can examine what kind of brokers tend to violate the TWPI rule. We classify brokers's types as institutional, retail, and HFT-proprietary. @fig-brokers exhibits the top 10 brokers that have done the most violations. The plot reveals that only two brokers dominated the number of violations. Given that both brokers are institutional, could it be inferred that institutional brokers tend to commit more violations than other types of brokers? Since there were only two brokers dominating the violation, it is probably more like an individuality reason than because of the broker's type.
+ 
+We also understand that regulators did not impose any penalties for these violations, given that the first release regarding the TWPI rule violation occurred in February 2023. This is probably because the rule has just been introduced and the number of violations was still insignificant compared to all internal crossings. However, as the proportion was on a rising trend, regulators should have taken action to prevent the number from getting more significant, especially since it has already happened since 2015.
 
 ```{r, eval = FALSE}
 # load broker classification data
@@ -422,7 +422,7 @@ twpi_af |>
   ungroup() |>
   filter(Marks != 1) |>
   mutate(Marks = ifelse(Marks == 2, "At Spread", "Outside"),
-         AnonBrokerID = paste("Broker", as.integer(factor(BuyerBrokerID)))) |>
+         AnonBrokerID = as.integer(factor(BuyerBrokerID))) |>
   ggplot(aes(x = reorder(AnonBrokerID, -n), y = percentage, fill = Marks)) +
   geom_col(position = "dodge") +
   labs(title = "Violation in Percentage to TWPI",
@@ -433,11 +433,11 @@ twpi_af |>
 
 *Modelling*
 
-To understand what condition that contributed to the occurrence of violation in TWPI rule, we will do simple modelling using logistic regression and random forest. Since there were only two brokers that dominate the violation, we will use data from these two brokers to train the model. We also did not use broker's type as one of the predictor variable because of this reason. If we put the broker's type as one of the predictors, then the model will take it as the dominant variable causing the violation.
-
-To modelling the violation pattern, we use several predictor variables from the transaction data, namely dollar value, trade volume, hour, and date, and also market data, such as market spread and best bid/ask volume. We also make model for each violation type, `at-the-spread` and `outside-the-spread` violation.
-
-We split the data to train and test datasets. Moreover, we will check the robustness of the model using data from the brokers other than these top two brokers. One thing that is important to consider is that this data have very imbalance response variable, as the violation only accounts for approximately 5% of all internal crossings reported as TWPI (see again @tbl-bfaf). 
+To understand what condition contributed to the occurrence of a violation of the TWPI rule, we will do simple modeling using logistic regression and random forest. Given that only two brokers dominated the violation, we plan to train the model using data from these brokers. For this reason, we did not include the broker's type as one of the predictor variables. If we put the broker's type as one of the predictors, then the model will take it as the dominant variable causing the violation.
+ 
+To model the violation pattern, we use several predictor variables from the transaction data, namely dollar value, trade volume, hour, and date, and also market data, such as market spread and best bid/ask volume. We also make models for each violation type, `at-the-spread` and `outside-the-spread` violations.
+ 
+We split the data to train and test datasets. Moreover, we will check the robustness of the model using data from brokers other than these top two brokers. One thing that is important to consider is that this data has a very imbalanced response variable, as the violation only accounts for approximately 5% of all internal crossings reported as TWPI (see again @tbl-bfaf).
 
 ```{r}
 # prepare data to model, only top 2 brokers
@@ -472,7 +472,7 @@ vo_test <- testing(vo_split)
 
 ### Logistic Regression
 
-Since our case is a classification problem, logistic regression is one of the most popular methods for predictive modelling. This model uses logistic function and maximum likelihood method to estimate the coefficients of each variable (James et al., 2021). The logistic function predicts the probability of belonging to one of two classes, with lower balance generally classified to class 0 and higher balance to class 1. A probability threshold can be set to determine the cutoff for classifying an observation into either class. In our case, observations with lower balances may fall into class "non-violation", while higher balances may fall into class "violation", depending on the chosen threshold. We use `roc()` and `coords()` functions from `pROC` package to find the best threshold for given cases.
+Since our case is a classification problem, logistic regression is one of the most popular methods for predictive modeling. This model uses logistic function and maximum likelihood method to estimate the coefficients of each variable (James et al., 2021). The logistic function predicts the probability of belonging to one of two classes, with lower balance generally classified to class 0 and higher balance to class 1. A probability threshold can be set to determine the cutoff for classifying an observation into either class. In our case, observations with lower balances may fall into class "non-violation", while higher balances may fall into class "violation", depending on the chosen threshold. We use `roc()` and `coords()` functions from the `pROC` package to find the best threshold for given cases.
 
 ```{r, eval = FALSE}
 log_mod <- logistic_reg() |>
@@ -540,9 +540,9 @@ matrix_va_ts <- va_ts_pred |>
               values_from = n, values_fill=0)
 ```
 
-After we train the model to the train dataset, we apply the fitted model to the test dataset to examine the accuracy of `at-the-spread` violation model. @tbl-log1 exhibits the confusion matrix for the result on this dataset. The class 0, meaning the non-violation trades, were correctly predicted as non-violation 732,681 times, while wrongly predicted 307,566 times. On the other hand, class 1, meaning the violation trades, were correctly predicted as violation 9,697 times, while wrongly predicted 4,539 times. 
-
-These number produce evaluation performance of sensitivity as high as 0.7043 and specificity as high as 0.6811. The balanced accuracy for this model to the test dataset is 0.6927. These number is quite high given the complexity of the data and also how the imbalanced the response variable are. 
+After we train the model on the train dataset, we apply the fitted model to the test dataset to examine the accuracy of the `at-the-spread` violation model. @tbl-log1 exhibits the confusion matrix for the result on this dataset. The class 0, meaning the non-violation trades, were correctly predicted as non-violation 732,681 times, while wrongly predicted 307,566 times. On the other hand, class 1, meaning the violation trades, were correctly predicted as violations 9,697 times, while wrongly predicted 4,539 times.
+ 
+These numbers produce evaluation performance of sensitivity as high as 0.7043 and specificity as high as 0.6811. The balanced accuracy for this model on the test dataset is 0.6927. These numbers are quite high, given the complexity of the data and how imbalanced the response variables are.
 
 ```{r}
 #| label: tbl-log1
@@ -560,7 +560,7 @@ matrix_va_ts |>
 confusionMatrix(va_ts_pred$pred_viol, va_ts_pred$Violation_1)
 ```
 
-Examining the significance of the variable from @tbl-sig1, we understand that most of the variables are significant predictors as the p-value are close to zero. Only the hour of the trades that is not significantly contributed to the model. Dollar value and the market data such as the spread and best bid/ask volume, have negative relationship with the violation, while the trade volume has positive correlation. These mean that the violation might happen more on the condition where the market has narrow spread but less volume depth.
+Examining the significance of the variable from @tbl-sig1, we understand that most of the variables are significant predictors as the p-values are close to zero. The only variable that does not significantly contribute to the model is the trading hour. Dollar value and the market data, such as the spread and best bid/ask volume, have a negative relationship with the violation, while the trade volume has a positive correlation. These mean that the violation might happen more on the condition where the market has a narrow spread but less volume depth.
 
 ```{r}
 #| label: tbl-sig1
@@ -616,9 +616,9 @@ matrix_vo_ts <- vo_ts_pred |>
 
 ```
 
-After we train logistic regression model to understand the variables that contribute to `at-the-spread` violation, we then want to understand regarding `outside-the-spread` violation. @tbl-log2 exhibits the confusion matrix for this violation modelling on the test set. The class 0, meaning the non-violation trades, were correctly predicted as non-violation 614,494 times, while wrongly predicted 399,606 times. On the other hand, class 1, were correctly predicted as violation 29,828 times, while wrongly predicted 10,555 times. 
-
-These number produce evaluation performance of sensitivity as high as 0.6059 and specificity as high as 0.7386. The balanced accuracy for this model to the test dataset is 0.6723. These number are similar with the previous prediction model on the `at-the-spread` violation.
+After we train the logistic regression model to understand the variables that contribute to `at-the-spread` violation, we then want to understand regarding `outside-the-spread` violation. @tbl-log2 exhibits the confusion matrix for this violation modeling on the test set. The class 0, meaning the non-violation trades, were correctly predicted as non-violation 614,494 times, while wrongly predicted 399,606 times. Conversely, we correctly predicted class 1 as a violation 29,828 times and incorrectly predicted it 10,555 times.
+ 
+These numbers yield evaluation performance as high as 0.6059 and specificity as high as 0.7386. The balanced accuracy for this model on the test dataset is 0.6723. These numbers are similar to the previous prediction model on the `at-the-spread` violation.
 
 ```{r}
 #| label: tbl-log2
@@ -636,7 +636,7 @@ matrix_vo_ts |>
 confusionMatrix(vo_ts_pred$pred_viol, vo_ts_pred$Violation_2)
 ```
 
-Differently, only the market depth variables that has significant value on this logistic regression model: best bid/ask volume and the market price spread. All three have negative correlation with the `outside-the-spread` violation, hence consistent with previous modelling: violation might happen more on the condition where the market has narrow spread but less volume depth.
+Differently, only the market depth variables have significant value on this logistic regression model: the best bid/ask volume and the market price spread. All three have a negative correlation with the `outside-the-spread` violation, hence consistent with previous modeling: violation might happen more on the condition where the market has a narrow spread but less volume depth.
 
 ```{r}
 #| label: tbl-sig2
@@ -651,9 +651,9 @@ tidy(log_fit2) |>
 
 ### Random Forest
 
-Random forest is another popular method for classification modelling. This model is an ensemble of decision trees using bootstrapped training samples. Each tree is trained on different subsets of the data using a random sample of predictors (not all variables used in each tree). This method force each split to consider the non-dominant variables (James et al., 2021). The random forest model predicts the probability of classes by aggregating the predictions from each individual tree, typically with the majority vote.
-
-Unlike logistic regression, random forest does not assume a linear relationship between predictors and the outcome (James et al., 2021), making it well-suited to capture complex interactions between variables. We will use `step_downsample` function from `themis` package to handle the imbalance observation on the response variable.
+Random forest is another popular method for classification modeling. This model is an ensemble of decision trees using bootstrapped training samples. Each tree is trained on different subsets of the data using a random sample of predictors (not all variables used in each tree). This method forces each split to consider the non-dominant variables (James et al., 2021). The random forest model predicts the probability of classes by aggregating the predictions from each individual tree, typically with the majority vote.
+ 
+Unlike logistic regression, random forest does not assume a linear relationship between predictors and the outcome (James et al., 2021), making it well-suited to capture complex interactions between variables. We will use the `step_downsample` function from the `themis` package to handle the imbalance observation in the response variable.
 
 *At-The-Spread Violation*
 
@@ -730,9 +730,9 @@ va_ts_pred_rf <- bake(data_prep1, va_test) |>
                          bake(data_prep1, va_test))$.pred_class)
 ```
 
-We fit the random forest model to the train dataset then apply the fitted model to the test dataset. @tbl-rf1 shows that the class 0 (non-violation trades) were correctly predicted 825,000 times while wrongly predicted 215,240 times. On the other hand, class 1 were correctly predicted as violation 11,665 times while wrongly predicted 2,571 times.
-
-The sensitivity for this model is as high as 0.7930 and the specificity is as high as 0.8194. The balanced accuracy for this model to the test dataset is 0.8062. The accuracy measures are much higher than previous model using logistic regression.
+We fit the random forest model to the train dataset, then apply the fitted model to the test dataset. @tbl-rf1 shows that the class 0 (non-violation trades) were correctly predicted 825,000 times while wrongly predicted 215,240 times. On the other hand, class 1 was correctly predicted as a violation 11,665 times while wrongly predicted 2,571 times.
+ 
+This model has 0.7930 sensitivity and 0.8194 specificity. The balanced accuracy for this model on the test dataset is 0.8062. The accuracy measures are significantly higher than those of the previous model that used logistic regression.
 
 ```{r}
 #| label: tbl-rf1
@@ -758,7 +758,7 @@ cf_rf_ts1 |>
 confusionMatrix(va_ts_pred_rf$pviol, va_ts_pred_rf$Violation_1)
 ```
 
-Similar with logistic regression model, we can examine which variables are most contributed to the model accuracy. From variable importance in @tbl-imp1, we understand that the market spread and best bid/ask volume are the most importance to the model, both based on the two metrics, `Mean Decrease in Accuracy` and `Mean Decrease in Gini`. This result support previous model where best bid/ask volume and the market price spread are the most significant variable in the model.
+Similar to the logistic regression model, we can examine which variables have most contributed to the model's accuracy. From variable importance in @tbl-imp1, we understand that the market spread and best bid/ask volume are the most important to the model, both based on the two metrics, `Mean Decrease in Accuracy` and `Mean Decrease in Gini`. This result supports the previous model where the best bid/ask volume and the market price spread are the most significant variables in the model.
 
 ```{r}
 #| label: tbl-imp1
@@ -845,9 +845,9 @@ vo_ts_pred_rf <- bake(data_prep2, vo_test) |>
                          bake(data_prep2, vo_test))$.pred_class)
 ```
 
-We then fit the random forest model to understand the `outside-the-spread` violation pattern. @tbl-rf2 shows that the class 0 (non-violation trades) were correctly predicted 851,567 times while wrongly predicted 162,533 times. On the other hand, class 1 were correctly predicted as violation 33,640 times while wrongly predicted 6.743 times.
-
-The sensitivity for this model is as high as 0.8397 and the specificity is as high as 0.8330. The balanced accuracy for this model to the test dataset is 0.8364. This type of violation also predicted better with random forest model rather than logistic regression.
+We then fit the random forest model to understand the `outside-the-spread` violation pattern. @tbl-rf2 shows that the class 0 (non-violation trades) were correctly predicted 851,567 times while wrongly predicted 162,533 times. On the other hand, class 1 was correctly predicted as a violation 33,640 times while wrongly predicted 6.743 times.
+ 
+This model has 0.8330 specificity and 0.8397 sensitivity. The balanced accuracy for this model on the test dataset is 0.8364. A random forest model also predicts this type of violation better than logistic regression.
 
 ```{r}
 #| label: tbl-rf2
@@ -873,7 +873,7 @@ cf_rf_ts2 |>
 confusionMatrix(vo_ts_pred_rf$pviol, vo_ts_pred_rf$Violation_2)
 ```
 
-Looking at variable importance in @tbl-imp2, the variables from the market data, namely the market price spread and best bid/ask volume, are the most important for the model. This pattern is similar with previous prediction on `at-the-spread` violation. 
+When examining the variable importance in @tbl-imp2, the model places the most importance on the variables from the market data, specifically the market price spread and best bid/ask volume. This pattern is similar to previous predictions on `at-the-spread` violations. 
 
 ```{r}
 #| label: tbl-imp2
@@ -904,14 +904,19 @@ importance(rf_model2) |>
 load("data/report/data_2")
 ```
 
-To check how robust are the models we have on previous sections, we fit them on the whole new dataset: the internal crossings data from out of the top two brokers with the most violations. After we fit the models to the data we can present the confusio matrix below:
+To check how robust are the models we have on previous sections, we fit them on the whole new dataset: the internal crossings data from out of the top two brokers with the most violations. We present the accuracy metrics on @tbl-robust. From the table, we can imply that the models are robust, as the accuracy metrics for this new dataset produce similar accuracy. These metrics clearly demonstrate the superiority of random forest models over logistic regression in this scenario, with approximately 10% more balanced accuracy for each type of violation.
 
 ```{r}
-# apply at-spread violation model and measure accuracy 
+
+# logistic regression
 
 data_2_va_pred <- log_fit1 |> 
   augment(new_data = data_2) |>
   mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log1_optimal_threshold[1,1], 1, 0)))
+
+data_2_vo_pred <- log_fit2 |> 
+  augment(new_data = data_2) |>
+  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
 
 matrix_data_2_va <- data_2_va_pred |>
   count(Violation_1, pred_viol) |>
@@ -919,30 +924,6 @@ matrix_data_2_va <- data_2_va_pred |>
   mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
   pivot_wider(names_from = pred_viol, 
               values_from = n, values_fill=0)
-
-```
-
-
-
-- show the confusion matrix of both model
-- show the balance accuracy, sensitivity and specificity
-- explain which model is preferred
-
-
-
-
-
-```{r}
-# confusion matrix best threshold
-confusionMatrix(data_2_va_pred$pred_viol, data_2_va_pred$Violation_1)
-```
-
-```{r}
-# apply outside violation model and measure accuracy 
-
-data_2_vo_pred <- log_fit2 |> 
-  augment(new_data = data_2) |>
-  mutate(pred_viol = as.factor(ifelse(.pred_1 > roc_log2_optimal_threshold[1,1], 1, 0)))
 
 matrix_data_2_vo <- data_2_vo_pred |>
   count(Violation_2, pred_viol) |>
@@ -952,33 +933,15 @@ matrix_data_2_vo <- data_2_vo_pred |>
               values_from = n, values_fill=0)
 
 
-bal_accuracy_logistic_data2_2 <- bal_accuracy(data_2_vo_pred, Violation_2, pred_viol)$.estimate
-bal_accuracy_logistic_data2_2
-```
+# random forest
 
-Confusion Matrix and Statistics of `outside-spread` violations on the new dataset:
-
-```{r}
-# confusion matrix best threshold
-confusionMatrix(data_2_vo_pred$pred_viol, data_2_vo_pred$Violation_2)
-```
-
-### Random Forest
-
-#### At-The-Spread
-
-
-#### Outside the Spread
-
-
-
-#### Apply model to twpi data outside broker 210 and 361
-
-```{r}
-# apply at-spread violation model and measure accuracy 
 data_2_va_pred_rf <- bake(data_prep1, data_2) |>
   mutate(pviol = predict(fit_rf1,
                          bake(data_prep1, data_2))$.pred_class)
+
+data_2_vo_pred_rf <- bake(data_prep2, data_2) |>
+  mutate(pviol = predict(fit_rf2,
+                         bake(data_prep2, data_2))$.pred_class)
 
 cf_rf_data_2_1 <- data_2_va_pred_rf |>
   count(Violation_1, pviol) |>
@@ -987,22 +950,6 @@ cf_rf_data_2_1 <- data_2_va_pred_rf |>
   pivot_wider(names_from = "pviol", 
               values_from = n, values_fill = 0)
 
-bal_accuracy_rf_data2_1 <- bal_accuracy(data_2_va_pred_rf, Violation_1, pviol)$.estimate
-
-```
-
-Confusion Matrix and Statistics of `at-the-spread` violations on the new dataset:
-
-```{r}
-confusionMatrix(data_2_va_pred_rf$pviol, data_2_va_pred_rf$Violation_1)
-```
-
-```{r}
-# apply outside violation model and measure accuracy 
-data_2_vo_pred_rf <- bake(data_prep2, data_2) |>
-  mutate(pviol = predict(fit_rf2,
-                         bake(data_prep2, data_2))$.pred_class)
-
 cf_rf_data_2_2 <- data_2_vo_pred_rf |>
   count(Violation_2, pviol) |>
   group_by(Violation_2) |>
@@ -1010,21 +957,61 @@ cf_rf_data_2_2 <- data_2_vo_pred_rf |>
   pivot_wider(names_from = "pviol", 
               values_from = n, values_fill = 0)
 
-bal_accuracy_rf_data2_2 <- bal_accuracy(data_2_vo_pred_rf, Violation_2, pviol)$.estimate
-
 ```
 
-Confusion Matrix and Statistics of `outside-spread` violations on the new dataset:
+```{r, eval = FALSE}
+# confusion matrix best threshold
+confusionMatrix(data_2_va_pred$pred_viol, data_2_va_pred$Violation_1)
+```
 
-```{r}
+```{r, eval = FALSE}
+# confusion matrix best threshold
+confusionMatrix(data_2_vo_pred$pred_viol, data_2_vo_pred$Violation_2)
+```
+
+```{r, eval = FALSE}
+confusionMatrix(data_2_va_pred_rf$pviol, data_2_va_pred_rf$Violation_1)
+```
+
+```{r, eval = FALSE}
 confusionMatrix(data_2_vo_pred_rf$pviol, data_2_vo_pred_rf$Violation_2)
 ```
 
-### Limitation
+```{r}
+#| label: tbl-robust
+#| tbl-cap: "Accuracy Metrics to Measure Models Robustness - Using Dataset from Other Than Top 2 Brokers"
 
-# Conclusion 500
+bal_acc <- c(0.6702, 0.7703, 0.6502, 0.7559)
 
-## Potential Future Work
+metrics <- cbind(matrix_data_2_va[2], cf_rf_data_2_1[2], matrix_data_2_vo[2], cf_rf_data_2_2[2]) |>
+  t() |> 
+  as.data.frame() |>
+  mutate(Model = c("Logistic Regression", "Random Forest", "Logistic Regression", "Random Forest"),
+         Violation = c("At-the-Spread", "At-the-Spread", "Outside-the-Spread", "Outside-the-Spread"),
+         Bal_Accuracy = bal_acc) |>
+  rename(Sensitivity = V1,
+         Specificity = V2) |>
+  select(4, 3, 1, 2, 5)
+  
+rownames(metrics) <- NULL
+
+metrics |>
+  kbl() |>
+  kable_styling(full_width = FALSE)
+
+
+```
+
+## Limitation
+
+# Conclusion 
+
+# Potential Future Work
+
+- Analyse violation pattern with other variables, such as stock industry sector, market cap, lagged price values, volatility, etc
+- Try different methods to analyse the pattern, such as PCA and factor modelling to understand the direction of the variables
+- More research questions:
+    -   How much profit did ASX make due to the rule amendment in May 2013?
 
 # References
 
