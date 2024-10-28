@@ -78,11 +78,11 @@ The study will compare transaction data before and after the 2013 regulation cha
 
 ### Identify the Violation Pattern
 
-ASIC's media release and publication in the last couple of years suggested that there have been TWPI rule violations in recent years. This study will examine the monetary worth of the violations, identify which brokers do the most violations, and find any pattern by creating a model to help spot non-compliance in the future.
+ASIC's media release and publication in the last couple of years suggested that there have been TWPI rule violations in recent years. This study will examine the proportion of the violations, identify which brokers do the most violations, and find any pattern by creating a model to help spot non-compliance in the future.
 
 **Key Question**:
 
-1. How many violations, both in terms of the quantity of trades and the dollar value, occurred following the rule change?
+1. How many proportion of violations occurred following the rule change?
 2. What kind of brokers violate the rules the most? Are some brokers more likely to break TWPI rules than others?
 3. What conditions contributed to the occurrence of the violations?
 
@@ -92,9 +92,7 @@ There are three main areas in which this study may contribute: academic, regulat
 
 ### Economic Significance
 
-The purpose of the rule amendment in 2013 was to encourage meaningful price improvement on the `dark pool` ([ASIC, 2014](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf)). Without price improvement, trading must be done on the ASX trading platform to promote liquidity on the market. Charles Lane Advisory Pty Ltd report ([Attachment to ASIC Report 394](https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf)) in May 2014 has thoroughly analyse the impact of this rule change and stated that there was a decline in the dollar value from \$54.9 billion to \$21 billion, 100 days prior the rule change and after. Our study aims to validate this figure by focusing only on internal crossings and extending the analysis over a one-year period, with the goal of providing a more in-depth understanding of the rule's economic impacts.
-
-From a financial point of view, it is also essential to comprehend TWPI violations since they have the potential to compromise market integrity in general [(Australian Securities and Investments Commission, 2014)](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf). By figuring out how much value in dollar TWPI violations occurred, this study can show how much value was traded not in a legal manner. If these trades had taken place on the `lit market`, then there would be trading fees that should be paid to the market operator (ASX). Internal crossing trades incur a fee of approximately 0.04 basis points per trade, whereas trades on the ASX platform cost 0.15 basis points per trade [(Australian Securities and Investments Commission, 2024)](https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf). This significant difference in trading fees indicates additional economic implications.
+The purpose of the rule amendment in 2013 was to encourage meaningful price improvement on the `dark pool` ([ASIC, 2014](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf)). Without price improvement, trading must be done on the ASX trading platform to promote liquidity on the market. Charles Lane Advisory Pty Ltd report ([Attachment to ASIC Report 394](https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf)) in May 2014 has thoroughly analyse the impact of this rule change and stated that there was a decline in the dollar value from \$54.9 billion to \$21 billion, 100 days prior the rule change and after. Our study aims to validate this figure by focusing only on internal crossings and extending the analysis over a one-year period, with the goal of providing a more in-depth understanding of the rule's economic impacts. From a financial point of view, it is also essential to comprehend TWPI violations since they have the potential to compromise market integrity in general [(Australian Securities and Investments Commission, 2014)](https://download.asic.gov.au/media/1344596/rep394-published-19-May-2014.pdf).
 
 ### Regulatory Significance
 
@@ -1004,7 +1002,17 @@ metrics |>
 
 ## Limitation
 
+- imbalance data: violation only accounts for 5% of all internal crossings
+- only using stocks on ASX200 index, because limited processing power
+- no recent data available. SIRCA only provide ASX data unti 2016
+
 # Conclusion 
+
+- the TWPI rule in 26 may 2016 effective reduce at-the-spread crossings on the `dark pool`, moving them to `lit market`
+- in 100 trading days, there was approximately \$3.7 billion trades value moving away from `dark pool`
+- the proportion of violation after the rule change until december 2015 is approximately 5%. however if we see it from montly numbers, the proportion is increasing month after month, reaching and toping at 12% at December 2015
+- Only 2 brokers dominate the violation, hence we dont have enough confidence to say that the broker's type play main role in the violation
+- from all models and both types of violation, `at-the-spread` and `outside-the-spread` violation, the important variables that explain the violation pattern are the market condition, specifically market price spread and the market depth, indicated from the best bid/ask volume
 
 # Potential Future Work
 
