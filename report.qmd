@@ -143,15 +143,11 @@ library(knitr)
 library(kableExtra)
 options(knitr.table.html.attr = "quarto-disable-processing=true")
 library(scales)
-library(viridis)
 library(tidymodels)
-library(discrim)
-library(rpart)
-library(rpart.plot)
+library(pROC)
+library(caret)
 library(randomForest)
 library(themis)
-library(caret)
-library(pROC)
 
 ```
 
@@ -437,35 +433,11 @@ twpi_af |>
 
 *Modelling*
 
-- we use data from the 2 dominated brokers to train the model, because if not, the pattern will tend to find the broker id as dominant variable causing violation. split the data to train and test
-- then check robustness to other brokers data
-- remind the imbalances in the data
+To understand what condition that contributed to the occurrence of violation in TWPI rule, we will do simple modelling using logistic regression and random forest. Since there were only two brokers that dominate the violation, we will use data from these two brokers to train the model. We also did not use broker's type as one of the predictor variable because of this reason. If we put the broker's type as one of the predictors, then the model will take it as the dominant variable causing the violation.
 
-*Logistic Regresion*
+To modelling the violation pattern, we use several predictor variables from the transaction data, namely dollar value, trade volume, hour, and date, and also market data, such as market spread and best bid/ask volume. We also make model for each violation type, `at-the-spread` and `outside-the-spread` violation.
 
-- explain how to find the best threshold
-- show the confusion matrix of the test set
-- show the table for the balance accuracy, sensitivity and specificity of the test set
-- show the significance of the variables
-- explain the contribution of the significant variables
-
-*Random Forest*
-
-- explain step downsample, because of the imbalance in the data
-- show the confusion matrix of the test set
-- show the table for the balance accuracy, sensitivity and specificity of the test set
-- show the variable importance, explain
-
-*Robustness Check*
-
-- show the confusion matrix of both model
-- show the balance accuracy, sensitivity and specificity
-- explain which model is preferred
-
-
-## Analysis
-
-
+We split the data to train and test datasets. Moreover, we will check the robustness of the model using data from the brokers other than these top two brokers. One thing that is important to consider is that this data have very imbalance response variable, as the violation only accounts for approximately 5% of all internal crossings reported as TWPI (see again @tbl-bfaf). 
 
 ```{r}
 # prepare data to model, only top 2 brokers
@@ -500,6 +472,8 @@ vo_test <- testing(vo_split)
 
 ### Logistic Regression
 
+Since our case is a classification problem, logistic regression is one of the most popular methods for predictive modelling. This model uses logistic function and maximum likelihood method to estimate the coefficients of each variable. The logistic function predicts the probability of belonging to one of two classes, with lower balance generally classified to class 0 and higher balance to class 1. A probability threshold can be set to determine the cutoff for classifying an observation into either class. In our example, observations with lower balances may fall into class "non-violation", while higher balances may fall into class "violation", depending on the chosen threshold. We use `roc()` and `coords()` functions from `pROC` package to find the best threshold for given cases.
+
 ```{r, eval = FALSE}
 log_mod <- logistic_reg() |>
   set_engine("glm") |>
@@ -521,6 +495,8 @@ glance(log_fit2)
 saveRDS(log_fit1, file = "data/report/log_fit1.rds")
 saveRDS(log_fit2, file = "data/report/log_fit2.rds")
 ```
+
+*At-The-Spread Violation*
 
 ```{r}
 # measure accuracy logistic regression on at-spread violation 
@@ -562,17 +538,65 @@ matrix_va_ts <- va_ts_pred |>
   mutate(cl_acc = n[pred_viol == Violation_1]/sum(n)) |>
   pivot_wider(names_from = pred_viol, 
               values_from = n, values_fill=0)
-
-bal_accuracy_logistic_va <- bal_accuracy(va_ts_pred, Violation_1, pred_viol)$.estimate
-
 ```
 
-Confusion Matrix and Statistics of `at-the-spread` violations on the test dataset:
+After we train the model to the train dataset, we apply the fitted model to the test dataset to examine the accuracy of `at-the-spread` violation model. @tbl-log1 exhibits the confusion matrix for the result on this dataset. The class 0, meaning the non-violation trades, were correctly predicted as non-violation 732,681 times, while wrongly predicted 307,566 times. On the other hand, class 1, meaning the violation trades, were correctly predicted as violation 9,697 times, while wrongly predicted 4,539 times. 
+
+These number produce evaluation performance of sensitivity as high as 0.7043 and specificity as high as 0.6811. The balanced accuracy for this model to the test dataset is 0.6927. These number is quite high given the complexity of the data and also how the imbalanced the response variable are. 
 
 ```{r}
+#| label: tbl-log1
+#| tbl-cap: "Confusion Matrix of Test Set for Logistic Regression Modelling on `At-The-Spread` Violation"
+
+matrix_va_ts |>
+  rename(Class = Violation_1) |>
+  kbl() |>
+  kable_styling(full_width = FALSE) |>
+  add_header_above(c("At-The-Spread Violation" = 4))
+```
+
+```{r, eval = FALSE}
 # confusion matrix best threshold
 confusionMatrix(va_ts_pred$pred_viol, va_ts_pred$Violation_1)
 ```
+
+Examining the significance of the variable from @tbl-sig1, we understand that most of the variables are significant predictors as the p-value are close to zero. Only the hour of the trades that is not significantly contributed to the model. Dollar value and the market data such as the spread and best bid/ask volume, have negative relationship with the violation, while the trade volume has positive correlation. These mean that the violation might happen more on the condition where the market has narrow spread but less volume depth.
+
+```{r}
+#| label: tbl-sig1
+#| tbl-cap: "Variables signifiance of the Logistic Regression Model"
+
+tidy(log_fit1) |>
+  select(1,2,5) |>
+  kbl() |>
+  kable_styling(full_width = FALSE)
+  
+```
+
+*Random Forest*
+
+- explain step downsample, because of the imbalance in the data
+- show the confusion matrix of the test set
+- show the table for the balance accuracy, sensitivity and specificity of the test set
+- show the variable importance, explain
+
+*Robustness Check*
+
+- show the confusion matrix of both model
+- show the balance accuracy, sensitivity and specificity
+- explain which model is preferred
+
+
+## Analysis
+
+
+### Logistic Regression
+
+
+
+Confusion Matrix and Statistics of `at-the-spread` violations on the test dataset:
+
+
 
 ```{r}
 # measure accuracy logistic regression on outside violation 
