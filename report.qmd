@@ -209,7 +209,7 @@ twpi4 <- twpi4 |> # remove duplicates
 save(twpi4, file = "data/report/twpi4")
 ```
 
-```{r, eval = FALSE}
+```{r}
 load("data/report/twpi4")
 
 twpi_bf <- twpi4 |>
@@ -564,7 +564,7 @@ Examining the significance of the variable from @tbl-sig1, we understand that mo
 
 ```{r}
 #| label: tbl-sig1
-#| tbl-cap: "Variables signifiance of the Logistic Regression Model"
+#| tbl-cap: "Variables significance of the Logistic Regression Model"
 
 tidy(log_fit1) |>
   select(1,2,5) |>
@@ -640,7 +640,7 @@ Differently, only the market depth variables that has significant value on this 
 
 ```{r}
 #| label: tbl-sig2
-#| tbl-cap: "Variables signifiance of the Logistic Regression Model"
+#| tbl-cap: "Variables significance of the Logistic Regression Model"
 
 tidy(log_fit2) |>
   select(1,2,5) |>
@@ -730,11 +730,15 @@ va_ts_pred_rf <- bake(data_prep1, va_test) |>
                          bake(data_prep1, va_test))$.pred_class)
 ```
 
-Variable importance of `at-the-spread` violations:
+We fit the random forest model to the train dataset then apply the fitted model to the test dataset. @tbl-rf1 shows that the class 0 (non-violation trades) were correctly predicted 825,000 times while wrongly predicted 215,240 times. On the other hand, class 1 were correctly predicted as violation 11,665 times while wrongly predicted 2,571 times.
+
+The sensitivity for this model is as high as 0.7930 and the specificity is as high as 0.8194. The balanced accuracy for this model to the test dataset is 0.8062. The accuracy measures are much higher than previous model using logistic regression.
 
 ```{r}
-# measure accuracy
+#| label: tbl-rf1
+#| tbl-cap: "Confusion Matrix of the Test Set for Random Forest Model on `At-The-Spread` Violations"
 
+# measure accuracy
 cf_rf_ts1 <- va_ts_pred_rf |>
   count(Violation_1, pviol) |>
   group_by(Violation_1) |>
@@ -742,19 +746,29 @@ cf_rf_ts1 <- va_ts_pred_rf |>
   pivot_wider(names_from = "pviol", 
               values_from = n, values_fill = 0)
 
-
-bal_accuracy_rf1 <- bal_accuracy(va_ts_pred_rf, Violation_1, pviol)$.estimate
-
-rf_model1 <- pull_workflow_fit(fit_rf1)$fit
-importance(rf_model1)
+cf_rf_ts1 |>
+  rename(Class = Violation_1,
+         cl_acc = Accuracy) |>
+  kbl() |>
+  kable_styling(full_width = FALSE) |>
+  add_header_above(c("At-The-Spread Violation" = 4))
 ```
 
-Confusion Matrix and Statistics of `at-the-spread` violations on the test dataset:
-
-```{r}
+```{r, eval = FALSE}
 confusionMatrix(va_ts_pred_rf$pviol, va_ts_pred_rf$Violation_1)
 ```
 
+Similar with logistic regression model, we can examine which variables are most contributed to the model accuracy. From variable importance in @tbl-imp1, we understand that the market spread and best bid/ask volume are the most importance to the model, both based on the two metrics, `Mean Decrease in Accuracy` and `Mean Decrease in Gini`. This result support previous model where best bid/ask volume and the market price spread are the most significant variable in the model.
+
+```{r}
+#| label: tbl-imp1
+#| tbl-cap: "Variables importance of the Random Forest Model"
+
+rf_model1 <- pull_workflow_fit(fit_rf1)$fit
+importance(rf_model1) |>
+  kbl() |>
+  kable_styling(full_width = FALSE)
+```
 
 *Outside-The-Spread Violation*
 
@@ -998,24 +1012,6 @@ Confusion Matrix and Statistics of `outside-spread` violations on the new datase
 
 ```{r}
 confusionMatrix(data_2_vo_pred_rf$pviol, data_2_vo_pred_rf$Violation_2)
-```
-
-### Summary
-
-```{r}
-
-summary <- data.frame(
-  Violation = c("at-spread", "outside-spread"),
-  GLM_top2 = c(bal_accuracy_logistic_va, bal_accuracy_logistic_vo),
-  GLM_others = c(bal_accuracy_logistic_data2_1, bal_accuracy_logistic_data2_2),
-  RF_top2 = c(bal_accuracy_rf1, bal_accuracy_rf2),
-  RF_others = c(bal_accuracy_rf_data2_1, bal_accuracy_rf_data2_2)
-)
-
-
-summary |>
-  kbl() |>
-  kable_styling(full_width = FALSE, position = "left")
 ```
 
 ### Limitation
