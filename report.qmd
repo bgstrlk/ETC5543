@@ -1,19 +1,15 @@
 ---
-title: "Trade With Price Improvement"
-author: "Bagas Trilaksonoaji"
-date: "`r Sys.Date()`"
-format: 
-  pdf:
-    toc: true
-    number-sections: true
-execute: 
-  eval: TRUE
-  echo: false
-  message: false
-  warning: false
+title: "Does Imposing Trades With Price Improvement Take Liquidity Away from Dark Pool?"
+author:
+- name: Bagas Trilaksonoaji
+  degrees: 32687044
+- name: Associate Professor Paul Lajbcygier
+  degrees: Project Supervisor
+organization: ETC5543 - Business Analytics Creative Activity 
+email: baga0002@student.monash.edu
+format: report-pdf
+toc: TRUE
 cache: TRUE
-editor_options: 
-  chunk_output_type: inline
 ---
 
 \pagebreak
@@ -21,6 +17,8 @@ editor_options:
 # Abstract
 
 The effect of the Trade With Price Improvement rule, which went into effect on 26 May 2013, on `at-the-spread` crossings in the `dark pool` of the Australian Securities Exchange (ASX), is examined in this study. The drop in the proportion of trading volume from `at-the-spread` crossings from 52% to 1% following the rule change indicates a notable shift in trading volume. Although the breaching of the rule initially accounted for only about 5% of all internal crossings, monthly statistics showed a steady increase in rule violations, peaking at 12% in December 2015. The majority of rule violations were done by only two brokers. We also use machine learning models to understand violation trends. The result emphasized the importance of market conditions, namely market spread and market depth, as the main contributors to the violation of the TWPI rule.
+
+Link to GitRepo: https://github.com/bgstrlk/ETC5543
 
 # Introduction 
 
@@ -225,7 +223,7 @@ We compare the number of internal crossings before and after the rule change on 
  
 From the start of the rule until the amendment, the monthly proportion of 'at-the-spread' internal crossings consistently ranged between 40% and 60%. The highest proportions were in October–December 2012, with 61%–62% of the total internal crossings. After subtracting January 2012, which had the lowest number of crossings due to the transition, April 2013 had the lowest proportion, accounting for only 39% of the total crossings.
  
-@tbl-BF shows that there were a number of violations of the early rule of internal crossings. However, the proportion was not significant, consistently falling below 2%, with the exception of September 2012. The total proportion of `at-the-spread` crossings from the introduction of the `at or within-the-spread` rule until the amendment in May 2013 was 52%.
+@tbl-bf shows that there were a number of violations of the early rule of internal crossings. However, the proportion was not significant, consistently falling below 2%, with the exception of September 2012. The total proportion of `at-the-spread` crossings from the introduction of the `at or within-the-spread` rule until the amendment in May 2013 was 52%.
  
 These numbers and percentages show that there were a balanced proportion of `within-the-spread` and `at-the-spread` crossings, with only an insignificant number of violations (`outside-the-spread`), from the introduction of the rule in November 2011 until the amendment in May 2013.
 
@@ -389,7 +387,7 @@ From the report by Charles Lane Advisory, *Review of recent rule changes affecti
 
 @fig-prop shows that there were still violations of the TWPI rule after the rule change on 26 May 2013. If we look at the proportion, the percentages were going higher year after year. This trend is primarily due to the increasing trend of 'outside-the-spread' crossings, which accounted for more than 12% of all internal crossings in December 2015. These numbers could potentially rise in the years following 2015. However, this is out of scope of this study.
  
-Since we have the broker IDs variable on our dataset, we can examine what kind of brokers tend to violate the TWPI rule. We classify brokers's types as institutional, retail, and HFT-proprietary. @fig-brokers exhibits the top 10 brokers that have done the most violations. The plot reveals that only two brokers dominated the number of violations. Given that both brokers are institutional, could it be inferred that institutional brokers tend to commit more violations than other types of brokers? Since there were only two brokers dominating the violation, it is probably more like an individuality reason than because of the broker's type.
+Since we have the broker IDs variable on our dataset, we can examine what kind of brokers tend to violate the TWPI rule. We classify brokers's types as institutional, retail, and HFT-proprietary. @fig-broker exhibits the top 10 brokers that have done the most violations. The plot reveals that only two brokers dominated the number of violations. Given that both brokers are institutional, could it be inferred that institutional brokers tend to commit more violations than other types of brokers? Since there were only two brokers dominating the violation, it is probably more like an individuality reason than because of the broker's type.
  
 We also understand that regulators did not impose any penalties for these violations, given that the first release regarding the TWPI rule violation occurred in February 2023. This is probably because the rule has just been introduced and the number of violations was still insignificant compared to all internal crossings. However, as the proportion was on a rising trend, regulators should have taken action to prevent the number from getting more significant, especially since it has already happened since 2015.
 
@@ -1041,9 +1039,10 @@ Australian Securities Exchange. (n.d.). ASX regulatory framework. Retrieved 24 O
 
 Australian Securities Exchange. (n.d.). ASX story. Retrieved 24 October 2024, from https://www.asx.com.au/about/asx-story
 
-Australian Securities Exchange. (n.d.). About Us. Retrieved 24 October 2024, from https://www.asx.com.au/about#:~:text=As%20an%20integrated%20exchange%2C%20ASX's,equities%20and%20fixed%20income%20markets.
+Australian Securities Exchange. (n.d.). About Us. Retrieved 24 October 2024, from https://www.asx.com.au/about
 
-Australian Securities Exchange. (19 February 2024). *ASX Trade: Markets Participant and Trading Schedule of Fees* (PDF). Retrieved 24 October 2024, from https://asxonline.com/content/dam/asxonline/public/documents/schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf
+Australian Securities Exchange. (19 February 2024). *ASX Trade: Markets Participant and Trading Schedule of Fees* (PDF). 
+Retrieved 24 October 2024, from https://asxonline.com/content/dam/asxonline/public/documents/ schedule-of-fees/asx-trade-markets-participant-and-trading-schedule-of-fees.pdf
 
 Charles Lane Advisory Pty Ltd. (May 2014). *Report by Charles Lane Advisory: Review of recent rule changes affecting dark liquidity* (PDF). Attachment to ASIC Report 394: Review of recent rule changes affecting dark liquidity. Retrieved 24 October 2024, from https://download.asic.gov.au/media/1344590/rep394-attachment-published-19-May-2014.pdf
 
